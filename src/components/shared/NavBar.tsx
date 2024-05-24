@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import logo from "../../assets/logo.svg";
+import { Divider } from "@mui/material";
 
 const pages = ["Home", "Resturants", "why us"];
 const settings = ["Profile", "Logout"];
@@ -93,6 +94,7 @@ function NavBar() {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
+              <Divider/>
                 {!isUser&&<MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center" color="primary">log in</Typography>
                 </MenuItem>}

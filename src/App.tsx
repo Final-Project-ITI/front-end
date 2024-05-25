@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider, Typography } from "@mui/material";
 import theme from "./themes/theme.ts";
 import NavBar from "./components/shared/NavBar.tsx";
 import Category from "./components/shared/Category.tsx";
@@ -163,13 +163,16 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <NavBar></NavBar>
-        <Image />
-        <Category name="PIZZA" products={pizzaProducts} />
-        <Category name="SANDWICH" products={sandwichProducts} />
-        <Category name="SOUQ" products={souqProducts} />
-        <Category name="PIES" products={piesProducts} />
-        <Category name="PASTA" products={pastaProducts} />
+        <CssBaseline />
+        <Box sx={{ minHeight: "100vh", backgroundColor: "#F3ECE4" }}>
+          <NavBar></NavBar>
+          <Image />
+          <Category name="PIZZA" products={pizzaProducts} />
+          <Category name="SANDWICH" products={sandwichProducts} />
+          <Category name="SOUQ" products={souqProducts} />
+          <Category name="PIES" products={piesProducts} />
+          <Category name="PASTA" products={pastaProducts} />
+        </Box>
       </ThemeProvider>
     </>
   );

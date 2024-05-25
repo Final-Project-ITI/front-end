@@ -20,18 +20,18 @@ const Product = ({ product }: ProductProps) => {
   const theme = useTheme();
 
   return (
-    <Grid item xs={12} sm={6} md={3} sx={{ padding: 0 }}>
+    <Grid item xs={12} sm={9} md={6} lg={3}>
       <Card
         sx={{
           backgroundColor: theme.palette.secondary.main,
           borderRadius: "25px",
-          padding: 2,
-          paddingTop: 3,
           textAlign: "center",
           width: "100%",
-          height: "96%",
+          height: "445px",
           position: "relative",
           overflow: "visible",
+          mt: { sm: "50px", xs: 6 },
+          mb: { sm: "50px", xs: 6 },
         }}
       >
         <CardMedia
@@ -39,19 +39,19 @@ const Product = ({ product }: ProductProps) => {
           alt={product.name}
           image={product.image}
           sx={{
-            width: "250px",
-            height: "250px",
-            border: "8px solid",
+            width: "320px",
+            height: "320px",
+            border: "10px solid",
             borderColor: theme.palette.primary.main,
             borderRadius: "50%",
             objectFit: "cover",
             position: "absolute",
-            top: "-100px",
+            top: "-150px",
             left: "50%",
             transform: "translateX(-50%)",
           }}
         />
-        <CardContent sx={{ paddingTop: "150px" }}>
+        <CardContent sx={{ paddingTop: "220px" }}>
           <Typography
             variant="h6"
             gutterBottom

@@ -15,7 +15,7 @@ interface IProps {
 
 const Category = ({ name, products }: IProps) => {
   return (
-    <Grid container spacing={2} sx={{ padding: 8 }}>
+    <Grid container spacing={4} sx={{ padding: 8 }}>
       <Grid item xs={12}>
         <Typography
           variant="h4"
@@ -32,11 +32,9 @@ const Category = ({ name, products }: IProps) => {
           {name}
         </Typography>
       </Grid>
-      <Grid container spacing={2} justifyContent="center" sx={{}}>
-        {products.map((product) => (
-          <Product key={product.id} product={product} />
-        ))}
-      </Grid>
+      {products.map((product) => (
+        <Product key={product.id} product={product} />
+      ))}
     </Grid>
   );
 };

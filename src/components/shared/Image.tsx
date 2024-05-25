@@ -12,7 +12,7 @@ const Image = ({}: IProps) => {
           alt="Placeholder Image"
           sx={{
             width: "100%",
-            height: "70vh",
+            height: "55vh",
             borderRadius: "10px",
           }}
         />

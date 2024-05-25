@@ -7,15 +7,15 @@ const theme = createTheme({
     },
     secondary: {
       main: "#E8DCCC",
-      light:"F3ECE4"
+      light: "F3ECE4",
     },
     info: {
       main: "#373234",
     },
-    text:{
-        primary:"#0a0a0a"
-    }
-  }
+    text: {
+      primary: "#0a0a0a",
+    },
+  },
 });
 
 export default theme;

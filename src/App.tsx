@@ -1,4 +1,4 @@
-import { Box, CssBaseline, ThemeProvider, Typography } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./themes/theme.ts";
 import NavBar from "./components/shared/NavBar.tsx";
 import Category from "./components/shared/Category.tsx";

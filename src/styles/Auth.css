@@ -1,0 +1,118 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #f3ece4;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* align-items: center; */
+  min-height: 100vh;
+}
+
+.txt1,
+.log {
+  color: #d74339;
+  text-decoration: none;
+}
+.txt1 {
+  text-align: center;
+}
+.sign {
+  width: 50%;
+  max-width: 420px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 2rem;
+  margin-top: 20px;
+  margin-left: 50px;
+}
+.img {
+  margin-left: 50px;
+  width: 70%;
+  max-width: 844px;
+  min-height: 100vh;
+  background-image: url("../assets/images/13a20b05-11e4-4c75-a1a3-5aeb87ef4e43.jpg");
+}
+
+.sign-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+.sign-input {
+  border: 1px solid #d74339;
+  background-color: #e8dccc;
+}
+.sign-input[type="text"],
+.sign-input[type="password"],
+.sign-button,
+.sign-text-area {
+  font-family: "Nunito", sans-serif;
+  font-size: 16px;
+  padding: 0.5rem;
+  border-radius: 1rem;
+}
+
+.sign-label {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sign-button {
+  padding: 0.5rem;
+  background-color: #d74339;
+  border: #d74339;
+  color: #fff;
+  margin-top: 2rem;
+}
+.sign-button:hover {
+  background-color: #df756e;
+  cursor: pointer;
+}
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 1rem;
+  background: red;
+  color: #fff;
+  padding: 0.5rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.instructions > svg {
+  margin-right: 0.25rem;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+/* .hide {
+  display: none;
+} */
+
+/* .valid {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.invalid {
+  color: red;
+  margin-left: 0.25rem;
+} */
+
+.errmsg {
+  color: firebrick;
+  padding: 0.5rem;
+  text-align: center;
+}

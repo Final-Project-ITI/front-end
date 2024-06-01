@@ -1,19 +1,21 @@
-import { ThemeProvider, Typography } from "@mui/material";
-import theme from "./themes/theme.ts"
-import NavBar from "./components/shared/NavBar.tsx";
+// import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Register from "./components/pages/register.tsx";
+import Login from "./components/pages/login.tsx";
 
 function App() {
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <NavBar></NavBar>
-        <Typography color={"primary"}>
-          foodi
+    // <BrowserRouter>
+    //   <Register />
+    //   {/* <Login /> */}
+    // </BrowserRouter>
 
-        </Typography>
-        
-      </ThemeProvider>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

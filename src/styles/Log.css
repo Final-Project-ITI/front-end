@@ -39,6 +39,7 @@ body {
   max-width: 952px;
   min-height: 100vh;
   background-image: url("../assets/images/2da114b4-ecdf-41b8-a60b-b16cd5da3ae8.jpg");
+  background-size: cover;
 }
 
 .sign-form {

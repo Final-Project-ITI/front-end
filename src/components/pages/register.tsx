@@ -160,7 +160,7 @@ export default function Register() {
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
-              email must be like this: youremail@example.com
+              email must be like this: example@gamil.com
             </p>
             <label htmlFor="password" className="sign-label">
               Password

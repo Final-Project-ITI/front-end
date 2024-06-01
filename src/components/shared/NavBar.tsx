@@ -44,7 +44,7 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "inherit" }}>
+    <AppBar position="static" sx={{ backgroundColor: "inherit", boxShadow: 0 }}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters sx={{height:"112px"}}>
           <Box

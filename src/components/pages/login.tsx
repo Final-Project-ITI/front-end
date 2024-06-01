@@ -80,7 +80,7 @@ export default function login() {
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
-              email must be like this: youremail@example.com
+              email must be like this: example@gmail.com
             </p>
 
             <label htmlFor="password" className="logn-label">

@@ -49,7 +49,10 @@ body {
   flex-grow: 1;
   padding-bottom: 1rem;
 }
-
+.sign-input:focus {
+  outline-color: #df756e;
+  outline-width: 3px;
+}
 .sign-input {
   border: 1px solid #d74339;
   background-color: #e8dccc;

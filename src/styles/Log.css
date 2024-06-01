@@ -21,7 +21,7 @@ body {
 .txt1 {
   text-align: center;
 }
-.sign {
+.logn {
   width: 50%;
   max-width: 646px;
   min-height: 467px;
@@ -42,22 +42,23 @@ body {
   background-size: cover;
 }
 
-.sign-form {
+.logn-form {
+  margin-top: 80px;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-evenly; */
+  gap: 30px;
   flex-grow: 1;
-  padding-bottom: 1rem;
+  /* padding-bottom: 1rem; */
 }
 
-.sign-input {
+.logn-input {
   border: 1px solid #d74339;
   background-color: #e8dccc;
 }
-.sign-input[type="text"],
-.sign-input[type="password"],
-.sign-button,
-.sign-text-area {
+.logn-input[type="text"],
+.logn-input[type="password"],
+.logn-button,
+.logn-text-area {
   font-family: "Nunito", sans-serif;
   font-size: 16px;
   padding: 0.5rem;
@@ -65,20 +66,23 @@ body {
   width: 400px;
   /* height: 20px; */
 }
-.sign-label {
+.logn-label {
   margin-top: 1rem;
   margin-bottom: 0rem;
 }
-
-.sign-button {
+.logn-input:focus {
+  outline-color: #df756e;
+  outline-width: 3px;
+}
+.logn-button {
   /* padding: 0.5rem; */
   background-color: #d74339;
   border: #d74339;
   color: #fff;
   width: 418px;
-  /* margin-top: 2rem; */
+  margin-top: 1rem;
 }
-.sign-button:hover {
+.logn-button:hover {
   background-color: #df756e;
   cursor: pointer;
 }

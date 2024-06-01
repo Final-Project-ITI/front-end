@@ -46,12 +46,15 @@ export default function login() {
     <>
       <div className="container m-auto">
         <div className="im"></div>
-        <section className="sign">
-          <h1 className="text-4xl font-bold btn btn-ghost txt1" title="Sign Up">
-            Log In
-          </h1>
-          <form className="sign-form" onSubmit={handleSubmit}>
-            <label htmlFor="email" className="sign-label">
+        <section className="logn">
+          <form className="logn-form" onSubmit={handleSubmit}>
+            <h1
+              className="text-4xl font-bold btn btn-ghost txt1"
+              title="Sign Up"
+            >
+              Log In
+            </h1>
+            <label htmlFor="email" className="logn-label">
               Email{" "}
             </label>
             <input
@@ -64,7 +67,7 @@ export default function login() {
               onFocus={() => setEmailFocus(true)}
               onBlur={() => setEmailFocus(true)}
               value={email}
-              className="sign-input"
+              className="logn-input"
               key={"email"}
             ></input>
 
@@ -80,7 +83,7 @@ export default function login() {
               email must be like this: youremail@example.com
             </p>
 
-            <label htmlFor="password" className="sign-label">
+            <label htmlFor="password" className="logn-label">
               Password
             </label>
             <input
@@ -92,7 +95,7 @@ export default function login() {
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
               value={pwd}
-              className="sign-input"
+              className="logn-input"
               key={"pwd"}
             />
             <p
@@ -118,22 +121,21 @@ export default function login() {
             </p>
 
             <button
-              className="sign-button"
+              className="logn-button"
               disabled={!validPwd || !validEmail ? true : false}
             >
               Sign In
             </button>
+            <p>
+              Don't have an account?
+              <span className="log">
+                <Link to="/" id="sign-link" className="log">
+                  Sign up
+                </Link>
+                <br />
+              </span>
+            </p>
           </form>
-
-          <p>
-            Don't have an account?
-            <span className="log">
-              <Link to="/" id="sign-link" className="log">
-                Sign up
-              </Link>
-              <br />
-            </span>
-          </p>
         </section>
       </div>
     </>

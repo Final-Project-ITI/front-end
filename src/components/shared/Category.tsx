@@ -1,5 +1,7 @@
-import { Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import Product from "./Product";
+import Ditails from "../pages/Ditails";
+import UserInfoAndOrders from "../pages/UserInfoAndOrders";
 
 interface ProductType {
   id: number;
@@ -15,7 +17,7 @@ interface IProps {
 
 const Category = ({ name, products }: IProps) => {
   return (
-    <Grid container spacing={4} sx={{ padding: 8, mb: -40 }}>
+    <Grid container sx={{ padding: 8, mb: -40 }}>
       <Grid item xs={12}>
         <Typography
           variant="h4"
@@ -37,6 +39,10 @@ const Category = ({ name, products }: IProps) => {
       {products.map((product) => (
         <Product key={product.id} product={product} />
       ))}
+
+      <Ditails />
+
+      <UserInfoAndOrders />
     </Grid>
   );
 };

@@ -7,7 +7,7 @@ import Checkout from "./components/pages/Checkout.tsx";
 import CartIcon from "./components/shared/CartIcon.tsx";
 import SideCart from "./components/shared/SideCart.tsx";
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import item from "./models/Item.ts";
 import Home from "./components/pages/home";
 import Restaurants from "./components/pages/restaurants";
@@ -18,6 +18,7 @@ import Ditails from "./components/pages/Ditails.tsx";
 import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
 
 function App() {
+  const path =useLocation().pathname 
   const [openSideCart, setOpenSideCart] = useState(false);
 
   const [isUser, setisUser] = useState(false);
@@ -30,7 +31,7 @@ function App() {
   const [addresses, setAddresses] = useState<string[]>([]);
 
   useEffect(() => {
-    setisUser(true);
+    setisUser(false);
     const newCartItems = [
       {
         productId: {
@@ -137,19 +138,19 @@ function App() {
             position: "relative",
           }}
         >
-          <NavBar
+          {(path!=="/register" && path!=="/login" )&&<NavBar
             isUser={isUser}
             setisUser={setisUser}
             cartQuantity={cartQuantity}
-          ></NavBar>
+          ></NavBar>}
           <Routes>
-            <Route path="/Menu" element={<Menu />} />
-            <Route path="/ProductDetails" element={<Ditails />} />
-            <Route path="/UserInfo" element={<UserInfoAndOrders />} />
-            <Route path="/" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/restaurant" element={<Restaurants />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/productdetails" element={<Ditails />} />
+            <Route path="/userinfo" element={<UserInfoAndOrders />} />
+            <Route path="/register" element={<Register setisUser={setisUser}/>} />
+            <Route path="/login" element={<Login setisUser={setisUser} />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/restaurants" element={<Restaurants />} />
             <Route
               path="/checkout"
               element={
@@ -174,7 +175,7 @@ function App() {
               }
             />
           </Routes>
-          <Footer></Footer>
+          {(path!=="/register" && path!=="/login" )&&<Footer></Footer>}
         </Stack>
         {openSideCart && (
           <SideCart
@@ -186,7 +187,7 @@ function App() {
             editItemQuantity={editItemQuantity}
           />
         )}
-        <CartIcon setOpenSideCart={setOpenSideCart} cartTotal={cartTotal} />
+        {(path!=="/register" && path!=="/login" && path!=="/cart" )&&<CartIcon setOpenSideCart={setOpenSideCart} cartTotal={cartTotal} />}
       </ThemeProvider>
     </>
   );

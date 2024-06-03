@@ -15,7 +15,7 @@ interface IProps {
 
 const Category = ({ name, products }: IProps) => {
   return (
-    <Grid container sx={{ padding: 8, mb: -40 }}>
+    <Grid container sx={{ padding: "8px" }}>
       <Grid item xs={12}>
         <Typography
           variant="h4"

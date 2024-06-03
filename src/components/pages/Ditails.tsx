@@ -16,7 +16,7 @@ const Ditails = ({}: IProps) => {
 
   return (
     <>
-      <Box sx={{ padding: "234px 160px", boxSizing: "border-box" }}>
+      <Box sx={{ padding: "100px 160px", boxSizing: "border-box" }}>
         <Grid container spacing={0} alignItems="center">
           <Grid item xs={12} md={5} sx={{ paddingRight: "18px" }}>
             <CardMedia

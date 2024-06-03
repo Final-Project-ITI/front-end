@@ -18,7 +18,7 @@ const UserInfoAndOrders = () => {
   return (
     <Box
       sx={{
-        padding: "234px 170px",
+        padding: "100px 170px",
       }}
     >
       <Grid container spacing={0}>

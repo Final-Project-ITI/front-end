@@ -10,7 +10,7 @@ import axios from "../../api/axios";
 import "../../styles/Log.css";
 
 const LOGIN_URL = "/users/login";
-export default function login() {
+export default function login({setisUser}:{setisUser:React.Dispatch<React.SetStateAction<boolean>>}) {
   const { setAuth }: any = useContext(AuthProvider);
   // const [, setCookie] = useCookies();
   const navigate = useNavigate();
@@ -145,6 +145,7 @@ export default function login() {
             <button
               className="logn-button"
               disabled={!validPwd || !validEmail ? true : false}
+              onClick={()=>{setisUser(true); navigate("/")}}
             >
               {/* <Link to="/home" id="sign-link" className="log2"> */}
               Sign In
@@ -153,7 +154,7 @@ export default function login() {
             <p>
               Don't have an account?
               <span className="log">
-                <Link to="/" id="sign-link" className="log">
+                <Link to="/register" id="sign-link" className="log">
                   Sign up
                 </Link>
                 <br />

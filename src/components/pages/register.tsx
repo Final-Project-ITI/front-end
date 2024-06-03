@@ -200,7 +200,9 @@ export default function Register() {
               className="sign-button"
               disabled={!validName || !validEmail || !validPwd ? true : false}
             >
-              Sign Up
+              <Link to="/login" id="sign-link" className="log2">
+                Sign Up
+              </Link>
             </button>
           </form>
 

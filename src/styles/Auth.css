@@ -18,6 +18,10 @@ body {
   color: #d74339;
   text-decoration: none;
 }
+.log2 {
+  color: white;
+  text-decoration: none;
+}
 .txt1 {
   text-align: center;
 }
@@ -35,7 +39,7 @@ body {
 .img {
   margin-left: 50px;
   width: 70%;
-  max-width: 844px;
+  max-width: 744px;
   min-height: 100vh;
   background-image: url("../assets/images/13a20b05-11e4-4c75-a1a3-5aeb87ef4e43.jpg");
   background-size: cover;

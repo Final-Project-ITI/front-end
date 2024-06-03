@@ -124,7 +124,9 @@ export default function login() {
               className="logn-button"
               disabled={!validPwd || !validEmail ? true : false}
             >
-              Sign In
+              <Link to="/home" id="sign-link" className="log2">
+                Sign In
+              </Link>
             </button>
             <p>
               Don't have an account?

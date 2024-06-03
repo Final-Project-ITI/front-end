@@ -29,9 +29,9 @@ function OrderSubmitted({setSubmitOrderPopUp}:{setSubmitOrderPopUp:React.Dispatc
             <path
               d="M8.46387 15.535L15.5359 8.46503M8.46387 8.46503L15.5359 15.535"
               stroke="#E4002B"
-              stroke-opacity="0.38"
-              stroke-width="1.875"
-              stroke-linecap="round"
+              strokeOpacity="0.38"
+              strokeWidth="1.875"
+              strokeLinecap="round"
             />
           </svg>
         </Box>

@@ -14,13 +14,16 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import logo from "../../assets/logo.svg";
 import { Divider } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import item from "../../models/Item";
 
 const pages = ["Home", "Resturants", "why us"];
 const settings = ["Profile", "Logout"];
 
-function NavBar() {
-  const isUser = true;
-  const cartitems = 8;
+function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.Dispatch<React.SetStateAction<boolean>>,cartQuantity:number}) {
+  const navigate= useNavigate()
+
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -128,7 +131,7 @@ function NavBar() {
               </Button>
             ))}
           </Box>
-          <Button >
+          <Button onClick={()=>navigate("./cart")} >
             <svg
               width="24"
               height="64"
@@ -141,7 +144,7 @@ function NavBar() {
                 fill="#111111"
               />
             </svg>
-            {!!cartitems && (
+            {!!cartQuantity && (
               <Box
                 sx={{
                   height: "24px",
@@ -151,7 +154,7 @@ function NavBar() {
                   color: "white",
                 }}
               >
-                {cartitems}
+                {cartQuantity}
               </Box>
             )}
           </Button>
@@ -175,6 +178,7 @@ function NavBar() {
             <>
               {" "}
               <Button
+              
                 variant="outlined"
                 color="primary"
                 sx={{
@@ -187,6 +191,7 @@ function NavBar() {
                 sign up
               </Button>
               <Button
+              onClick={()=>setisUser(true)}
                 variant="contained"
                 color="primary"
                 sx={{
@@ -204,6 +209,7 @@ function NavBar() {
             <>
               {" "}
               <Button
+                onClick={()=>setisUser(false)}
                 variant="contained"
                 color="primary"
                 sx={{
@@ -218,42 +224,7 @@ function NavBar() {
             </>
           )}
 
-          {/* <Box sx={{ flexGrow: 0, display: { md: "none", xs: "flex" } }}>
-            {isUser && (
-              <>
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
-                    />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "45px" }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </>
-            )}
-          </Box> */}
+
         </Toolbar>
       </Container>
     </AppBar>

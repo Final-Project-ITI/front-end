@@ -1,10 +1,28 @@
 import { Box, Button,TextField, Stack, Typography } from "@mui/material";
+import React, { useState } from 'react'
+const phoneRegex=new RegExp(/^01[0-2,5]{1}[0-9]{8}$/)
 
 
+function AddNumber({setAddNumberPopUp,addPhoneNumber}:{setAddNumberPopUp:React.Dispatch<React.SetStateAction<boolean>>,addPhoneNumber: (phone: string) => void}) {
+  let [phone,setPhone]=useState("");
+  let [error,setError]=useState(false);
+ 
 
-import React from 'react'
-
-function AddNumber({setAddNumberPopUp}:{setAddNumberPopUp:React.Dispatch<React.SetStateAction<boolean>>}) {
+  const handlePhoneInput=(e:any)=>{
+    setPhone(e.target.value)
+    
+  }
+  const handleAddPhone=()=>{
+    if(!phoneRegex.test(phone)){
+      setError(true)
+    }else{
+      setError(false)
+      addPhoneNumber(phone)
+      setAddNumberPopUp(false)
+            
+    }
+  }
+  
   return (
     <>
     <Box sx={{position: "absolute",left:"0",top:"0",width:"100%",height:"100%",backgroundColor:"#00000060",zIndex:"100"}}>
@@ -12,13 +30,14 @@ function AddNumber({setAddNumberPopUp}:{setAddNumberPopUp:React.Dispatch<React.S
         sx={{
           position: "absolute",
           backgroundColor: "#F3ECE5",
-          height: "140px",
+          minHeight: "140px",
           width: "320px",
           left: "50%",
           top: "50vh",
           translate: "-50% -50%",
           zIndex: "200",
           borderRadius: "10px",
+          paddingBottom:"15px"
         }}
       >
         <Box sx={{position:"absolute",left:"8px",top:"8px","&:hover": { cursor: "pointer" }}} onClick={()=>{setAddNumberPopUp(false)}}>
@@ -32,9 +51,9 @@ function AddNumber({setAddNumberPopUp}:{setAddNumberPopUp:React.Dispatch<React.S
             <path
               d="M8.46387 15.535L15.5359 8.46503M8.46387 8.46503L15.5359 15.535"
               stroke="#E4002B"
-              stroke-opacity="0.38"
-              stroke-width="1.875"
-              stroke-linecap="round"
+              strokeOpacity="0.38"
+              strokeWidth="1.875"
+              strokeLinecap="round"
             />
           </svg>
         </Box>
@@ -51,8 +70,8 @@ function AddNumber({setAddNumberPopUp}:{setAddNumberPopUp:React.Dispatch<React.S
             {" "}
             phone number
           </Typography>
-          <TextField sx={{'& input':{height:"24px",width:"256px",padding:"0",border:"0.5px solid #d84339",borderRadius:"5px"}}} id="outlined-basic" variant="outlined" />
-          <Button sx={{width:"112px",borderRadius:"25px",height:"24px",fontSize:"16px",textTransform:"capitalize"}} variant="contained" >Insert</Button>
+          <TextField error={error} helperText={error?"Incorrect phone number":""} onInput={handlePhoneInput} value={phone} sx={{'& input':{height:"24px",width:"256px",padding:"0 5px",border:"0.5px solid #d84339",borderRadius:"5px"}}} id="outlined-basic" variant="outlined" />
+          <Button onClick={handleAddPhone} sx={{width:"112px",borderRadius:"25px",height:"24px",fontSize:"16px",textTransform:"capitalize"}} variant="contained" >Insert</Button>
 
         </Stack>
       </Box>

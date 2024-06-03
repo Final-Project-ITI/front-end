@@ -8,31 +8,35 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import item from "../../models/Item";
+import { useNavigate } from "react-router-dom";
 
-function Cart({ cartitems }: { cartitems: number }) {
+function Cart({ cartItems,cartQuantity,cartTotal,editItemQuantity }: { cartItems: item[],cartQuantity:number,cartTotal:number,editItemQuantity:(itemId: string, newQuantity: number) => void }) {
+  const navigate= useNavigate()
+  const vat=10;
   return (
     <>
       <Container maxWidth="xl">
         <Grid
           container
           justifyContent={"space-between"}
-          alignItems={"center"}
-          sx={{ paddingBottom: "60px" }}
+          
+          sx={{ paddingBottom: "60px",alignItems:{xs:"center",lg:"start"} }}
         >
           <Grid
             item
             xs={12 }
-            lg={7}
+            lg={cartQuantity===0?12:7}
             sx={{
               backgroundColor: "#E8DCCC",
               paddingInline:
-                cartitems == 0
+              cartQuantity == 0
                   ? { xs: "1rem",sm:"2rem", md: "4rem" }
                   : { xs: "1rem", sm:"2rem", md: "4rem" },
               paddingBlock: "1.5rem",
-              borderRadius: cartitems != 0 ? "10px" : "0",
+              borderRadius: cartQuantity != 0 ? "10px" : "0",
               marginTop: "3rem",
-              boxShadow: cartitems != 0 ? "10" : "0",
+              boxShadow: cartQuantity != 0 ? "10" : "0",
             }}
           >
             <Stack direction={"row"} justifyContent={"space-between"}>
@@ -57,7 +61,7 @@ function Cart({ cartitems }: { cartitems: number }) {
                     fontSize: {xs:"1.3rem",md:"1.5rem"},
                   }}
                 >
-                  {cartitems}
+                  {cartQuantity}
                 </Stack>
               </Stack>
               <Stack
@@ -77,24 +81,24 @@ function Cart({ cartitems }: { cartitems: number }) {
             </Stack>
             <Stack sx={{marginTop:"32px"}}>
 
-              {cartitems === 0 && (
-                <Stack justifyContent={"center"}>
+              {cartQuantity === 0 && (
+                <Stack >
                 <Typography
-                  sx={{ textTransform: "capitalize", marginTop: "4rem" }}
+                  sx={{ textTransform: "capitalize", marginBlock: "1rem 4rem",textAlign:"center" }}
                 >
                   There are no items in your cart
                 </Typography>
                 </Stack>
               )}
 
-              <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+              {cartItems.map((item)=><Stack key={item.productId._id} direction={"row"} justifyContent={"space-between"} alignItems={"center"} sx={{marginBottom:"10px"}}>
                 <Box sx={{height:{xs:"38px",sm:"50px",md:"64px"}}}>
-                  <img height={"100%"} src="https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/d6c392a84e4f665424d710649452e7f9/Derivates/a6bdb196bee23faef1d8020319c7c64750ef7686.jpg" />
+                  <img height={"100%"} src={item.productId.icon} />
                 </Box>
-                <Typography title="Chicken BBQ pizza" sx={{fontSize:{xs:"0.8rem",sm:"1.2rem",md:"24px"}}}>Chicken BBQ pizza</Typography>
+                <Typography title={item.productId.title} sx={{fontSize:{xs:"0.8rem",sm:"1.2rem",md:"24px"}}}>{item.productId.title}</Typography>
                 <Stack direction={"row"} sx={{gap:{xs:2,sm:2.2,md:3}}}  alignItems={"center"} justifyContent={"space-between"}>
                 <Stack direction={"row"} alignItems={"center"} sx={{gap:{xs:0.1,sm:0.5,md:1.5}}}  justifyContent={"space-between"}>
-                  <Box sx={{height:{xs:"25px",sm:"30px",md:"40px"},width:{xs:"25px",sm:"30px",md:"40px"}}}>
+                  <Box sx={{"&:hover":{cursor:"pointer"},height:{xs:"25px",sm:"30px",md:"40px"},width:{xs:"25px",sm:"30px",md:"40px"}}} onClick={()=>editItemQuantity(item.productId._id,-1)}>
                   <svg
                     width="100%"
                     height="100%"
@@ -110,8 +114,8 @@ function Cart({ cartitems }: { cartitems: number }) {
 
                   </Box>
                   
-                  <Typography sx={{fontSize:{xs:"0.8rem",sm:"1.2rem",md:"24px"}}}>1</Typography>
-                  <Box sx={{height:{xs:"25px",sm:"30px",md:"40px"},width:{xs:"25px",sm:"30px",md:"40px"}}}>
+                  <Typography sx={{fontSize:{xs:"0.8rem",sm:"1.2rem",md:"24px"}}}>{item.quantity}</Typography>
+                  <Box sx={{"&:hover":{cursor:"pointer"},height:{xs:"25px",sm:"30px",md:"40px"},width:{xs:"25px",sm:"30px",md:"40px"}}} onClick={()=>editItemQuantity(item.productId._id,1)}>
                   <svg
                     width="100%"
                     height="100%"
@@ -128,26 +132,30 @@ function Cart({ cartitems }: { cartitems: number }) {
                   </Box>
                   
                 </Stack>
-                <Typography sx={{fontSize:{xs:"0.8rem",sm:"1.2rem",md:"24px"},fontWeight:"700"}}>EGP 120 </Typography>
+                <Typography sx={{fontSize:{xs:"0.8rem",sm:"1.2rem",md:"24px"},fontWeight:"700"}}>EGP {item.quantity*item.productId.price} </Typography>
                 </Stack>
-              </Stack>
+              </Stack>)}
             </Stack>
           </Grid>
-          {cartitems > 0 && (
+          {cartQuantity > 0 && (
             <Grid
               item
               xs={12}
-              md={7}
+              md={12}
               lg={4}
               sx={{
                 marginTop: "3rem",
               }}
             >
+              <Grid container justifyContent={"space-between"}>
+              <Grid item xs={12}
+              md={7}
+              lg={12}>
               <Box
                 sx={{
                   backgroundColor: "#E8DCCC",
                   paddingBlock: "32px",
-                  borderRadius: cartitems != 0 ? "10px" : "0",
+                  borderRadius: cartQuantity != 0 ? "10px" : "0",
                   height: "243px",
                 }}
               >
@@ -166,10 +174,10 @@ function Cart({ cartitems }: { cartitems: number }) {
                   </Stack>
                   <Stack>
                     <Typography sx={{ color: "#00000069",fontSize:{xs:"18px",sm:"20px"} }} >
-                      EGP 120
+                      EGP {cartTotal}
                     </Typography>
                     <Typography sx={{ color: "#00000069",fontSize:{xs:"18px",sm:"20px"} }} >
-                      EGP 10
+                      EGP {vat}
                     </Typography>
                   </Stack>
                 </Stack>
@@ -189,16 +197,15 @@ function Cart({ cartitems }: { cartitems: number }) {
                     </Typography>
                   </Stack>
                   <Stack>
-                    <Typography sx={{fontSize:{xs:"20px",sm:"24px"}}} >EGP 130</Typography>
+                    <Typography sx={{fontSize:{xs:"20px",sm:"24px"}}} >EGP {cartTotal+vat}</Typography>
                   </Stack>
                 </Stack>
               </Box>
-            </Grid>
-          )}
-          {cartitems > 0 && <Grid item xs={0} lg={8} />}
-          {cartitems > 0 && (
-            <Grid item xs={12} md={4} >
-              <Button
+                </Grid >
+                <Grid item xs={12}
+              md={4}
+              lg={12}>
+                <Button
                 variant="outlined"
                 sx={{
                   width: "100%",
@@ -213,6 +220,7 @@ function Cart({ cartitems }: { cartitems: number }) {
                 Add more items
               </Button>
               <Button
+              onClick={()=>{navigate("/checkout")}}
                 sx={{
                   width: "100%",
                   borderRadius: "50px",
@@ -225,8 +233,15 @@ function Cart({ cartitems }: { cartitems: number }) {
               >
                 checkout
               </Button>
+                
+              </Grid>
+
+              </Grid>
+              
+              
             </Grid>
           )}
+
         </Grid>
       </Container>
     </>

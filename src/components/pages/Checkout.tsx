@@ -16,12 +16,37 @@ import OrderSubmitted from "../popups/OrderSubmitted";
 import AddNumber from "../popups/AddNumber";
 import AddAdress from "../popups/AddAdress";
 
-function Checkout() {
+function Checkout({
+  phones,
+  addresses,
+  cartTotal,
+  addPhoneNumber,
+  addAddress,
+}: {
+  phones: string[];
+  addresses: string[];
+  cartTotal: number;
+  addPhoneNumber: (phone: string) => void;
+  addAddress: (address: string) => void;
+}) {
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);
+
+  const [checkoutInfo, setCheckoutInfo] = useState({
+    phone: phones[phones.length - 1] || "",
+    address: addresses[addresses.length-1] || "",
+  });
+
   const ITEM_HEIGHT = 30;
   const ITEM_PADDING_TOP = 8;
+  const vat: number = 10;
+
+  const handleInfoChange=(newCheckOutInfo:{address:string,phone:string})=>{
+    setCheckoutInfo(newCheckOutInfo)
+
+  }
+
   const MenuProps = {
     PaperProps: {
       style: {
@@ -53,14 +78,25 @@ function Checkout() {
   };
   return (
     <>
-      <Container maxWidth="xl" >
-        
-        {submitOrderPopUp&&<OrderSubmitted setSubmitOrderPopUp={setSubmitOrderPopUp}></OrderSubmitted>}
-        {addNumberPopUp&&<AddNumber  setAddNumberPopUp={setAddNumberPopUp}></AddNumber>}
-        {addAddressPopUp&&<AddAdress setAddAddressPopUp={setAddAddressPopUp}></AddAdress>}
+      <Container maxWidth="xl">
+        {submitOrderPopUp && (
+          <OrderSubmitted
+            setSubmitOrderPopUp={setSubmitOrderPopUp}
+          ></OrderSubmitted>
+        )}
+        {addNumberPopUp && (
+          <AddNumber
+            addPhoneNumber={addPhoneNumber}
+            setAddNumberPopUp={setAddNumberPopUp}
+          ></AddNumber>
+        )}
+        {addAddressPopUp && (
+          <AddAdress
+            addAddress={addAddress}
+            setAddAddressPopUp={setAddAddressPopUp}
+          ></AddAdress>
+        )}
 
-
-        
         <Grid
           container
           justifyContent={"space-between"}
@@ -76,7 +112,7 @@ function Checkout() {
             sx={{
               backgroundColor: "#E8DCCC",
               paddingInline: { xs: "1rem", sm: "2rem", md: "4rem" },
-              paddingBlock: "1.5rem",
+              paddingBlock: "1.5rem 2.5rem",
               borderRadius: "10px",
               marginTop: "3rem",
             }}
@@ -106,7 +142,7 @@ function Checkout() {
                     <Select
                       MenuProps={MenuProps}
                       sx={{
-                        width:"100%",
+                        width: "100%",
                         maxWidth: "100%",
                         border: "1px solid #d84339",
                         backgroundColor: "#F3ECE5",
@@ -114,19 +150,20 @@ function Checkout() {
                         height: "50px",
                       }}
                       id="demo-simple-select"
-                      //   value={[3]}
-                      //   label="Age"
-                      // onChange={handleChange}
+                      // defaultValue={phones[phones.length-1]}
+                      value={checkoutInfo.phone}
+                      onChange={(e)=>handleInfoChange({...checkoutInfo,phone:e.target.value})}
                     >
-                      <MenuItem value={"01020633680"}>01020633680</MenuItem>
-                      <MenuItem value={"01020633680"}>01020633680</MenuItem>
-                      <MenuItem value={"01020633680"}>01020633680</MenuItem>
-                      <MenuItem value={"01020633680"}>01020633680</MenuItem>
-                      <MenuItem value={"01020633680"}>01020633680</MenuItem>
-                      <MenuItem value={"01020633680"}>01020633680</MenuItem>
+                      {phones.map((phone) => (
+                        <MenuItem key={phone} value={phone}>
+                          {phone}
+                        </MenuItem>
+                      ))}
                     </Select>
                     <Box
-                     onClick={()=>{setAddNumberPopUp(true)}}
+                      onClick={() => {
+                        setAddNumberPopUp(true);
+                      }}
                       sx={{ "&:hover": { cursor: "pointer" } }}
                     >
                       <svg
@@ -145,41 +182,46 @@ function Checkout() {
                   </Stack>
                 </Box>
               </FormControl>
-              <FormControl fullWidth sx={{marginTop:"8px"}}>
+              <FormControl fullWidth sx={{ marginTop: "8px" }}>
                 <Box>
                   <Typography sx={{ color: "#111111BA", fontSize: "18px" }}>
-                  Address
+                    Address
                   </Typography>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
                     justifyContent={"center"}
                     spacing={2}
-                    sx={{paddingInline:"0px"}}
+                    sx={{ paddingInline: "0px" }}
                   >
                     <Select
+                      //  defaultValue={addresses[addresses.length-1]}
                       MenuProps={MenuProps}
                       sx={{
-                        width:"100%",
+                        width: "100%",
                         border: "1px solid #d84339",
                         backgroundColor: "#F3ECE5",
                         borderRadius: "15px",
                         height: "96px",
                         wordWrap: "break-word",
-                        "& MuiSelect-select":{wordWrap: "break-word"}
-                        
+                        "& MuiSelect-select": { wordWrap: "break-word" },
                       }}
                       id="demo-simple-select"
-                      //   value={[3]}
+                      value={checkoutInfo.address}
                       //   label="Age"
-                      // onChange={handleChange}
+                      onChange={(e)=>handleInfoChange({...checkoutInfo,address:e.target.value})}
                     >
-                      <MenuItem value={"010206,  k,mmmmmmmmmmmmmmmmmmmmmm mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm33680"}>010206,k,mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm33680</MenuItem>
-                      <MenuItem value={"01020633680"}>01020633680</MenuItem>
-                      <MenuItem value={"01020633680"}>01020633680</MenuItem>
+                      {addresses.map((addresse) => (
+                        <MenuItem key={addresse} value={addresse}>
+                          {addresse}
+                        </MenuItem>
+                      ))}
                     </Select>
                     <Box
-                     onClick={()=>{setAddAddressPopUp(true)}}
+                      onClick={() => {
+                        console.log(addresses[addresses.length - 1]);
+                        setAddAddressPopUp(true);
+                      }}
                       sx={{ "&:hover": { cursor: "pointer" } }}
                     >
                       <svg
@@ -204,126 +246,133 @@ function Checkout() {
             <Grid
               item
               xs={12}
-              md={7}
+              md={12}
               lg={4}
               sx={{
                 marginTop: "3rem",
               }}
             >
-              <Box
-                sx={{
-                  backgroundColor: "#E8DCCC",
-                  paddingBlock: "32px",
-                  borderRadius: "10px",
-                  height: "243px",
-                }}
-              >
-                <Stack
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  sx={{
-                    paddingInline: { xs: "1.5rem", sm: "3rem", md: "1rem" },
-                  }}
-                >
-                  <Stack>
-                    <Typography
+              <Grid container justifyContent={"space-between"}>
+                <Grid item xs={12} md={7} lg={12}>
+                  <Box
+                    sx={{
+                      backgroundColor: "#E8DCCC",
+                      paddingBlock: "32px",
+                      borderRadius: "10px",
+                      height: "243px",
+                    }}
+                  >
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"space-between"}
                       sx={{
-                        color: "#00000069",
-                        fontSize: { xs: "18px", sm: "20px" },
+                        paddingInline: { xs: "1.5rem", sm: "3rem", md: "1rem" },
                       }}
                     >
-                      Sub Total:
-                    </Typography>
-                    <Typography
+                      <Stack>
+                        <Typography
+                          sx={{
+                            color: "#00000069",
+                            fontSize: { xs: "18px", sm: "20px" },
+                          }}
+                        >
+                          Sub Total:
+                        </Typography>
+                        <Typography
+                          sx={{
+                            color: "#00000069",
+                            fontSize: { xs: "18px", sm: "20px" },
+                          }}
+                        >
+                          vat:
+                        </Typography>
+                      </Stack>
+                      <Stack>
+                        <Typography
+                          sx={{
+                            color: "#00000069",
+                            fontSize: { xs: "18px", sm: "20px" },
+                          }}
+                        >
+                          EGP {cartTotal}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            color: "#00000069",
+                            fontSize: { xs: "18px", sm: "20px" },
+                          }}
+                        >
+                          EGP {vat}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    <Divider color={"black"} sx={{ marginBlock: "18px" }} />
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"space-between"}
                       sx={{
-                        color: "#00000069",
-                        fontSize: { xs: "18px", sm: "20px" },
+                        paddingInline: { xs: "1.5rem", sm: "3rem", md: "1rem" },
                       }}
                     >
-                      vat:
-                    </Typography>
-                  </Stack>
-                  <Stack>
-                    <Typography
-                      sx={{
-                        color: "#00000069",
-                        fontSize: { xs: "18px", sm: "20px" },
-                      }}
-                    >
-                      EGP 120
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: "#00000069",
-                        fontSize: { xs: "18px", sm: "20px" },
-                      }}
-                    >
-                      EGP 10
-                    </Typography>
-                  </Stack>
-                </Stack>
-                <Divider color={"black"} sx={{ marginBlock: "18px" }} />
-                <Stack
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  sx={{
-                    paddingInline: { xs: "1.5rem", sm: "3rem", md: "1rem" },
-                  }}
-                >
-                  <Stack>
-                    <Typography sx={{ fontSize: { xs: "24px", sm: "28px" } }}>
-                      Total
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: "#00000069",
-                        marginTop: "14px",
-                        fontSize: { xs: "18px", sm: "20px" },
-                      }}
-                    >
-                      Including vat
-                    </Typography>
-                  </Stack>
-                  <Stack>
-                    <Typography sx={{ fontSize: { xs: "20px", sm: "24px" } }}>
-                      EGP 130
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </Box>
-            </Grid>
-          }
-          {<Grid item xs={0} lg={8} />}
-          {
-            <Grid item xs={12} md={4}>
-              <Button
-                variant="outlined"
-                sx={{
-                  width: "100%",
-                  borderRadius: "50px",
-                  marginBlock: "32px",
-                  color: "black",
-                  height: { xs: "54px", sm: "64px" },
-                  fontSize: { xs: "18px", sm: "24px" },
-                  fontWeight: "700",
-                }}
-              >
-                Add more items
-              </Button>
-              <Button
-                sx={{
-                  width: "100%",
-                  borderRadius: "50px",
-                  height: { xs: "54px", sm: "64px" },
-                  fontSize: { xs: "18px", sm: "24px" },
-                  fontWeight: "700",
-                }}
-                variant="contained"
-                color="primary"
-                onClick={()=>{setSubmitOrderPopUp(true)}}
-              >
-                checkout
-              </Button>
+                      <Stack>
+                        <Typography
+                          sx={{ fontSize: { xs: "24px", sm: "28px" } }}
+                        >
+                          Total
+                        </Typography>
+                        <Typography
+                          sx={{
+                            color: "#00000069",
+                            marginTop: "14px",
+                            fontSize: { xs: "18px", sm: "20px" },
+                          }}
+                        >
+                          Including vat
+                        </Typography>
+                      </Stack>
+                      <Stack>
+                        <Typography
+                          sx={{ fontSize: { xs: "20px", sm: "24px" } }}
+                        >
+                          EGP {cartTotal + vat}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={4} lg={12}>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      width: "100%",
+                      borderRadius: "50px",
+                      marginBlock: "32px",
+                      color: "black",
+                      height: { xs: "54px", sm: "64px" },
+                      fontSize: { xs: "18px", sm: "24px" },
+                      fontWeight: "700",
+                    }}
+                  >
+                    Add more items
+                  </Button>
+                  <Button
+                    sx={{
+                      width: "100%",
+                      borderRadius: "50px",
+                      height: { xs: "54px", sm: "64px" },
+                      fontSize: { xs: "18px", sm: "24px" },
+                      fontWeight: "700",
+                    }}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      setSubmitOrderPopUp(true);
+                    }}
+                  >
+                    checkout
+                  </Button>
+                </Grid>
+              </Grid>
             </Grid>
           }
         </Grid>

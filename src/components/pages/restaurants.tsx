@@ -88,14 +88,14 @@ export default function Restaurants() {
       <Stack
         justifyContent="center"
         alignItems="center"
-        sx={{ minHeight: "800px", background: "white" }}
+        sx={{ minHeight: "800px", background: "#f3ece4" }}
         spacing={4}
       >
         <Stack
           direction="row"
           justifyContent="center"
           alignItems="center"
-          sx={{ background: "white", minHeight: "400px" }}
+          sx={{ background: "#f3ece4", minHeight: "400px" }}
           spacing={4}
         >
           {images.slice(0, 4).map((imageUrl, index) => (
@@ -118,7 +118,7 @@ export default function Restaurants() {
           direction="row"
           justifyContent="center"
           alignItems="center"
-          sx={{ background: "white", minHeight: "400px" }}
+          sx={{ background: "#f3ece4", minHeight: "400px" }}
           spacing={4}
         >
           {images.slice(4).map((imageUrl, index) => (

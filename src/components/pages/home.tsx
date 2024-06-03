@@ -158,7 +158,7 @@ export default function Home() {
       <Box
         sx={{
           minHeight: "400px",
-          backgroundColor: "white",
+          backgroundColor: "#f3ece4",
           alignItems: "center",
           display: "flex",
           flexDirection: "column",
@@ -182,13 +182,13 @@ export default function Home() {
         <Stack
           justifyContent="center"
           alignItems="center"
-          sx={{ minHeight: "800px", background: "white" }}
+          sx={{ minHeight: "800px", background: "#f3ece4" }}
         >
           <Stack
             direction="row"
             justifyContent="center"
             alignItems="center"
-            sx={{ background: "white", minHeight: "400px" }}
+            sx={{ background: "f3ece4", minHeight: "400px" }}
             spacing={4}
           >
             {filteredImages.map((imageUrl, index) => (

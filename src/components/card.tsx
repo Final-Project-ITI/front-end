@@ -13,7 +13,7 @@ export default function Card() {
       <Box
         sx={{
           minHeight: "400px",
-          backgroundColor: "white",
+          backgroundColor: "#f3ece4",
           alignItems: "center",
           display: "flex",
           flexDirection: "column",
@@ -37,7 +37,7 @@ export default function Card() {
         <Stack
           justifyContent="center"
           alignItems="center"
-          sx={{ minHeight: "800px", background: "white" }}
+          sx={{ minHeight: "800px", background: "#f3ece4" }}
         >
           <Stack
             direction="row"
@@ -45,7 +45,7 @@ export default function Card() {
             alignItems="center"
             position="relative"
             top="-60px"
-            sx={{ background: "white", minHeight: "400px" }}
+            sx={{ background: "#f3ece4", minHeight: "400px" }}
             spacing={10}
           >
             <Stack justifyContent="center" alignItems="center" spacing={1}>

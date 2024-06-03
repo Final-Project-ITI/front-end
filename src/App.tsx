@@ -16,6 +16,10 @@ import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import cart from "./models/Cart.ts";
 import item from "./models/Item.ts";
+import Home from "./components/pages/home";
+import Restaurants from "./components/pages/restaurants";
+import Register from "./components/pages/register";
+import Login from "./components/pages/login";
 
 function App() {
   const [openSideCart, setOpenSideCart] = useState(false);
@@ -25,10 +29,9 @@ function App() {
   const [cartItems, setCartItems] = useState<item[]>([]);
   const [cartQuantity, setCartQuantity] = useState<number>(0);
   const [cartTotal, setCartTotal] = useState<number>(0);
-  
+
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
-
 
   useEffect(() => {
     setisUser(true);
@@ -51,17 +54,25 @@ function App() {
         },
         quantity: 3,
       },
-      
     ];
     setCartItems(newCartItems);
     calculateQuantity(newCartItems);
     calculateTotal(newCartItems);
 
-    const newPhones=["01120633680","01030622894","01240277648","01548522960"]
-    setPhones(newPhones)
+    const newPhones = [
+      "01120633680",
+      "01030622894",
+      "01240277648",
+      "01548522960",
+    ];
+    setPhones(newPhones);
 
-    const newAddresses=["101-nasr city, cairo, egypt","202-ard elgamaeyat, ismailia, egypt","101-el-abasa, abu-hammad, sharkia, egypt"]
-    setAddresses(newAddresses)
+    const newAddresses = [
+      "101-nasr city, cairo, egypt",
+      "202-ard elgamaeyat, ismailia, egypt",
+      "101-el-abasa, abu-hammad, sharkia, egypt",
+    ];
+    setAddresses(newAddresses);
   }, []);
 
   const calculateQuantity = (newCartItems: item[]) => {
@@ -108,16 +119,15 @@ function App() {
     setCartItems(newCartItems);
     calculateQuantity(newCartItems);
     calculateTotal(newCartItems);
-    
   };
-  const addPhoneNumber=(phone:string)=>{
-    const newPhones=[...phones,phone]
-    setPhones(newPhones)
-  }
-  const addAddress=(address:string)=>{
-    const newAddresses=[...addresses,address]
-    setAddresses(newAddresses)
-  }
+  const addPhoneNumber = (phone: string) => {
+    const newPhones = [...phones, phone];
+    setPhones(newPhones);
+  };
+  const addAddress = (address: string) => {
+    const newAddresses = [...addresses, address];
+    setAddresses(newAddresses);
+  };
 
   return (
     <>
@@ -137,7 +147,22 @@ function App() {
             cartQuantity={cartQuantity}
           ></NavBar>
           <Routes>
-            <Route path="/checkout" element={<Checkout phones={phones} addresses={addresses} cartTotal={cartTotal} addPhoneNumber={addPhoneNumber} addAddress={addAddress}/> } />
+            <Route path="/" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/restaurant" element={<Restaurants />} />
+            <Route
+              path="/checkout"
+              element={
+                <Checkout
+                  phones={phones}
+                  addresses={addresses}
+                  cartTotal={cartTotal}
+                  addPhoneNumber={addPhoneNumber}
+                  addAddress={addAddress}
+                />
+              }
+            />
             <Route
               path="/cart"
               element={
@@ -153,7 +178,14 @@ function App() {
           <Footer></Footer>
         </Stack>
         {openSideCart && (
-          <SideCart deleteItemQuantity={deleteItemQuantity} setOpenSideCart={setOpenSideCart} cartItems={cartItems} cartQuantity={cartQuantity}  cartTotal={cartTotal}   editItemQuantity={editItemQuantity}/>
+          <SideCart
+            deleteItemQuantity={deleteItemQuantity}
+            setOpenSideCart={setOpenSideCart}
+            cartItems={cartItems}
+            cartQuantity={cartQuantity}
+            cartTotal={cartTotal}
+            editItemQuantity={editItemQuantity}
+          />
         )}
         <CartIcon setOpenSideCart={setOpenSideCart} cartTotal={cartTotal} />
       </ThemeProvider>

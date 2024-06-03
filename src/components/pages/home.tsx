@@ -16,7 +16,7 @@ import img3 from "../../assets/images/elsraya.jpg";
 import img4 from "../../assets/images/x&o.jpg";
 import img5 from "../../assets/images/chq.jpg";
 import img6 from "../../assets/images/nour-elsham.jpg";
-import Card from "../card";
+import Card from "../Whyus";
 
 const images = [img3, img4, img5, img6];
 const restaurantNames = [

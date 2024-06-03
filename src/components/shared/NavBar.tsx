@@ -20,9 +20,16 @@ import item from "../../models/Item";
 const pages = ["Home", "Resturants", "why us"];
 const settings = ["Profile", "Logout"];
 
-function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.Dispatch<React.SetStateAction<boolean>>,cartQuantity:number}) {
-  const navigate= useNavigate()
-
+function NavBar({
+  isUser,
+  setisUser,
+  cartQuantity,
+}: {
+  isUser: boolean;
+  setisUser: React.Dispatch<React.SetStateAction<boolean>>;
+  cartQuantity: number;
+}) {
+  const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -48,8 +55,8 @@ function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "inherit", boxShadow: 0 }}>
-      <Container maxWidth="xl" >
-        <Toolbar disableGutters sx={{height:"112px"}}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters sx={{ height: "112px" }}>
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -97,19 +104,32 @@ function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
-              <Divider/>
-                {!isUser&&<MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" color="primary">log in</Typography>
-                </MenuItem>}
-                {isUser&&
+              <Divider />
+              {!isUser && (
                 <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" color="primary">log out</Typography>
+                  <Typography textAlign="center" color="primary">
+                    log in
+                  </Typography>
                 </MenuItem>
-                }
+              )}
+              {isUser && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" color="primary">
+                    log out
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           <Button
-            sx={{ display: { xs: "flex", md: "none" },position:"absolute", left:"50%" , translate:"-50%" ,mr: 3, flexGrow: 100 }}
+            sx={{
+              display: { xs: "flex", md: "none" },
+              position: "absolute",
+              left: "50%",
+              translate: "-50%",
+              mr: 3,
+              flexGrow: 100,
+            }}
           >
             <img src={logo} alt="" />
           </Button>
@@ -131,7 +151,7 @@ function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.
               </Button>
             ))}
           </Box>
-          <Button onClick={()=>navigate("./cart")} >
+          <Button onClick={() => navigate("./cart")}>
             <svg
               width="24"
               height="64"
@@ -159,7 +179,7 @@ function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.
             )}
           </Button>
           {isUser && (
-            <Button >
+            <Button>
               <svg
                 width="24"
                 height="64"
@@ -178,7 +198,6 @@ function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.
             <>
               {" "}
               <Button
-              
                 variant="outlined"
                 color="primary"
                 sx={{
@@ -191,7 +210,7 @@ function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.
                 sign up
               </Button>
               <Button
-              onClick={()=>setisUser(true)}
+                onClick={() => setisUser(true)}
                 variant="contained"
                 color="primary"
                 sx={{
@@ -209,7 +228,7 @@ function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.
             <>
               {" "}
               <Button
-                onClick={()=>setisUser(false)}
+                onClick={() => setisUser(false)}
                 variant="contained"
                 color="primary"
                 sx={{
@@ -223,8 +242,6 @@ function NavBar({isUser,setisUser,cartQuantity}:{isUser:boolean,setisUser:React.
               </Button>
             </>
           )}
-
-
         </Toolbar>
       </Container>
     </AppBar>

@@ -1,10 +1,4 @@
-import {
-  Box,
-  CssBaseline,
-  ThemeProvider,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { CssBaseline, ThemeProvider, Stack } from "@mui/material";
 import theme from "./themes/theme.ts";
 import NavBar from "./components/shared/NavBar.tsx";
 import Footer from "./components/shared/Footer.tsx";
@@ -14,12 +8,14 @@ import CartIcon from "./components/shared/CartIcon.tsx";
 import SideCart from "./components/shared/SideCart.tsx";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import cart from "./models/Cart.ts";
 import item from "./models/Item.ts";
 import Home from "./components/pages/home";
 import Restaurants from "./components/pages/restaurants";
 import Register from "./components/pages/register";
 import Login from "./components/pages/login";
+import { Menu } from "./components/pages/Menu.tsx";
+import Ditails from "./components/pages/Ditails.tsx";
+import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
 
 function App() {
   const [openSideCart, setOpenSideCart] = useState(false);
@@ -147,6 +143,9 @@ function App() {
             cartQuantity={cartQuantity}
           ></NavBar>
           <Routes>
+            <Route path="/Menu" element={<Menu />} />
+            <Route path="/ProductDetails" element={<Ditails />} />
+            <Route path="/UserInfo" element={<UserInfoAndOrders />} />
             <Route path="/" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home />} />

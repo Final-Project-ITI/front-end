@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../styles/restaurant.css";
 import img from "../../assets/images/21.png";
 import img2 from "../../assets/images/22.png";
@@ -26,6 +26,7 @@ const restaurantNames = [
 ];
 
 export default function Restaurants() {
+  const navigate = useNavigate()
   return (
     <div>
       <Stack
@@ -106,7 +107,7 @@ export default function Restaurants() {
               <div className="text-wrapper">
                 <Typography variant="h6">{restaurantNames[index]}</Typography>
                 <button className="bb2">
-                  <Link to="/restaurant" id="sign-link" className="log4">
+                  <Link to="/menu" id="sign-link" className="log4">
                     View Menu
                   </Link>
                 </button>

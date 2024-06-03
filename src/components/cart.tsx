@@ -2,7 +2,9 @@ import React from "react";
 import { Box } from "@mui/material";
 import { Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import img from "../assets/images/2da114b4-ecdf-41b8-a60b-b16cd5da3ae8.jpg";
+import img1 from "../assets/images/1.png";
+import img2 from "../assets/images/2.png";
+import img3 from "../assets/images/3.png";
 // import "../../styles/home.css";
 
 export default function Card() {
@@ -49,7 +51,7 @@ export default function Card() {
             <Stack justifyContent="center" alignItems="center" spacing={1}>
               <Box
                 sx={{
-                  backgroundImage: `url(${img})`,
+                  backgroundImage: `url(${img1})`,
                   width: "250px",
                   height: "250px",
                   backgroundRepeat: "no-repeat",
@@ -89,7 +91,7 @@ export default function Card() {
             <Stack justifyContent="center" alignItems="center" spacing={1}>
               <Box
                 sx={{
-                  backgroundImage: `url(${img})`,
+                  backgroundImage: `url(${img2})`,
                   width: "250px",
                   height: "250px",
                   backgroundRepeat: "no-repeat",
@@ -129,7 +131,7 @@ export default function Card() {
             <Stack justifyContent="center" alignItems="center" spacing={1}>
               <Box
                 sx={{
-                  backgroundImage: `url(${img})`,
+                  backgroundImage: `url(${img3})`,
                   width: "250px",
                   height: "250px",
                   backgroundRepeat: "no-repeat",

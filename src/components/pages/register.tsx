@@ -6,12 +6,12 @@ import { PWD_REGEX } from "../../regex/pass";
 import { EMAIL_REGEX } from "../../regex/email";
 import { Phone_REGEX } from "../../regex/phone";
 import "../../styles/Auth.css";
-// import axios from "../../api/axios";
+import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 
-// const REGISTER_URL = "/users/register";
+const REGISTER_URL = "/users/register";
 export default function Register() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const userRef = useRef<HTMLInputElement>(null);
   const errRef: any = useRef();
@@ -63,17 +63,26 @@ export default function Register() {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    const v1 = USER_REGEX.test(user);
-    const v2 = Phone_REGEX.test(phone);
-    const v3 = EMAIL_REGEX.test(email);
-    const v4 = PWD_REGEX.test(pwd);
-    if (!v1 || !v2 || !v3 || !v4) {
-      setErrMsg("invalid entry");
-      return;
-    }
-    console.log(user, phone, email, pwd);
-  }
 
+    try {
+      await axios.post(REGISTER_URL, {
+        username: user,
+        phone,
+        email,
+        password: pwd,
+      });
+
+      setErrMsg("");
+
+      navigate("/login", { replace: true });
+    } catch (err: any) {
+      if (!err.response) {
+        setErrMsg("No server response");
+      } else {
+        setErrMsg(err.response.data.message);
+      }
+    }
+  }
   return (
     <>
       <div className="container m-auto">
@@ -200,9 +209,9 @@ export default function Register() {
               className="sign-button"
               disabled={!validName || !validEmail || !validPwd ? true : false}
             >
-              <Link to="/login" id="sign-link" className="log2">
-                Sign Up
-              </Link>
+              {/* <Link to="/login" id="sign-link" className="log2"> */}
+              Sign Up
+              {/* </Link> */}
             </button>
           </form>
 

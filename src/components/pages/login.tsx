@@ -1,11 +1,21 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { EMAIL_REGEX } from "../../regex/email";
 import { PWD_REGEX } from "../../regex/pass";
-import { Link, useNavigate } from "react-router-dom";
+import AuthProvider from "../../context/AuthProvider.tsx";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import axios from "../../api/axios";
 import "../../styles/Log.css";
+
+const LOGIN_URL = "/users/login";
 export default function login() {
+  const { setAuth }: any = useContext(AuthProvider);
+  const [, setCookie] = useCookies();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const home = location.state?.home?.pathname || "/home";
   const userRef = useRef<HTMLInputElement>(null);
   const errRef: any = useRef();
 
@@ -23,13 +33,24 @@ export default function login() {
   }, []);
   async function handleSubmit(e: any) {
     e.preventDefault();
-    const v3 = EMAIL_REGEX.test(email);
-    const v4 = PWD_REGEX.test(pwd);
-    if (!v3 || !v4) {
-      setErrMsg("invalid entry");
-      return;
+
+    try {
+      const res = await axios.post(LOGIN_URL, { email, password: pwd });
+      const token = await res.data.token;
+
+      setErrMsg("");
+      setAuth({ token });
+
+      setCookie("token", token);
+      navigate(home, { replace: true });
+    } catch (err: any) {
+      if (!err.response) {
+        setErrMsg("No server response");
+      } else {
+        setErrMsg(err.response.data.message);
+        setEmail(""), setPwd("");
+      }
     }
-    console.log(email, pwd);
   }
 
   useEffect(() => {
@@ -124,9 +145,9 @@ export default function login() {
               className="logn-button"
               disabled={!validPwd || !validEmail ? true : false}
             >
-              <Link to="/home" id="sign-link" className="log2">
-                Sign In
-              </Link>
+              {/* <Link to="/home" id="sign-link" className="log2"> */}
+              Sign In
+              {/* </Link> */}
             </button>
             <p>
               Don't have an account?

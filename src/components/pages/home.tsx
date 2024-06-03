@@ -76,9 +76,9 @@ export default function Home() {
     setSearchRest(event.target.value);
   };
 
-  const filteredRestaurants = restaurantNames.filter((name) => {
-    name.toLowerCase().includes(searchRest.toLowerCase());
-  });
+  const filteredRestaurants = restaurantNames.filter((name) =>
+    name.toLowerCase().includes(searchRest.toLowerCase())
+  );
 
   const filteredImages = images.filter((_, index) =>
     restaurantNames[index].toLowerCase().includes(searchRest.toLowerCase())

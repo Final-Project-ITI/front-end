@@ -104,7 +104,9 @@ export default function Home() {
             backgroundPosition: "center center",
             backgroundSize: "cover",
             border: "5px",
-            borderRadius: "50%",
+            borderRadius: "20%",
+            position: "relative",
+            bottom: "20px",
           }}
         ></Box>
         <Stack
@@ -123,7 +125,7 @@ export default function Home() {
               color: "black",
               textAlign: "center",
               position: "initial",
-              bottom: "20px",
+              // bottom: "20px",
             }}
           >
             Order food online in Zagazig
@@ -150,7 +152,7 @@ export default function Home() {
             backgroundPosition: "center center",
             backgroundSize: "cover",
             border: "5px",
-            borderRadius: "50%",
+            borderRadius: "5%",
           }}
         ></Box>
       </Stack>

@@ -36,18 +36,18 @@ export default function Restaurants() {
         justifyContent="center"
         alignItems="center"
         sx={{ minHeight: "500px", background: "#F9F1E5" }}
-        spacing={20}
+        spacing={30}
       >
         <Box
           sx={{
             backgroundImage: `url(${img})`,
-            width: "300px",
-            height: "300px",
+            width: "250px",
+            height: "320px",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center center",
             backgroundSize: "cover",
             border: "5px",
-            borderRadius: "50%",
+            borderRadius: "1%",
           }}
         ></Box>
         <Stack
@@ -75,13 +75,15 @@ export default function Restaurants() {
         <Box
           sx={{
             backgroundImage: `url(${img2})`,
-            width: "300px",
+            width: "200px",
             height: "300px",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center center",
             backgroundSize: "cover",
-            border: "5px",
-            borderRadius: "50%",
+            position: "relative",
+            bottom: "20px",
+            // border: "5px",
+            // borderRadius: "1%",
           }}
         ></Box>
       </Stack>

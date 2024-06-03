@@ -89,7 +89,7 @@ function NavBar({
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={()=>{handleCloseNavMenu(); navigate("/") }}>
+                <MenuItem key={page} onClick={()=>{handleCloseNavMenu(); if(page=="Resturants"){navigate("/resturants")}else{navigate("/")} }}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}

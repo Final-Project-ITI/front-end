@@ -143,9 +143,9 @@ function App() {
             cartQuantity={cartQuantity}
           ></NavBar>
           <Routes>
-            <Route path="/Menu" element={<Menu />} />
-            <Route path="/ProductDetails" element={<Ditails />} />
-            <Route path="/UserInfo" element={<UserInfoAndOrders />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/productDetails" element={<Ditails />} />
+            <Route path="/userInfo" element={<UserInfoAndOrders />} />
             <Route path="/" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/home" element={<Home />} />

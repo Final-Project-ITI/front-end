@@ -32,7 +32,7 @@ export default function Card() {
             top: "-20px",
           }}
         >
-          Way Us
+          Why Us
         </Typography>
         <Stack
           justifyContent="center"

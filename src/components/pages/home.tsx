@@ -17,7 +17,7 @@ import img4 from "../../assets/images/x&o.jpg";
 import img5 from "../../assets/images/chq.jpg";
 import img6 from "../../assets/images/nour-elsham.jpg";
 import ButtonAppBar from "../navebar";
-import Card from "../cart";
+import Card from "../card";
 
 const images = [img3, img4, img5, img6];
 const restaurantNames = [
@@ -86,7 +86,7 @@ export default function Home() {
 
   return (
     <div>
-      <ButtonAppBar />
+      
       <Stack
         height={"400px"}
         direction="row"

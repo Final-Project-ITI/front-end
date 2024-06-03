@@ -122,7 +122,7 @@ const UserInfoAndOrders = () => {
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "15px",
-                  backgroundColor: "#F3ECE5",
+                  backgroundColor: "#ffffff",
 
                   "& fieldset": {
                     borderColor: theme.palette.primary.main,
@@ -153,7 +153,7 @@ const UserInfoAndOrders = () => {
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "15px",
-                  backgroundColor: "#F3ECE5",
+                  backgroundColor: "#ffffff",
 
                   "& fieldset": {
                     borderColor: theme.palette.primary.main,
@@ -215,7 +215,7 @@ const UserInfoAndOrders = () => {
               width: "404",
               height: "456px",
               padding: "32px",
-              backgroundColor: "#F3ECE5",
+              backgroundColor: "#ffffff",
               borderRadius: "10px",
             }}
           >

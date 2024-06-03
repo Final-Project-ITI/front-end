@@ -1,7 +1,5 @@
 import { Grid, Typography } from "@mui/material";
 import Product from "./ProductCard";
-import Ditails from "../pages/Ditails";
-import UserInfoAndOrders from "../pages/UserInfoAndOrders";
 
 interface ProductType {
   id: number;

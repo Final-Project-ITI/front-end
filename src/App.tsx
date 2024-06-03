@@ -1,10 +1,4 @@
-import {
-  Box,
-  CssBaseline,
-  ThemeProvider,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { CssBaseline, ThemeProvider, Stack } from "@mui/material";
 import theme from "./themes/theme.ts";
 import NavBar from "./components/shared/NavBar.tsx";
 import Footer from "./components/shared/Footer.tsx";
@@ -14,7 +8,6 @@ import CartIcon from "./components/shared/CartIcon.tsx";
 import SideCart from "./components/shared/SideCart.tsx";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import cart from "./models/Cart.ts";
 import item from "./models/Item.ts";
 import Home from "./components/pages/home";
 import Restaurants from "./components/pages/restaurants";

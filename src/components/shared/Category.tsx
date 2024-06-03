@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import Product from "./Product";
+import Product from "./ProductCard";
 import Ditails from "../pages/Ditails";
 import UserInfoAndOrders from "../pages/UserInfoAndOrders";
 
@@ -39,10 +39,6 @@ const Category = ({ name, products }: IProps) => {
       {products.map((product) => (
         <Product key={product.id} product={product} />
       ))}
-
-      <Ditails />
-
-      <UserInfoAndOrders />
     </Grid>
   );
 };

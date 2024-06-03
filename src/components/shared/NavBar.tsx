@@ -7,18 +7,13 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import logo from "../../assets/logo.svg";
 import { Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import item from "../../models/Item";
 
 const pages = ["Home", "Resturants", "why us"];
-const settings = ["Profile", "Logout"];
 
 function NavBar({
   isUser,
@@ -34,24 +29,18 @@ function NavBar({
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
+
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "inherit", boxShadow: 0 }}>
@@ -65,7 +54,7 @@ function NavBar({
               flexGrow: 100,
             }}
           >
-            <Button>
+            <Button onClick={()=>navigate("/")}>
               <img src={logo} alt="" />
             </Button>
           </Box>
@@ -100,20 +89,20 @@ function NavBar({
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={()=>{handleCloseNavMenu(); navigate("/") }}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
               <Divider />
               {!isUser && (
-                <MenuItem onClick={handleCloseNavMenu}>
+                <MenuItem onClick={()=>{handleCloseNavMenu(); navigate("/login")}}>
                   <Typography textAlign="center" color="primary">
                     log in
                   </Typography>
                 </MenuItem>
               )}
               {isUser && (
-                <MenuItem onClick={handleCloseNavMenu}>
+                <MenuItem onClick={()=>{handleCloseNavMenu(); setisUser(false)}}>
                   <Typography textAlign="center" color="primary">
                     log out
                   </Typography>
@@ -122,6 +111,7 @@ function NavBar({
             </Menu>
           </Box>
           <Button
+          onClick={()=>navigate("/")}
             sx={{
               display: { xs: "flex", md: "none" },
               position: "absolute",
@@ -138,7 +128,7 @@ function NavBar({
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={()=>{handleCloseNavMenu();  navigate("/")}}
                 sx={{
                   my: 2,
                   marginInline: "1rem",
@@ -179,7 +169,7 @@ function NavBar({
             )}
           </Button>
           {isUser && (
-            <Button>
+            <Button onClick={()=>navigate("/userinfo")}>
               <svg
                 width="24"
                 height="64"
@@ -198,6 +188,7 @@ function NavBar({
             <>
               {" "}
               <Button
+              onClick={()=>navigate("/register")}
                 variant="outlined"
                 color="primary"
                 sx={{
@@ -210,7 +201,7 @@ function NavBar({
                 sign up
               </Button>
               <Button
-                onClick={() => setisUser(true)}
+                onClick={() => {setisUser(true); navigate("/login") }}
                 variant="contained"
                 color="primary"
                 sx={{

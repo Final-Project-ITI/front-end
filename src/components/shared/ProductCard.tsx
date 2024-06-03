@@ -7,6 +7,7 @@ import {
   useTheme,
   Button,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 interface ProductProps {
   product: {
@@ -17,6 +18,7 @@ interface ProductProps {
 }
 
 const Product = ({ product }: ProductProps) => {
+  const navigate= useNavigate()
   const theme = useTheme();
 
   return (
@@ -69,6 +71,7 @@ const Product = ({ product }: ProductProps) => {
           <Grid container direction="column" spacing={1} sx={{ marginTop: 2 }}>
             <Grid item xs={12}>
               <Button
+              onClick={()=>{navigate("/productdetails")}}
                 variant="outlined"
                 fullWidth
                 sx={{

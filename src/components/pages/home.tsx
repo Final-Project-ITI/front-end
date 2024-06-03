@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Stack,
@@ -69,6 +69,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Home() {
+  const navigate= useNavigate()
   const [searchRest, setSearchRest] = useState("");
 
   const handleSearchChange = (event: any) => {
@@ -192,7 +193,7 @@ export default function Home() {
             spacing={4}
           >
             {filteredImages.map((imageUrl, index) => (
-              <div key={index} className="flip-card">
+              <div onClick={()=>{navigate("/menu")}} key={index} className="flip-card">
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
                     <img src={imageUrl} alt={`Image ${index}`} />
@@ -207,7 +208,7 @@ export default function Home() {
             ))}
           </Stack>
           <button className="bb">
-            <Link to="/restaurant" id="sign-link" className="log3">
+            <Link to="/restaurants" id="sign-link" className="log3">
               <h3>See More</h3>
             </Link>
           </button>

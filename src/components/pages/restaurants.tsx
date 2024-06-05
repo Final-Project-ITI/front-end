@@ -26,7 +26,7 @@ const restaurantNames = [
 ];
 
 export default function Restaurants() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div>
       <Stack

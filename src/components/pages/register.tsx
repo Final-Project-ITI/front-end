@@ -5,6 +5,7 @@ import { USER_REGEX } from "../../regex/user";
 import { PWD_REGEX } from "../../regex/pass";
 import { EMAIL_REGEX } from "../../regex/email";
 import { Phone_REGEX } from "../../regex/phone";
+// import { Box, Stack, Typography } from "@mui/material";
 import "../../styles/Auth.css";
 import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";

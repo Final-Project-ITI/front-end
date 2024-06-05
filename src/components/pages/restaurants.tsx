@@ -33,6 +33,7 @@ export default function Restaurants() {
         height={"400px"}
         direction="row"
         justifyContent="center"
+        // flexWrap={"inherit"}
         alignItems="center"
         sx={{ minHeight: "500px", background: "#F9F1E5" }}
         spacing={30}

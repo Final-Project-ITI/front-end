@@ -10,7 +10,11 @@ import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 
 const REGISTER_URL = "/users/register";
-export default function Register({setisUser}:{setisUser:React.Dispatch<React.SetStateAction<boolean>>}) {
+export default function Register({
+  setisUser,
+}: {
+  setisUser: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const navigate = useNavigate();
 
   const userRef = useRef<HTMLInputElement>(null);
@@ -179,8 +183,8 @@ export default function Register({setisUser}:{setisUser:React.Dispatch<React.Set
               type="password"
               id="password"
               onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
               required
+              value={pwd}
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
               className="sign-input"
@@ -208,7 +212,10 @@ export default function Register({setisUser}:{setisUser:React.Dispatch<React.Set
             <button
               className="sign-button"
               disabled={!validName || !validEmail || !validPwd ? true : false}
-              onClick={()=>{setisUser(true); navigate("/")}}
+              onClick={() => {
+                setisUser(true);
+                navigate("/");
+              }}
             >
               {/* <Link to="/login" id="sign-link" className="log2"> */}
               Sign Up

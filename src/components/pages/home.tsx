@@ -105,7 +105,7 @@ export default function Home() {
             border: "5px",
             borderRadius: "20%",
             position: "relative",
-            bottom: "40px",
+            bottom: "30px",
           }}
         ></Box>
         <Stack

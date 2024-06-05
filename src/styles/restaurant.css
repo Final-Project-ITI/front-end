@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+/* body {
+  width: 100%;
+} */
 .log4 {
   color: white;
   text-decoration: none;
@@ -41,29 +44,11 @@
   border: #d74339 7px solid;
   border-radius: 50%;
   position: relative;
+  left: 5px;
   top: 20px;
 }
 
 .text-wrapper {
   text-align: center;
   margin-bottom: 10px;
-  @media only screen and (max-width: 640px) {
-    /* Styles for tablet screens */
-    .card {
-      width: 160px;
-      height: 250px;
-    }
-  }
-
-  @media only screen and (max-width: 0px) {
-    /* Styles for mobile screens */
-    .card {
-      width: 120px;
-      height: 200px;
-    }
-    .bb2 {
-      width: 100px;
-      height: 30px;
-    }
-  }
 }

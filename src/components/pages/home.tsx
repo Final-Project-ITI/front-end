@@ -69,7 +69,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Home() {
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
 
   const handleSearchChange = (event: any) => {
@@ -105,7 +105,7 @@ export default function Home() {
             border: "5px",
             borderRadius: "20%",
             position: "relative",
-            bottom: "20px",
+            bottom: "40px",
           }}
         ></Box>
         <Stack
@@ -193,7 +193,13 @@ export default function Home() {
             spacing={4}
           >
             {filteredImages.map((imageUrl, index) => (
-              <div onClick={()=>{navigate("/menu")}} key={index} className="flip-card">
+              <div
+                onClick={() => {
+                  navigate("/menu");
+                }}
+                key={index}
+                className="flip-card"
+              >
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
                     <img src={imageUrl} alt={`Image ${index}`} />

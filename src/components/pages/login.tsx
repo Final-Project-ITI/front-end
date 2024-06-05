@@ -5,14 +5,16 @@ import { EMAIL_REGEX } from "../../regex/email";
 import { PWD_REGEX } from "../../regex/pass";
 import AuthProvider from "../../context/AuthProvider.tsx";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import { useCookies } from "react-cookie";
 import axios from "../../api/axios";
 import "../../styles/Log.css";
 
 const LOGIN_URL = "/users/login";
-export default function login({setisUser}:{setisUser:React.Dispatch<React.SetStateAction<boolean>>}) {
+export default function login({
+  setisUser,
+}: {
+  setisUser: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { setAuth }: any = useContext(AuthProvider);
-  // const [, setCookie] = useCookies();
   const navigate = useNavigate();
   const location = useLocation();
   const home = location.state?.home?.pathname || "/home";
@@ -41,7 +43,6 @@ export default function login({setisUser}:{setisUser:React.Dispatch<React.SetSta
       setErrMsg("");
       setAuth({ token });
 
-      // setCookie("token", token);
       localStorage.setItem("token", token);
       navigate(home, { replace: true });
     } catch (err: any) {
@@ -145,11 +146,12 @@ export default function login({setisUser}:{setisUser:React.Dispatch<React.SetSta
             <button
               className="logn-button"
               disabled={!validPwd || !validEmail ? true : false}
-              onClick={()=>{setisUser(true); navigate("/")}}
+              onClick={() => {
+                setisUser(true);
+                navigate("/");
+              }}
             >
-              {/* <Link to="/home" id="sign-link" className="log2"> */}
               Sign In
-              {/* </Link> */}
             </button>
             <p>
               Don't have an account?

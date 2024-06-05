@@ -30,13 +30,13 @@ export default function Restaurants() {
   return (
     <div>
       <Stack
+    
         height={"400px"}
         direction="row"
-        justifyContent="center"
+        justifyContent="space-between"
         // flexWrap={"inherit"}
         alignItems="center"
         sx={{ minHeight: "500px", background: "#F9F1E5" }}
-        spacing={30}
       >
         <Box
           sx={{
@@ -97,11 +97,11 @@ export default function Restaurants() {
           direction="row"
           justifyContent="center"
           alignItems="center"
-          sx={{ background: "#f3ece4", minHeight: "400px" }}
+          sx={{ background: "#f3ece4", minHeight: "400px",flexWrap:"wrap",paddingInline:{lg:"15%"} }}
           spacing={4}
         >
-          {images.slice(0, 4).map((imageUrl, index) => (
-            <div key={index} className="card">
+          {images.map((imageUrl, index) => (
+            <div key={index} className="card" >
               <div className="image-wrapper">
                 <img src={imageUrl} alt={`Image ${index}`} />
               </div>
@@ -115,32 +115,9 @@ export default function Restaurants() {
               </div>
             </div>
           ))}
+
         </Stack>
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ background: "#f3ece4", minHeight: "400px" }}
-          spacing={4}
-        >
-          {images.slice(4).map((imageUrl, index) => (
-            <div key={index} className="card">
-              <div className="image-wrapper">
-                <img src={imageUrl} alt={`Image ${index + 4}`} />
-              </div>
-              <div className="text-wrapper">
-                <Typography variant="h6">
-                  {restaurantNames[index + 4]}
-                </Typography>
-                <button className="bb2">
-                  <Link to="/restaurant" id="sign-link" className="log4">
-                    View Menu
-                  </Link>
-                </button>
-              </div>
-            </div>
-          ))}
-        </Stack>
+
       </Stack>
     </div>
   );

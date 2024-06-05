@@ -73,7 +73,7 @@ function SideCart({ cartItems,setOpenSideCart,cartQuantity,cartTotal,editItemQua
               There are no items in your cart
             </Typography>
           )}
-          <Box sx={{maxHeight:"calc(100vh - 250px)", overflow:"scroll"}}>          
+          <Box sx={{maxHeight:"calc(100vh - 250px)", overflow:"auto"}}>          
           {cartQuantity > 0 && (
             cartItems.map((item)=> <Stack
             key={item.productId._id}

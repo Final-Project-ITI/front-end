@@ -1,5 +1,4 @@
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
-import React from "react";
 import logo from "../../assets/logo.svg";
 
 function Footer() {
@@ -13,7 +12,7 @@ function Footer() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding:{xs:"40px"}
+          padding: { xs: "40px" },
         }}
       >
         <Grid
@@ -49,11 +48,11 @@ function Footer() {
             </Stack>
           </Grid>
           <Grid item xs={12} md={3}>
-            <Stack justifyContent={"center"}  spacing={2}>
+            <Stack justifyContent={"center"} spacing={2}>
               <Typography sx={{ fontSize: "24px", fontWeight: "700" }}>
                 Find us on social media
               </Typography>
-              <Stack direction={"row"} >
+              <Stack direction={"row"}>
                 <Button>
                   <svg
                     width="32"

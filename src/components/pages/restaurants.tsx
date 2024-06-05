@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Stack, Typography, Grid } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Stack, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import "../../styles/restaurant.css";
 import img from "../../assets/images/21.png";
@@ -25,142 +25,131 @@ const restaurantNames = [
   "HI proust",
 ];
 
-export default function Restaurants() {
-  return (
-    <>
-      <Grid container spacing={0} alignItems="center" justifyContent="center">
-        {/* <Stack width={"100%"} height={"100%"}> */}
-        <Grid item xs={12} md={12}>
-          <Stack
-            width={"100%"}
-            height={"400px"}
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ minHeight: "500px", background: "#F9F1E5" }}
-            spacing={25}
-          >
-            <Box
-              sx={{
-                backgroundImage: `url(${img})`,
-                width: "250px",
-                height: "320px",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center center",
-                backgroundSize: "cover",
-                border: "5px",
-                borderRadius: "1%",
-                position: "relative",
-                right: "12px",
-              }}
-            ></Box>
-            {/* <Stack
-            alignItems="center"
-            justifyContent="center"
-            spacing={4}
-            position={"relative"}
-            top={"-40px"}
-          > */}
-            <Typography
-              variant="h5"
-              noWrap
-              sx={{
-                fontWeight: 700,
-                color: "black",
-                textAlign: "center",
-                position: "initial",
-                bottom: "10px",
-              }}
-            >
-              Order from your favorite restaurants now!
-            </Typography>
-            {/* </Stack> */}
+const itemsInPage = 8;
 
-            <Box
-              sx={{
-                backgroundImage: `url(${img2})`,
-                width: "200px",
-                height: "300px",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center center",
-                backgroundSize: "cover",
-                position: "relative",
-                bottom: "20px",
-                // left: "13px",
-                // border: "5px",
-                // borderRadius: "1%",
-              }}
-            ></Box>
-          </Stack>
-        </Grid>
-        {/* <Grid item xs={12} md={12}> */}
+export default function Restaurants() {
+  const [page, setPage] = useState(0);
+
+  const handleNext = () => {
+    setPage(
+      (prevPage) => (prevPage + 1) % Math.ceil(images.length / itemsInPage)
+    );
+  };
+
+  const handlePrev = () => {
+    setPage(
+      (prevPage) =>
+        (prevPage - 1 + Math.ceil(images.length / itemsInPage)) %
+        Math.ceil(images.length / itemsInPage)
+    );
+  };
+
+  const startIndex = page * itemsInPage;
+  const endIndex = startIndex + itemsInPage;
+  const currentItems = images.slice(startIndex, endIndex);
+
+  return (
+    <div>
+      <Stack
+        height={"400px"}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ minHeight: "500px", background: "#F9F1E5" }}
+      >
+        <Box
+          sx={{
+            backgroundImage: `url(${img})`,
+            width: "250px",
+            height: "320px",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center center",
+            backgroundSize: "cover",
+            borderRadius: "1%",
+          }}
+        ></Box>
         <Stack
+          alignItems="center"
+          justifyContent="center"
+          spacing={4}
+          position={"relative"}
+          top={"-40px"}
+        >
+          <Typography
+            variant="h5"
+            noWrap
+            sx={{
+              fontWeight: 700,
+              color: "black",
+              textAlign: "center",
+              position: "initial",
+              bottom: "10px",
+            }}
+          >
+            Order from your favorite restaurants now!
+          </Typography>
+        </Stack>
+        <Box
+          sx={{
+            backgroundImage: `url(${img2})`,
+            width: "200px",
+            height: "300px",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center center",
+            backgroundSize: "cover",
+            position: "relative",
+            bottom: "20px",
+          }}
+        ></Box>
+      </Stack>
+      <Stack
+        justifyContent="center"
+        alignItems="center"
+        sx={{ minHeight: "800px", background: "#f3ece4" }}
+        spacing={4}
+      >
+        <Stack
+          direction="row"
           justifyContent="center"
           alignItems="center"
-          sx={{ minHeight: "800px", background: "#f3ece4" }}
+          sx={{
+            background: "#f3ece4",
+            minHeight: "400px",
+            flexWrap: "wrap",
+            paddingInline: { lg: "10%" },
+          }}
           spacing={4}
         >
-          {" "}
-          <Stack
-            // sx={(theme) => ({
-            //   [theme.breakpoints.up("xs")]: { justifyContent: "center" },
-            //   [theme.breakpoints.up("sm")]: {
-            //     justifyContent: "left",
-            //   },
-            //   background: "#f3ece4",
-            //   minHeight: "400px",
-            // })}
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ background: "#f3ece4", minHeight: "400px" }}
-            spacing={4}
-          >
-            {images.slice(0, 4).map((imageUrl, index) => (
-              <div key={index} className="card">
-                <div className="image-wrapper">
-                  <img src={imageUrl} />
-                </div>
-                <div className="text-wrapper">
-                  <Typography variant="h6">{restaurantNames[index]}</Typography>
-                  <button className="bb2">
-                    <Link to="/restaurant" id="sign-link" className="log4">
-                      View Menu
-                    </Link>
-                  </button>
-                </div>
+          {currentItems.map((imageUrl, index) => (
+            <div key={index} className="card">
+              <div className="image-wrapper">
+                <img src={imageUrl} alt={`Image ${index}`} />
               </div>
-            ))}
-          </Stack>
-          {/* </Grid> */}
-          <Stack
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ background: "#f3ece4", minHeight: "400px" }}
-            spacing={4}
-          >
-            {images.slice(4).map((imageUrl, index) => (
-              <div key={index} className="card">
-                <div className="image-wrapper">
-                  <img src={imageUrl} alt={`Image ${index + 4}`} />
-                </div>
-                <div className="text-wrapper">
-                  <Typography variant="h6">
-                    {restaurantNames[index + 4]}
-                  </Typography>
-                  <button className="bb2">
-                    <Link to="/restaurant" id="sign-link" className="log4">
-                      View Menu
-                    </Link>
-                  </button>
-                </div>
+              <div className="text-wrapper">
+                <Typography variant="h6">
+                  {restaurantNames[startIndex + index]}
+                </Typography>
+                <button className="bb2">
+                  <Link to="/menu" id="sign-link" className="log4">
+                    View Menu
+                  </Link>
+                </button>
               </div>
-            ))}
-          </Stack>
+            </div>
+          ))}
         </Stack>
-      </Grid>
-      {/* </Stack> */}
-    </>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Button onClick={handlePrev} sx={{ fontSize: "2rem" }}>
+            &larr;
+          </Button>
+          <Typography variant="h6">
+            {page + 1} / {Math.ceil(images.length / itemsInPage)}
+          </Typography>
+          <Button onClick={handleNext} sx={{ fontSize: "2rem" }}>
+            &rarr;
+          </Button>
+        </Stack>
+      </Stack>
+    </div>
   );
 }

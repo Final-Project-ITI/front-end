@@ -27,6 +27,7 @@ const restaurantNames = [
 ];
 
 const Search = styled("div")(({ theme }) => ({
+  paddingLeft: "20px",
   position: "relative",
   borderRadius: "25px",
   border: "1px solid #d74339",
@@ -89,10 +90,10 @@ export default function Home() {
       <Stack
         height={"400px"}
         direction="row"
-        justifyContent="center"
+        justifyContent="space-between"
+        // flexWrap={"inherit"}
         alignItems="center"
         sx={{ minHeight: "500px", background: "#F9F1E5" }}
-        spacing={20}
       >
         <Box
           sx={{
@@ -181,15 +182,24 @@ export default function Home() {
           Restaurants
         </Typography>
         <Stack
+          // width={"100%"}
           justifyContent="center"
           alignItems="center"
-          sx={{ minHeight: "800px", background: "#f3ece4" }}
+          sx={{
+            minHeight: "800px",
+            background: "#f3ece4",
+          }}
         >
           <Stack
             direction="row"
             justifyContent="center"
             alignItems="center"
-            sx={{ background: "f3ece4", minHeight: "400px" }}
+            sx={{
+              background: "f3ece4",
+              minHeight: "400px",
+              flexWrap: "wrap",
+              // paddingInline: { lg: "1%" },
+            }}
             spacing={4}
           >
             {filteredImages.map((imageUrl, index) => (

@@ -26,11 +26,11 @@ body {
   }
 }
 
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
   .container {
     padding: 0 100px;
   }
-}
+} */
 
 .txt1,
 .log {
@@ -50,21 +50,26 @@ body {
 
 .sign {
   width: 100%;
-  max-width: 420px;
+  max-width: 520px;
   min-height: 400px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 2rem;
-  margin: 1rem 90px;
+  margin: 1rem auto;
 }
 
-@media (min-width: 1600px) {
+/* @media (min-width: 1360px) {
   .sign {
-    width: 50%;
-    margin: 20px 50px 20px 200px;
+    margin: 1rem auto;
   }
-}
+  .sign-input[type="text"],
+  .sign-input[type="password"],
+  .sign-button,
+  .sign-text-area {
+    width: 400px !important;
+  }
+} */
 
 .img {
   display: none;
@@ -81,11 +86,11 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .sign {
-    margin: 1rem 0;
+    margin: 1rem 0 !important;
   }
-}
+} */
 
 .sign-form {
   display: flex;
@@ -126,6 +131,7 @@ body {
   border: #d74339;
   color: #fff;
   margin-top: 2rem;
+  transition: background-color 0.3s ease;
 }
 
 .sign-button:disabled {

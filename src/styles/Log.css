@@ -44,12 +44,12 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   padding: 2rem;
-  margin: 1rem 0;
+  margin: 1rem auto;
 }
 @media (min-width: 768px) {
   .logn {
     width: 50%;
-    margin: 20px 120px 20px 8%;
+    margin: 20px 100px 20px 8%;
   }
 }
 .im {

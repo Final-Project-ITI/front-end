@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Stack, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "../../styles/restaurant.css";
 import img from "../../assets/images/21.png";
 import img2 from "../../assets/images/22.png";
@@ -29,24 +29,49 @@ const itemsInPage = 8;
 
 export default function Restaurants() {
   const [page, setPage] = useState(0);
+  const [filteredRestaurants, setFilteredRestaurants] =
+    useState(restaurantNames);
+  const [filteredImages, setFilteredImages] = useState(images);
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+
+  useEffect(() => {
+    if (searchQuery) {
+      const filteredNames = restaurantNames.filter((name) =>
+        name.toLowerCase().includes(searchQuery)
+      );
+      const filteredImgs = images.filter((_, index) =>
+        restaurantNames[index].toLowerCase().includes(searchQuery)
+      );
+
+      setFilteredRestaurants(filteredNames);
+      setFilteredImages(filteredImgs);
+    } else {
+      setFilteredRestaurants(restaurantNames);
+      setFilteredImages(images);
+    }
+  }, [searchQuery]);
 
   const handleNext = () => {
     setPage(
-      (prevPage) => (prevPage + 1) % Math.ceil(images.length / itemsInPage)
+      (prevPage) =>
+        (prevPage + 1) % Math.ceil(filteredImages.length / itemsInPage)
     );
   };
 
   const handlePrev = () => {
     setPage(
       (prevPage) =>
-        (prevPage - 1 + Math.ceil(images.length / itemsInPage)) %
-        Math.ceil(images.length / itemsInPage)
+        (prevPage - 1 + Math.ceil(filteredImages.length / itemsInPage)) %
+        Math.ceil(filteredImages.length / itemsInPage)
     );
   };
 
   const startIndex = page * itemsInPage;
   const endIndex = startIndex + itemsInPage;
-  const currentItems = images.slice(startIndex, endIndex);
+  const currentItems = filteredImages.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -127,7 +152,7 @@ export default function Restaurants() {
               </div>
               <div className="text-wrapper">
                 <Typography variant="h6">
-                  {restaurantNames[startIndex + index]}
+                  {filteredRestaurants[startIndex + index]}
                 </Typography>
                 <button className="bb2">
                   <Link to="/menu" id="sign-link" className="log4">
@@ -143,7 +168,7 @@ export default function Restaurants() {
             &larr;
           </Button>
           <Typography variant="h6">
-            {page + 1} / {Math.ceil(images.length / itemsInPage)}
+            {page + 1} / {Math.ceil(filteredImages.length / itemsInPage)}
           </Typography>
           <Button onClick={handleNext} sx={{ fontSize: "2rem" }}>
             &rarr;

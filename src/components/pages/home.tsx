@@ -77,6 +77,10 @@ export default function Home() {
     setSearchRest(event.target.value);
   };
 
+  const handleSearchSubmit = () => {
+    navigate(`/restaurants?search=${searchRest}`);
+  };
+
   const filteredRestaurants = restaurantNames.filter((name) =>
     name.toLowerCase().includes(searchRest.toLowerCase())
   );
@@ -91,7 +95,6 @@ export default function Home() {
         height={"400px"}
         direction="row"
         justifyContent="space-between"
-        // flexWrap={"inherit"}
         alignItems="center"
         sx={{ minHeight: "500px", background: "#F9F1E5" }}
       >
@@ -125,7 +128,6 @@ export default function Home() {
               color: "black",
               textAlign: "center",
               position: "initial",
-              // bottom: "20px",
             }}
           >
             Order food online in Zagazig
@@ -135,10 +137,11 @@ export default function Home() {
               placeholder="Search…"
               value={searchRest}
               onChange={handleSearchChange}
+              onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
               inputProps={{ "aria-label": "Search" }}
             />
             <SearchIconWrapper>
-              <SearchIcon />
+              <SearchIcon onClick={handleSearchSubmit} />
             </SearchIconWrapper>
           </Search>
         </Stack>
@@ -182,7 +185,6 @@ export default function Home() {
           Restaurants
         </Typography>
         <Stack
-          // width={"100%"}
           justifyContent="center"
           alignItems="center"
           sx={{
@@ -198,9 +200,8 @@ export default function Home() {
               background: "f3ece4",
               minHeight: "400px",
               flexWrap: "wrap",
-              // paddingInline: { lg: "1%" },
+              spacing: 4,
             }}
-            spacing={4}
           >
             {filteredImages.map((imageUrl, index) => (
               <div

@@ -11,10 +11,12 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OrderSubmitted from "../popups/OrderSubmitted";
 import AddNumber from "../popups/AddNumber";
 import AddAdress from "../popups/AddAdress";
+import axios from "axios";
+const url = "http://localhost:3000/api/v1";
 
 function Checkout({
   phones,
@@ -22,30 +24,70 @@ function Checkout({
   cartTotal,
   addPhoneNumber,
   addAddress,
+  restaurantId,
+  emptyCart,
 }: {
-  phones: string[];
-  addresses: string[];
+  phones: any[];
+  addresses: any[];
   cartTotal: number;
   addPhoneNumber: (phone: string) => void;
   addAddress: (address: string) => void;
+  restaurantId: string;
+  emptyCart: () => void;
 }) {
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);
+  const [addressError, setAddressError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
 
   const [checkoutInfo, setCheckoutInfo] = useState({
     phone: phones[phones.length - 1] || "",
-    address: addresses[addresses.length-1] || "",
+    address: addresses[addresses.length - 1] || "",
   });
 
   const ITEM_HEIGHT = 30;
   const ITEM_PADDING_TOP = 8;
   const vat: number = 10;
 
-  const handleInfoChange=(newCheckOutInfo:{address:string,phone:string})=>{
-    setCheckoutInfo(newCheckOutInfo)
-
-  }
+  const handleInfoChange = (newCheckOutInfo: {
+    address: string;
+    phone: string;
+  }) => {
+    setCheckoutInfo(newCheckOutInfo);
+  };
+  useEffect(() => {
+    setCheckoutInfo({
+      phone: phones[phones.length - 1],
+      address: addresses[addresses.length - 1],
+    });
+  }, []);
+  const handlCheckout = () => {
+    const fetchCheckout = async () => {
+      const res = await axios.post(
+        url + "/orders/" + restaurantId + "/user",
+        { phoneId: checkoutInfo.phone._id },
+        {
+          headers: { jwt: localStorage.getItem("token") },
+        }
+      );
+      if (res.status == 201) {
+        emptyCart();
+        setSubmitOrderPopUp(true);
+      }
+    };
+    if (!checkoutInfo.phone) {
+      setPhoneError(true);
+    }
+    if (!checkoutInfo.address) {
+      setAddressError(true);
+    }
+    if (checkoutInfo.phone && checkoutInfo.address) {
+      setAddressError(false);
+      setPhoneError(false);
+      fetchCheckout();
+    }
+  };
 
   const MenuProps = {
     PaperProps: {
@@ -140,6 +182,7 @@ function Checkout({
                     spacing={2}
                   >
                     <Select
+                      error={phoneError}
                       MenuProps={MenuProps}
                       sx={{
                         width: "100%",
@@ -152,11 +195,16 @@ function Checkout({
                       id="demo-simple-select"
                       // defaultValue={phones[phones.length-1]}
                       value={checkoutInfo.phone}
-                      onChange={(e)=>handleInfoChange({...checkoutInfo,phone:e.target.value})}
+                      onChange={(e) =>
+                        handleInfoChange({
+                          ...checkoutInfo,
+                          phone: e.target.value,
+                        })
+                      }
                     >
                       {phones.map((phone) => (
                         <MenuItem key={phone} value={phone}>
-                          {phone}
+                          {phone.phoneNumber}
                         </MenuItem>
                       ))}
                     </Select>
@@ -195,6 +243,7 @@ function Checkout({
                     sx={{ paddingInline: "0px" }}
                   >
                     <Select
+                      error={addressError}
                       //  defaultValue={addresses[addresses.length-1]}
                       MenuProps={MenuProps}
                       sx={{
@@ -209,17 +258,21 @@ function Checkout({
                       id="demo-simple-select"
                       value={checkoutInfo.address}
                       //   label="Age"
-                      onChange={(e)=>handleInfoChange({...checkoutInfo,address:e.target.value})}
+                      onChange={(e) =>
+                        handleInfoChange({
+                          ...checkoutInfo,
+                          address: e.target.value,
+                        })
+                      }
                     >
                       {addresses.map((addresse) => (
                         <MenuItem key={addresse} value={addresse}>
-                          {addresse}
+                          {addresse.details}
                         </MenuItem>
                       ))}
                     </Select>
                     <Box
                       onClick={() => {
-                        console.log(addresses[addresses.length - 1]);
                         setAddAddressPopUp(true);
                       }}
                       sx={{ "&:hover": { cursor: "pointer" } }}
@@ -365,9 +418,7 @@ function Checkout({
                     }}
                     variant="contained"
                     color="primary"
-                    onClick={() => {
-                      setSubmitOrderPopUp(true);
-                    }}
+                    onClick={handlCheckout}
                   >
                     checkout
                   </Button>

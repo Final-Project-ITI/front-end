@@ -26,6 +26,11 @@ function NavBar({
 }) {
   const navigate = useNavigate();
 
+  const handleLogOut=()=>{
+    localStorage.removeItem("token")
+    setisUser(false)
+  }
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -102,7 +107,7 @@ function NavBar({
                 </MenuItem>
               )}
               {isUser && (
-                <MenuItem onClick={()=>{handleCloseNavMenu(); setisUser(false)}}>
+                <MenuItem onClick={()=>{handleCloseNavMenu(); handleLogOut()}}>
                   <Typography textAlign="center" color="primary">
                     log out
                   </Typography>
@@ -201,7 +206,7 @@ function NavBar({
                 sign up
               </Button>
               <Button
-                onClick={() => {setisUser(true); navigate("/login") }}
+                onClick={() => {navigate("/login") }}
                 variant="contained"
                 color="primary"
                 sx={{
@@ -219,7 +224,7 @@ function NavBar({
             <>
               {" "}
               <Button
-                onClick={() => setisUser(false)}
+                onClick={handleLogOut}
                 variant="contained"
                 color="primary"
                 sx={{

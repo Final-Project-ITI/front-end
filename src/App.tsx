@@ -16,7 +16,8 @@ import Login from "./components/pages/login";
 import { Menu } from "./components/pages/Menu.tsx";
 import Ditails from "./components/pages/Ditails.tsx";
 import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
-
+import axios from "axios";
+const url="http://localhost:3000/api/v1"
 function App() {
   const path =useLocation().pathname 
   const [openSideCart, setOpenSideCart] = useState(false);
@@ -29,47 +30,56 @@ function App() {
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
+  const [restaurantId,setRestaurantId]=useState<string>("");
 
   useEffect(() => {
-    setisUser(false);
-    const newCartItems = [
-      {
-        productId: {
-          _id: "1",
-          title: "Chicken BBQ pizza",
-          icon: "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/d6c392a84e4f665424d710649452e7f9/Derivates/a6bdb196bee23faef1d8020319c7c64750ef7686.jpg",
-          price: 120,
-        },
-        quantity: 2,
-      },
-      {
-        productId: {
-          _id: "2",
-          title: "Chicken burger",
-          icon: "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/d6c392a84e4f665424d710649452e7f9/Derivates/a6bdb196bee23faef1d8020319c7c64750ef7686.jpg",
-          price: 70,
-        },
-        quantity: 3,
-      },
-    ];
-    setCartItems(newCartItems);
-    calculateQuantity(newCartItems);
-    calculateTotal(newCartItems);
+    const  getUserCart= async ()=>{
+      const res = await axios.get(url+"/cart",{
+        headers: { jwt: localStorage.getItem("token") },
+      });
+      if(res.data.itemsIds.length){
+        const newCartItems = res.data.itemsIds
+        setCartItems(newCartItems);
+        setRestaurantId(res.data.itemsIds[0].productId.restaurantId)
+        calculateQuantity(newCartItems);
+        calculateTotal(newCartItems);
+      }
+      
+    }
+    const  getUserAddresses= async ()=>{
+      const res = await axios.get(url+"/addresses",{
+        headers: { jwt: localStorage.getItem("token") },
+      });
+      if(!res.data.message){
+        const newAddresses = res.data
+        setAddresses(newAddresses);
+      }  
+      
+    }
+    const  getUserPhones= async ()=>{
+      const res = await axios.get(url+"/phones",{
+        headers: { jwt: localStorage.getItem("token") },
+      });
+      if(!res.data.message){
+        const newPhones = res.data
+        setPhones(newPhones);
+      }  
+      
+    }
+    // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
+    if(localStorage.getItem("token")){
+      setisUser(true);
+      getUserCart();
+      getUserAddresses();
+      getUserPhones();
+    }
+    else{
+      setisUser(false);
+    }
+   
+    
 
-    const newPhones = [
-      "01120633680",
-      "01030622894",
-      "01240277648",
-      "01548522960",
-    ];
-    setPhones(newPhones);
-
-    const newAddresses = [
-      "101-nasr city, cairo, egypt",
-      "202-ard elgamaeyat, ismailia, egypt",
-      "101-el-abasa, abu-hammad, sharkia, egypt",
-    ];
-    setAddresses(newAddresses);
+    
   }, []);
 
   const calculateQuantity = (newCartItems: item[]) => {
@@ -92,12 +102,12 @@ function App() {
     const index = newCartItems.findIndex(
       (item) => item.productId._id === itemId
     );
-    if (newCartItems[index].quantity + newQuantity < 0) {
-      return;
-    } else if (newCartItems[index].quantity + newQuantity === 0) {
-      deleteItemQuantity(itemId);
-      return;
-    }
+    // if (newCartItems[index].quantity + newQuantity < 0) {
+    //   return;
+    // } else if (newCartItems[index].quantity + newQuantity === 0) {
+    //   deleteItemQuantity(itemId);
+    //   return;
+    // }
     newCartItems[index] = {
       ...newCartItems[index],
       quantity: newCartItems[index].quantity + newQuantity,
@@ -117,11 +127,16 @@ function App() {
     calculateQuantity(newCartItems);
     calculateTotal(newCartItems);
   };
-  const addPhoneNumber = (phone: string) => {
+  const emptyCart=()=>{
+    setCartItems([])
+    setCartQuantity(0)
+    setCartTotal(0)
+  }
+  const addPhoneNumber = (phone: any) => {
     const newPhones = [...phones, phone];
     setPhones(newPhones);
   };
-  const addAddress = (address: string) => {
+  const addAddress = (address: any) => {
     const newAddresses = [...addresses, address];
     setAddresses(newAddresses);
   };
@@ -155,6 +170,8 @@ function App() {
               path="/checkout"
               element={
                 <Checkout
+                emptyCart={emptyCart}
+                  restaurantId={restaurantId}
                   phones={phones}
                   addresses={addresses}
                   cartTotal={cartTotal}
@@ -167,6 +184,7 @@ function App() {
               path="/cart"
               element={
                 <Cart
+                deleteItemQuantity={deleteItemQuantity}
                   cartQuantity={cartQuantity}
                   cartItems={cartItems}
                   cartTotal={cartTotal}

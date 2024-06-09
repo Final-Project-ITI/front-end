@@ -1,6 +1,8 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import axios from "axios";
 
 import React, { useState } from 'react'
+const url = "http://localhost:3000/api/v1";
 
 function AddAdress({setAddAddressPopUp,addAddress}:{setAddAddressPopUp:React.Dispatch<React.SetStateAction<boolean>>,addAddress: (address: string) => void}) {
   let [address,setAddress]=useState("");
@@ -12,11 +14,23 @@ function AddAdress({setAddAddressPopUp,addAddress}:{setAddAddressPopUp:React.Dis
     
   }
   const handleAddAddress=()=>{
-    if(false){
+    const fetchAddAddress = async () => {
+      const res = await axios.post(
+        url + "/addresses",
+        {
+          "details": address,
+        },
+        {
+          headers: { jwt: localStorage.getItem("token") },
+        }
+      );
+      addAddress(res.data);
+    };
+    if(address.length<50){
       setError(true)
     }else{
       setError(false)
-      addAddress(address)
+      fetchAddAddress()
       setAddAddressPopUp(false)
             
     }
@@ -69,7 +83,7 @@ function AddAdress({setAddAddressPopUp,addAddress}:{setAddAddressPopUp:React.Dis
             Address
           </Typography>
                     
-          <TextField  error={error} onInput={handleAddressInput} value={address} helperText={error?"Incorrect address":""} multiline fullWidth  rows={2} sx={{padding:"0",border:"0.5px solid #d84339",borderRadius:"5px"}} id="outlined-basic" variant="outlined" size="small"/>
+          <TextField  error={error} onInput={handleAddressInput} value={address} helperText={error?"address length must be 50":""} multiline fullWidth  rows={2} sx={{padding:"0",border:"0.5px solid #d84339",borderRadius:"5px"}} id="outlined-basic" variant="outlined" size="small"/>
           <Button  onClick={handleAddAddress} sx={{width:"112px",borderRadius:"25px",height:"24px",fontSize:"16px",textTransform:"capitalize"}} variant="contained" >Insert</Button>
 
         </Stack>

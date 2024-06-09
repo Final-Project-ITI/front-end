@@ -1,7 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function OrderSubmitted({setSubmitOrderPopUp}:{setSubmitOrderPopUp:React.Dispatch<React.SetStateAction<boolean>>}) {
+  const navigate=useNavigate()
   return (
     <>
     <Box sx={{position: "absolute",left:"0",top:"0",width:"100%",height:"100%",backgroundColor:"#00000060",zIndex:"100"}}>
@@ -18,7 +20,7 @@ function OrderSubmitted({setSubmitOrderPopUp}:{setSubmitOrderPopUp:React.Dispatc
           borderRadius: "25px",
         }}
       >
-        <Box sx={{position:"absolute",left:"13px",top:"8px","&:hover": { cursor: "pointer" }}} onClick={()=>{setSubmitOrderPopUp(false)}}>
+        <Box sx={{position:"absolute",left:"13px",top:"8px","&:hover": { cursor: "pointer" }}} onClick={()=>{setSubmitOrderPopUp(false); navigate("/")}}>
           <svg
             width="24"
             height="24"

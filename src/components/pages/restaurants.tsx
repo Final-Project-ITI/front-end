@@ -4,74 +4,64 @@ import { Link, useLocation } from "react-router-dom";
 import "../../styles/restaurant.css";
 import img from "../../assets/images/21.png";
 import img2 from "../../assets/images/22.png";
-import img3 from "../../assets/images/elsraya.jpg";
-import img4 from "../../assets/images/x&o.jpg";
-import img5 from "../../assets/images/chq.jpg";
-import img6 from "../../assets/images/nour-elsham.jpg";
-import img7 from "../../assets/images/soy-soshi.jpg";
-import img8 from "../../assets/images/baba-awad.jpg";
-import img9 from "../../assets/images/wagdy.jpg";
-import img10 from "../../assets/images/hi-proust.jpg";
-
-const images = [img3, img4, img5, img6, img7, img8, img9, img10];
-const restaurantNames = [
-  "Al Saraya",
-  "XO burger",
-  "Chicken Hills",
-  "Nour Elsham",
-  "soy sushi",
-  "Baba Awad",
-  "Wagdy Elsham",
-  "HI proust",
-];
+import axios from "../../api/axios";
 
 const itemsInPage = 8;
 
 export default function Restaurants() {
+  const [restaurants, setRestaurants] = useState([]);
   const [page, setPage] = useState(0);
-  const [filteredRestaurants, setFilteredRestaurants] =
-    useState(restaurantNames);
-  const [filteredImages, setFilteredImages] = useState(images);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
   useEffect(() => {
-    if (searchQuery) {
-      const filteredNames = restaurantNames.filter((name) =>
-        name.toLowerCase().includes(searchQuery)
-      );
-      const filteredImgs = images.filter((_, index) =>
-        restaurantNames[index].toLowerCase().includes(searchQuery)
-      );
+    getAllRestaurants();
+  }, []);
 
-      setFilteredRestaurants(filteredNames);
-      setFilteredImages(filteredImgs);
-    } else {
-      setFilteredRestaurants(restaurantNames);
-      setFilteredImages(images);
+  useEffect(() => {
+    filterRestaurants();
+  }, [searchQuery, restaurants]);
+
+  const getAllRestaurants = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/restaurant/");
+      setRestaurants(data);
+    } catch (err: any) {
+      console.error(err.response?.data || err.message, "err");
     }
-  }, [searchQuery]);
+  };
+
+  const filterRestaurants = () => {
+    if (searchQuery) {
+      const filtered = restaurants.filter((restaurant: any) =>
+        restaurant.name.toLowerCase().includes(searchQuery)
+      );
+      setFilteredRestaurants(filtered);
+    } else {
+      setFilteredRestaurants(restaurants);
+    }
+    setPage(0);
+  };
 
   const handleNext = () => {
-    setPage(
-      (prevPage) =>
-        (prevPage + 1) % Math.ceil(filteredImages.length / itemsInPage)
+    setPage((prevPage) =>
+      Math.min(
+        prevPage + 1,
+        Math.ceil(filteredRestaurants.length / itemsInPage) - 1
+      )
     );
   };
 
   const handlePrev = () => {
-    setPage(
-      (prevPage) =>
-        (prevPage - 1 + Math.ceil(filteredImages.length / itemsInPage)) %
-        Math.ceil(filteredImages.length / itemsInPage)
-    );
+    setPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
   const startIndex = page * itemsInPage;
   const endIndex = startIndex + itemsInPage;
-  const currentItems = filteredImages.slice(startIndex, endIndex);
+  const currentItems = filteredRestaurants.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -145,15 +135,13 @@ export default function Restaurants() {
           }}
           spacing={4}
         >
-          {currentItems.map((imageUrl, index) => (
-            <div key={index} className="card">
+          {currentItems.map((restaurant: any, index) => (
+            <div key={restaurant._id} className="card">
               <div className="image-wrapper">
-                <img src={imageUrl} alt={`Image ${index}`} />
+                <img src={restaurant.icon} alt={`Image ${index}`} />
               </div>
               <div className="text-wrapper">
-                <Typography variant="h6">
-                  {filteredRestaurants[startIndex + index]}
-                </Typography>
+                <Typography variant="h6">{restaurant.name}</Typography>
                 <button className="bb2">
                   <Link to="/menu" id="sign-link" className="log4">
                     View Menu
@@ -164,13 +152,13 @@ export default function Restaurants() {
           ))}
         </Stack>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Button onClick={handlePrev} sx={{ fontSize: "2rem" }}>
+          <Button sx={{ fontSize: "2rem" }} onClick={handlePrev}>
             &larr;
           </Button>
           <Typography variant="h6">
-            {page + 1} / {Math.ceil(filteredImages.length / itemsInPage)}
+            {page + 1} / {Math.ceil(filteredRestaurants.length / itemsInPage)}
           </Typography>
-          <Button onClick={handleNext} sx={{ fontSize: "2rem" }}>
+          <Button sx={{ fontSize: "2rem" }} onClick={handleNext}>
             &rarr;
           </Button>
         </Stack>

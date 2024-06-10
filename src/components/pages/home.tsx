@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -12,19 +12,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import "../../styles/home.css";
 import img from "../../assets/images/11.png";
 import img2 from "../../assets/images/12.png";
-import img3 from "../../assets/images/elsraya.jpg";
-import img4 from "../../assets/images/x&o.jpg";
-import img5 from "../../assets/images/chq.jpg";
-import img6 from "../../assets/images/nour-elsham.jpg";
 import Card from "../Whyus";
-
-const images = [img3, img4, img5, img6];
-const restaurantNames = [
-  "Al Saraya",
-  "XO burger",
-  "Chicken Hills",
-  "Nour Elsham",
-];
+import axios from "../../api/axios";
 
 const Search = styled("div")(({ theme }) => ({
   paddingLeft: "20px",
@@ -70,8 +59,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Home() {
+  const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
+
+  useEffect(() => {
+    getAllRestaurants();
+  }, [searchRest]);
+
+  const getAllRestaurants = async () => {
+    try {
+      const Rest_URL = searchRest
+        ? `/api/v1/restaurant/search/${searchRest}`
+        : "/api/v1/restaurant/";
+      const { data } = await axios.get(Rest_URL);
+      setRestaurants(data);
+    } catch (err: any) {
+      console.error(err.response?.data || err.message, "err");
+    }
+  };
 
   const handleSearchChange = (event: any) => {
     setSearchRest(event.target.value);
@@ -80,14 +86,6 @@ export default function Home() {
   const handleSearchSubmit = () => {
     navigate(`/restaurants?search=${searchRest}`);
   };
-
-  const filteredRestaurants = restaurantNames.filter((name) =>
-    name.toLowerCase().includes(searchRest.toLowerCase())
-  );
-
-  const filteredImages = images.filter((_, index) =>
-    restaurantNames[index].toLowerCase().includes(searchRest.toLowerCase())
-  );
 
   return (
     <div>
@@ -203,22 +201,18 @@ export default function Home() {
               spacing: 4,
             }}
           >
-            {filteredImages.map((imageUrl, index) => (
+            {restaurants.slice(0, 4).map((restaurant: any) => (
               <div
-                onClick={() => {
-                  navigate("/menu");
-                }}
-                key={index}
+                onClick={() => navigate("/menu")}
+                key={restaurant._id}
                 className="flip-card"
               >
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
-                    <img src={imageUrl} alt={`Image ${index}`} />
+                    <img src={restaurant.icon} alt={restaurant.name} />
                   </div>
                   <div className="flip-card-back">
-                    <Typography variant="h5">
-                      {filteredRestaurants[index]}
-                    </Typography>
+                    <Typography variant="h5">{restaurant.name}</Typography>
                   </div>
                 </div>
               </div>

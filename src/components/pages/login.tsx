@@ -8,16 +8,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import "../../styles/Log.css";
 
-const LOGIN_URL = "/users/login";
+const LOGIN_URL = "/api/v1/authentication/login";
 export default function login({
   setisUser,
 }: {
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { setAuth }: any = useContext(AuthProvider);
+  // const { setAuth }: any = useContext(AuthProvider);
+  // console.log(setAuth);
   const navigate = useNavigate();
   const location = useLocation();
-  const home = location.state?.home?.pathname || "/home";
+  const home = location.state?.home?.pathname || "/";
   const userRef = useRef<HTMLInputElement>(null);
   const errRef: any = useRef();
 
@@ -41,11 +42,13 @@ export default function login({
       const token = await res.data.token;
 
       setErrMsg("");
-      setAuth({ token });
+      // setAuth({ token });
 
       localStorage.setItem("token", token);
+      console.log(token);
       navigate(home, { replace: true });
     } catch (err: any) {
+      // console.log(err.response?.data || err.message, "err");
       if (!err.response) {
         setErrMsg("No server response");
       } else {
@@ -146,10 +149,10 @@ export default function login({
             <button
               className="logn-button"
               disabled={!validPwd || !validEmail ? true : false}
-              onClick={() => {
-                setisUser(true);
-                navigate("/");
-              }}
+              // onClick={() => {
+              //   setisUser(true);
+              //   navigate("/");
+              // }}
             >
               Sign In
             </button>

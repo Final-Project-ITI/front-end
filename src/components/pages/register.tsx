@@ -4,13 +4,13 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { USER_REGEX } from "../../regex/user";
 import { PWD_REGEX } from "../../regex/pass";
 import { EMAIL_REGEX } from "../../regex/email";
-import { Phone_REGEX } from "../../regex/phone";
+// import { Phone_REGEX } from "../../regex/phone";
 // import { Box, Stack, Typography } from "@mui/material";
 import "../../styles/Auth.css";
 import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 
-const REGISTER_URL = "/users/register";
+const REGISTER_URL = "/api/v1/authentication/register";
 export default function Register({
   setisUser,
 }: {
@@ -25,9 +25,9 @@ export default function Register({
   const [validName, setValidName] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
 
-  const [phone, setPhone] = useState("");
-  const [validPhone, setValidPhone] = useState(false);
-  const [phoneFocus, setPhoneFocus] = useState(false);
+  // const [phone, setPhone] = useState("");
+  // const [validPhone, setValidPhone] = useState(false);
+  // const [phoneFocus, setPhoneFocus] = useState(false);
 
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
@@ -45,34 +45,37 @@ export default function Register({
   useEffect(() => {
     const result = USER_REGEX.test(user);
     setValidName(result);
+    console.log(result);
   }, [user]);
 
-  useEffect(() => {
-    const result = Phone_REGEX.test(phone);
-    setValidPhone(result);
-  }, [phone]);
+  // useEffect(() => {
+  //   const result = Phone_REGEX.test(phone);
+  //   setValidPhone(result);
+  //   console.log(result);
+  // }, [phone]);
 
   useEffect(() => {
     const result = EMAIL_REGEX.test(email);
     setValidEmail(result);
+    console.log(result);
   }, [email]);
 
   useEffect(() => {
     const result = PWD_REGEX.test(pwd);
     setValidPwd(result);
+    console.log(result);
   }, [pwd]);
 
   useEffect(() => {
     setErrMsg("");
-  }, [user, phone, pwd, email]);
+  }, [user, pwd, email]);
 
   async function handleSubmit(e: any) {
     e.preventDefault();
 
     try {
       await axios.post(REGISTER_URL, {
-        username: user,
-        phone,
+        fullName: user,
         email,
         password: pwd,
       });
@@ -81,6 +84,7 @@ export default function Register({
 
       navigate("/login", { replace: true });
     } catch (err: any) {
+      // console.log(err.response?.data || err.message, "err");
       if (!err.response) {
         setErrMsg("No server response");
       } else {
@@ -97,7 +101,7 @@ export default function Register({
           </h1>
           <form className="sign-form" onSubmit={handleSubmit}>
             <label htmlFor="username" className="sign-label">
-              Username{" "}
+              UserName{" "}
             </label>
             <input
               placeholder="User Name"
@@ -125,7 +129,7 @@ export default function Register({
               Letters, numbers, underscores, hyphens allowed.
             </p>
             {/* /////// */}
-            <label htmlFor="phone" className="sign-label">
+            {/* <label htmlFor="phone" className="sign-label">
               Phone Number{" "}
             </label>
             <input
@@ -150,7 +154,7 @@ export default function Register({
               <FontAwesomeIcon icon={faInfoCircle} />
               phone number must be like this: 01012345678 or 01112345678 or
               01212345678
-            </p>
+            </p> */}
             <label htmlFor="email" className="sign-label">
               Email{" "}
             </label>
@@ -213,10 +217,10 @@ export default function Register({
             <button
               className="sign-button"
               disabled={!validName || !validEmail || !validPwd ? true : false}
-              onClick={() => {
-                setisUser(true);
-                navigate("/");
-              }}
+              // onClick={() => {
+              //   setisUser(true);
+              //   navigate("/");
+              // }}
             >
               {/* <Link to="/login" id="sign-link" className="log2"> */}
               Sign Up

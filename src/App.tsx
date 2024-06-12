@@ -17,9 +17,9 @@ import { Menu } from "./components/pages/Menu.tsx";
 import Ditails from "./components/pages/Ditails.tsx";
 import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
 import axios from "axios";
-const url="http://localhost:3000/api/v1"
+const url = "http://localhost:3000/api/v1";
 function App() {
-  const path =useLocation().pathname 
+  const path = useLocation().pathname;
   const [openSideCart, setOpenSideCart] = useState(false);
 
   const [isUser, setisUser] = useState(false);
@@ -30,57 +30,49 @@ function App() {
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
-  const [restaurantId,setRestaurantId]=useState<string>("");
+  const [restaurantId, setRestaurantId] = useState<string>("");
 
   useEffect(() => {
-    const  getUserCart= async ()=>{
-      const res = await axios.get(url+"/cart",{
+    const getUserCart = async () => {
+      const res = await axios.get(url + "/cart", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if(res.data.itemsIds.length){
-        const newCartItems = res.data.itemsIds
+      if (res.data.itemsIds.length) {
+        const newCartItems = res.data.itemsIds;
         setCartItems(newCartItems);
-        setRestaurantId(res.data.itemsIds[0].productId.restaurantId)
+        setRestaurantId(res.data.itemsIds[0].productId.restaurantId);
         calculateQuantity(newCartItems);
         calculateTotal(newCartItems);
       }
-      
-    }
-    const  getUserAddresses= async ()=>{
-      const res = await axios.get(url+"/addresses",{
+    };
+    const getUserAddresses = async () => {
+      const res = await axios.get(url + "/addresses", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if(!res.data.message){
-        const newAddresses = res.data
+      if (!res.data.message) {
+        const newAddresses = res.data;
         setAddresses(newAddresses);
-      }  
-      
-    }
-    const  getUserPhones= async ()=>{
-      const res = await axios.get(url+"/phones",{
+      }
+    };
+    const getUserPhones = async () => {
+      const res = await axios.get(url + "/phones", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if(!res.data.message){
-        const newPhones = res.data
+      if (!res.data.message) {
+        const newPhones = res.data;
         setPhones(newPhones);
-      }  
-      
-    }
+      }
+    };
     // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
-    if(localStorage.getItem("token")){
+    if (localStorage.getItem("token")) {
       setisUser(true);
       getUserCart();
       getUserAddresses();
       getUserPhones();
-    }
-    else{
+    } else {
       setisUser(false);
     }
-   
-    
-
-    
-  }, []);
+  }, [isUser]);
 
   const calculateQuantity = (newCartItems: item[]) => {
     const newCartQuantity = newCartItems.reduce(
@@ -127,11 +119,11 @@ function App() {
     calculateQuantity(newCartItems);
     calculateTotal(newCartItems);
   };
-  const emptyCart=()=>{
-    setCartItems([])
-    setCartQuantity(0)
-    setCartTotal(0)
-  }
+  const emptyCart = () => {
+    setCartItems([]);
+    setCartQuantity(0);
+    setCartTotal(0);
+  };
   const addPhoneNumber = (phone: any) => {
     const newPhones = [...phones, phone];
     setPhones(newPhones);
@@ -153,16 +145,21 @@ function App() {
             position: "relative",
           }}
         >
-          {(path!=="/register" && path!=="/login" )&&<NavBar
-            isUser={isUser}
-            setisUser={setisUser}
-            cartQuantity={cartQuantity}
-          ></NavBar>}
+          {path !== "/register" && path !== "/login" && (
+            <NavBar
+              isUser={isUser}
+              setisUser={setisUser}
+              cartQuantity={cartQuantity}
+            ></NavBar>
+          )}
           <Routes>
             <Route path="/menu" element={<Menu />} />
             <Route path="/productdetails" element={<Ditails />} />
             <Route path="/userinfo" element={<UserInfoAndOrders />} />
-            <Route path="/register" element={<Register setisUser={setisUser}/>} />
+            <Route
+              path="/register"
+              element={<Register setisUser={setisUser} />}
+            />
             <Route path="/login" element={<Login setisUser={setisUser} />} />
             <Route path="/" element={<Home />} />
             <Route path="/restaurants" element={<Restaurants />} />
@@ -170,7 +167,7 @@ function App() {
               path="/checkout"
               element={
                 <Checkout
-                emptyCart={emptyCart}
+                  emptyCart={emptyCart}
                   restaurantId={restaurantId}
                   phones={phones}
                   addresses={addresses}
@@ -184,7 +181,7 @@ function App() {
               path="/cart"
               element={
                 <Cart
-                deleteItemQuantity={deleteItemQuantity}
+                  deleteItemQuantity={deleteItemQuantity}
                   cartQuantity={cartQuantity}
                   cartItems={cartItems}
                   cartTotal={cartTotal}
@@ -193,7 +190,7 @@ function App() {
               }
             />
           </Routes>
-          {(path!=="/register" && path!=="/login" )&&<Footer></Footer>}
+          {path !== "/register" && path !== "/login" && <Footer></Footer>}
         </Stack>
         {openSideCart && (
           <SideCart
@@ -205,7 +202,9 @@ function App() {
             editItemQuantity={editItemQuantity}
           />
         )}
-        {(path!=="/register" && path!=="/login" && path!=="/cart" )&&<CartIcon setOpenSideCart={setOpenSideCart} cartTotal={cartTotal} />}
+        {path !== "/register" && path !== "/login" && path !== "/cart" && (
+          <CartIcon setOpenSideCart={setOpenSideCart} cartTotal={cartTotal} />
+        )}
       </ThemeProvider>
     </>
   );

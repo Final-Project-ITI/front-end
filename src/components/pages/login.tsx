@@ -60,8 +60,8 @@ export default function login({
   }
 
   useEffect(() => {
-    const result = EMAIL_REGEX.test(email);
-    setValidEmail(result);
+    // const result = EMAIL_REGEX.test(email);
+    setValidEmail(true);
   }, [email]);
 
   useEffect(() => {
@@ -149,7 +149,7 @@ export default function login({
 
             <button
               className="logn-button"
-              disabled={!validPwd || !validEmail ? true : false}
+              disabled={!pwd || !email ? true : false}
               // onClick={() => {
               //   setisUser(true);
               //   navigate("/");

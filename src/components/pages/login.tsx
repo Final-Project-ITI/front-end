@@ -45,7 +45,8 @@ export default function login({
       // setAuth({ token });
 
       localStorage.setItem("token", token);
-      console.log(token);
+      // console.log(token);
+      setisUser(true);
       navigate(home, { replace: true });
     } catch (err: any) {
       // console.log(err.response?.data || err.message, "err");
@@ -64,8 +65,8 @@ export default function login({
   }, [email]);
 
   useEffect(() => {
-    const result = PWD_REGEX.test(pwd);
-    setValidPwd(result);
+    // const result = PWD_REGEX.test(pwd);
+    setValidPwd(true);
   }, [pwd]);
 
   return (

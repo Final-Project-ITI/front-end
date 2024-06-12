@@ -11,9 +11,7 @@ import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 
 const REGISTER_URL = "/api/v1/authentication/register";
-export default function Register({
-  setisUser,
-}: {
+export default function Register({}: {
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const navigate = useNavigate();

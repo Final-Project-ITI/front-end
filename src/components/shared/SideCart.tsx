@@ -2,9 +2,52 @@ import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
 import item from "../../models/Item";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const url = "http://localhost:3000/api/v1";
+
 
 function SideCart({ cartItems,setOpenSideCart,cartQuantity,cartTotal,editItemQuantity,deleteItemQuantity }: { cartItems:item[],setOpenSideCart:React.Dispatch<React.SetStateAction<boolean>> ,cartQuantity:number,cartTotal:number,editItemQuantity:(itemId: string, newQuantity: number) => void,deleteItemQuantity: (itemId: string) => void}){
   const navigate=useNavigate()
+  const handleDeleteItem=(item:any)=>{
+    deleteItemQuantity(item.productId._id)
+
+    const fetchDeleteItem = async () => {
+      const res = await axios.delete(
+        url + "/cart/"+item._id,
+        {
+          headers: { jwt: localStorage.getItem("token") },
+        }
+      );    
+      
+    };
+    fetchDeleteItem()
+    
+  }
+  const handleEditItemQuantity=(item:any,newQuantity:number)=>{
+    if (item.quantity + newQuantity < 0) {
+      return;
+    } else if (item.quantity + newQuantity === 0) {
+       handleDeleteItem(item);
+      return;
+    }
+    editItemQuantity(item.productId._id, newQuantity)
+    const fetchEditItemQuantity = async () => {
+      const res = await axios.patch(
+        url + "/cart/"+item._id,
+        {
+          quantity: item.quantity+newQuantity,
+        },
+        {
+          headers: { jwt: localStorage.getItem("token") },
+        }
+      );
+      console.log(res)
+     
+
+    };
+    fetchEditItemQuantity()
+  }
   return (
     <>
       <Stack
@@ -90,7 +133,7 @@ function SideCart({ cartItems,setOpenSideCart,cartQuantity,cartTotal,editItemQua
                 marginBottom:"10px"
               }}
             >
-              <Box onClick={()=>deleteItemQuantity(item.productId._id)} sx={{ position: "absolute", top: "0.5px", right: "5px","& :hover":{cursor:"pointer"} }}>
+              <Box onClick={()=>handleDeleteItem(item)} sx={{ position: "absolute", top: "0.5px", right: "5px","& :hover":{cursor:"pointer"} }}>
                 <svg
                   width="24"
                   height="24"
@@ -107,14 +150,14 @@ function SideCart({ cartItems,setOpenSideCart,cartQuantity,cartTotal,editItemQua
                     stroke="#E4002B"
                     strokeOpacity="0.34"
                     strokeWidth="1.875"
-                    stroke-linecap="round"
+                    strokeLinecap="round"
                   />
                 </svg>
               </Box>
               <Box sx={{ height: "64px" }}>
                 <img
                   height={"100%"}
-                  src={item.productId.icon}
+                  src={item.productId.icon?item.productId.icon:"https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"}
                 />
               </Box>
               <Typography title={item.productId.title} sx={{ fontSize: "16px" }}>
@@ -135,7 +178,7 @@ function SideCart({ cartItems,setOpenSideCart,cartQuantity,cartTotal,editItemQua
                 justifyContent={"space-between"}
               >
                 <Box
-                onClick={()=>editItemQuantity(item.productId._id,-1)}
+                onClick={() => handleEditItemQuantity(item, -1)}
                   sx={{
                     height: "24px",
                     width: "24px",
@@ -164,7 +207,7 @@ function SideCart({ cartItems,setOpenSideCart,cartQuantity,cartTotal,editItemQua
                   {item.quantity}
                 </Typography>
                 <Box
-                onClick={()=>editItemQuantity(item.productId._id,1)}
+                onClick={() => handleEditItemQuantity(item, 1)}
                   sx={{
                     height: "24px",
                     width: "24px",

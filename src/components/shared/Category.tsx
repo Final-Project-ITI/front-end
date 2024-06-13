@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 import Product from "./ProductCard";
 
 interface ProductType {
@@ -15,7 +15,7 @@ interface IProps {
 
 const Category = ({ name, products }: IProps) => {
   return (
-    <Grid container sx={{ padding: "8px" }}>
+    <Grid container sx={{ padding: "48px" }}>
       <Grid item xs={12}>
         <Typography
           variant="h4"
@@ -34,9 +34,17 @@ const Category = ({ name, products }: IProps) => {
           {name}
         </Typography>
       </Grid>
-      {products.map((product) => (
-        <Product key={product.id} product={product} />
-      ))}
+      <Grid item xs={12}>
+        <Stack
+          direction={"row"}
+          justifyContent={"space-around"}
+          flexWrap={"wrap"}
+        >
+          {products.map((product) => (
+            <Product key={product.id} product={product} />
+          ))}
+        </Stack>
+      </Grid>
     </Grid>
   );
 };

@@ -20,7 +20,7 @@ import axios from "axios";
 import CartContext from "./context/CartProvider.tsx";
 const url="http://localhost:3000/api/v1"
 function App() {
-  const path =useLocation().pathname 
+  const path = useLocation().pathname;
   const [openSideCart, setOpenSideCart] = useState(false);
 
   const [isUser, setisUser] = useState(false);
@@ -30,57 +30,49 @@ function App() {
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
-  const [restaurantId,setRestaurantId]=useState<string>("");
+  const [restaurantId, setRestaurantId] = useState<string>("");
 
   useEffect(() => {
-    const  getUserCart= async ()=>{
-      const res = await axios.get(url+"/cart",{
+    const getUserCart = async () => {
+      const res = await axios.get(url + "/cart", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if(res.data.itemsIds.length){
-        const newCartItems = res.data.itemsIds
+      if (res.data.itemsIds.length) {
+        const newCartItems = res.data.itemsIds;
         setCartItems(newCartItems);
-        setRestaurantId(res.data.itemsIds[0].productId.restaurantId)
+        setRestaurantId(res.data.itemsIds[0].productId.restaurantId);
         calculateQuantity(newCartItems);
         calculateTotal(newCartItems);
       }
-      
-    }
-    const  getUserAddresses= async ()=>{
-      const res = await axios.get(url+"/addresses",{
+    };
+    const getUserAddresses = async () => {
+      const res = await axios.get(url + "/addresses", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if(!res.data.message){
-        const newAddresses = res.data
+      if (!res.data.message) {
+        const newAddresses = res.data;
         setAddresses(newAddresses);
-      }  
-      
-    }
-    const  getUserPhones= async ()=>{
-      const res = await axios.get(url+"/phones",{
+      }
+    };
+    const getUserPhones = async () => {
+      const res = await axios.get(url + "/phones", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if(!res.data.message){
-        const newPhones = res.data
+      if (!res.data.message) {
+        const newPhones = res.data;
         setPhones(newPhones);
-      }  
-      
-    }
+      }
+    };
     // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
-    if(localStorage.getItem("token")){
+    if (localStorage.getItem("token")) {
       setisUser(true);
       getUserCart();
       getUserAddresses();
       getUserPhones();
-    }
-    else{
+    } else {
       setisUser(false);
     }
-   
-    
-
-    
-  }, []);
+  }, [isUser]);
 
 
   const addPhoneNumber = (phone: any) => {
@@ -110,9 +102,13 @@ function App() {
           ></NavBar>}
           <Routes>
             <Route path="/menu" element={<Menu />} />
+
             <Route path="/productdetails" element={<Ditails />} />
             <Route path="/userinfo" element={<UserInfoAndOrders />} />
-            <Route path="/register" element={<Register setisUser={setisUser}/>} />
+            <Route
+              path="/register"
+              element={<Register setisUser={setisUser} />}
+            />
             <Route path="/login" element={<Login setisUser={setisUser} />} />
             <Route path="/" element={<Home />} />
             <Route path="/restaurants" element={<Restaurants />} />
@@ -135,7 +131,7 @@ function App() {
               }
             />
           </Routes>
-          {(path!=="/register" && path!=="/login" )&&<Footer></Footer>}
+          {path !== "/register" && path !== "/login" && <Footer></Footer>}
         </Stack>
         {openSideCart && (
           <SideCart

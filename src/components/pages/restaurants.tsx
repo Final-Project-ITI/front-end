@@ -1,40 +1,74 @@
-import React from "react";
-import { Box, Stack, Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Box, Stack, Typography, Button } from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
 import "../../styles/restaurant.css";
 import img from "../../assets/images/21.png";
 import img2 from "../../assets/images/22.png";
-import img3 from "../../assets/images/elsraya.jpg";
-import img4 from "../../assets/images/x&o.jpg";
-import img5 from "../../assets/images/chq.jpg";
-import img6 from "../../assets/images/nour-elsham.jpg";
-import img7 from "../../assets/images/soy-soshi.jpg";
-import img8 from "../../assets/images/baba-awad.jpg";
-import img9 from "../../assets/images/wagdy.jpg";
-import img10 from "../../assets/images/hi-proust.jpg";
+import axios from "../../api/axios";
 
-const images = [img3, img4, img5, img6, img7, img8, img9, img10];
-const restaurantNames = [
-  "Al Saraya",
-  "XO burger",
-  "Chicken Hills",
-  "Nour Elsham",
-  "soy sushi",
-  "Baba Awad",
-  "Wagdy Elsham",
-  "HI proust",
-];
+const itemsInPage = 8;
 
 export default function Restaurants() {
-  const navigate = useNavigate();
+  const [restaurants, setRestaurants] = useState([]);
+  const [page, setPage] = useState(0);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+
+  useEffect(() => {
+    getAllRestaurants();
+  }, []);
+
+  useEffect(() => {
+    filterRestaurants();
+  }, [searchQuery, restaurants]);
+
+  const getAllRestaurants = async () => {
+    try {
+      const { data } = await axios.get("/api/v1/restaurant/");
+      setRestaurants(data);
+    } catch (err: any) {
+      console.error(err.response?.data || err.message, "err");
+    }
+  };
+
+  const filterRestaurants = () => {
+    if (searchQuery) {
+      const filtered = restaurants.filter((restaurant: any) =>
+        restaurant.name.toLowerCase().includes(searchQuery)
+      );
+      setFilteredRestaurants(filtered);
+    } else {
+      setFilteredRestaurants(restaurants);
+    }
+    setPage(0);
+  };
+
+  const handleNext = () => {
+    setPage((prevPage) =>
+      Math.min(
+        prevPage + 1,
+        Math.ceil(filteredRestaurants.length / itemsInPage) - 1
+      )
+    );
+  };
+
+  const handlePrev = () => {
+    setPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  const startIndex = page * itemsInPage;
+  const endIndex = startIndex + itemsInPage;
+  const currentItems = filteredRestaurants.slice(startIndex, endIndex);
+
   return (
     <div>
       <Stack
-    
         height={"400px"}
         direction="row"
         justifyContent="space-between"
-        // flexWrap={"inherit"}
         alignItems="center"
         sx={{ minHeight: "500px", background: "#F9F1E5" }}
       >
@@ -46,7 +80,6 @@ export default function Restaurants() {
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center center",
             backgroundSize: "cover",
-            border: "5px",
             borderRadius: "1%",
           }}
         ></Box>
@@ -71,7 +104,6 @@ export default function Restaurants() {
             Order from your favorite restaurants now!
           </Typography>
         </Stack>
-
         <Box
           sx={{
             backgroundImage: `url(${img2})`,
@@ -82,8 +114,6 @@ export default function Restaurants() {
             backgroundSize: "cover",
             position: "relative",
             bottom: "20px",
-            // border: "5px",
-            // borderRadius: "1%",
           }}
         ></Box>
       </Stack>
@@ -97,27 +127,46 @@ export default function Restaurants() {
           direction="row"
           justifyContent="center"
           alignItems="center"
-          sx={{ background: "#f3ece4", minHeight: "400px",flexWrap:"wrap",paddingInline:{lg:"15%"} }}
+          sx={{
+            background: "#f3ece4",
+            minHeight: "400px",
+            flexWrap: "wrap",
+            paddingInline: { lg: "10%" },
+          }}
           spacing={4}
         >
-          {images.map((imageUrl, index) => (
-            <div key={index} className="card" >
+          {currentItems.map((restaurant: any, index) => (
+            <div key={restaurant._id} className="card">
               <div className="image-wrapper">
-                <img src={imageUrl} alt={`Image ${index}`} />
+                <img src={restaurant.icon} alt={`Image ${index}`} />
               </div>
               <div className="text-wrapper">
-                <Typography variant="h6">{restaurantNames[index]}</Typography>
+                <Typography variant="h6">{restaurant.name}</Typography>
                 <button className="bb2">
-                  <Link to="/menu" id="sign-link" className="log4">
+                  <Link
+                    to="/menu"
+                    id="sign-link"
+                    className="log4"
+                    state={restaurant._id}
+                  >
                     View Menu
                   </Link>
                 </button>
               </div>
             </div>
           ))}
-
         </Stack>
-
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Button sx={{ fontSize: "2rem" }} onClick={handlePrev}>
+            &larr;
+          </Button>
+          <Typography variant="h6">
+            {page + 1} / {Math.ceil(filteredRestaurants.length / itemsInPage)}
+          </Typography>
+          <Button sx={{ fontSize: "2rem" }} onClick={handleNext}>
+            &rarr;
+          </Button>
+        </Stack>
       </Stack>
     </div>
   );

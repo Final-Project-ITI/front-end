@@ -4,13 +4,12 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { USER_REGEX } from "../../regex/user";
 import { PWD_REGEX } from "../../regex/pass";
 import { EMAIL_REGEX } from "../../regex/email";
-import { Phone_REGEX } from "../../regex/phone";
-// import { Box, Stack, Typography } from "@mui/material";
 import "../../styles/Auth.css";
 import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 
-const REGISTER_URL = "/users/register";
+const REGISTER_URL = "/api/v1/authentication/register";
+
 export default function Register({
   setisUser,
 }: {
@@ -25,10 +24,6 @@ export default function Register({
   const [validName, setValidName] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
 
-  const [phone, setPhone] = useState("");
-  const [validPhone, setValidPhone] = useState(false);
-  const [phoneFocus, setPhoneFocus] = useState(false);
-
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
@@ -36,6 +31,11 @@ export default function Register({
   const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
+
+  const [confirmPwd, setConfirmPwd] = useState("");
+  const [validConfirmPwd, setValidConfirmPwd] = useState(false);
+  const [confirmPwdFocus, setConfirmPwdFocus] = useState(false);
+
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
@@ -48,11 +48,6 @@ export default function Register({
   }, [user]);
 
   useEffect(() => {
-    const result = Phone_REGEX.test(phone);
-    setValidPhone(result);
-  }, [phone]);
-
-  useEffect(() => {
     const result = EMAIL_REGEX.test(email);
     setValidEmail(result);
   }, [email]);
@@ -63,16 +58,24 @@ export default function Register({
   }, [pwd]);
 
   useEffect(() => {
+    setValidConfirmPwd(pwd === confirmPwd);
+  }, [pwd, confirmPwd]);
+
+  useEffect(() => {
     setErrMsg("");
-  }, [user, phone, pwd, email]);
+  }, [user, pwd, confirmPwd, email]);
 
   async function handleSubmit(e: any) {
     e.preventDefault();
 
+    if (!validName || !validEmail || !validPwd || !validConfirmPwd) {
+      setErrMsg("Invalid Entry");
+      return;
+    }
+
     try {
       await axios.post(REGISTER_URL, {
-        username: user,
-        phone,
+        fullName: user,
         email,
         password: pwd,
       });
@@ -88,6 +91,7 @@ export default function Register({
       }
     }
   }
+
   return (
     <>
       <div className="container m-auto">
@@ -97,7 +101,7 @@ export default function Register({
           </h1>
           <form className="sign-form" onSubmit={handleSubmit}>
             <label htmlFor="username" className="sign-label">
-              Username{" "}
+              UserName{" "}
             </label>
             <input
               placeholder="User Name"
@@ -108,7 +112,7 @@ export default function Register({
               onChange={(e) => setUser(e.target.value)}
               required
               onFocus={() => setUserFocus(true)}
-              onBlur={() => setUserFocus(true)}
+              onBlur={() => setUserFocus(false)}
               className="sign-input"
             ></input>
             <p
@@ -124,33 +128,7 @@ export default function Register({
               <br />
               Letters, numbers, underscores, hyphens allowed.
             </p>
-            {/* /////// */}
-            <label htmlFor="phone" className="sign-label">
-              Phone Number{" "}
-            </label>
-            <input
-              placeholder="Phone Number"
-              type="text"
-              id="phone"
-              autoComplete="off"
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              onFocus={() => setPhoneFocus(true)}
-              onBlur={() => setPhoneFocus(true)}
-              className="sign-input"
-            ></input>
-            <p
-              id="phdnote"
-              className={
-                phoneFocus && phone && !validPhone
-                  ? "instructions"
-                  : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              phone number must be like this: 01012345678 or 01112345678 or
-              01212345678
-            </p>
+
             <label htmlFor="email" className="sign-label">
               Email{" "}
             </label>
@@ -162,7 +140,7 @@ export default function Register({
               onChange={(e) => setEmail(e.target.value)}
               required
               onFocus={() => setEmailFocus(true)}
-              onBlur={() => setEmailFocus(true)}
+              onBlur={() => setEmailFocus(false)}
               className="sign-input"
             ></input>
             <p
@@ -176,6 +154,7 @@ export default function Register({
               <FontAwesomeIcon icon={faInfoCircle} />
               email must be like this: example@gamil.com
             </p>
+
             <label htmlFor="password" className="sign-label">
               Password
             </label>
@@ -207,20 +186,45 @@ export default function Register({
               <span aria-label="dollar sign">$</span>{" "}
               <span aria-label="percent">%</span>
             </p>
+
+            <label htmlFor="confirm_pwd" className="sign-label">
+              Confirm Password
+            </label>
+            <input
+              placeholder="Confirm Password"
+              type="password"
+              id="confirm_pwd"
+              onChange={(e) => setConfirmPwd(e.target.value)}
+              required
+              value={confirmPwd}
+              onFocus={() => setConfirmPwdFocus(true)}
+              onBlur={() => setConfirmPwdFocus(false)}
+              className="sign-input"
+            />
+            <p
+              id="confirmPwdnote"
+              className={
+                confirmPwdFocus && !validConfirmPwd
+                  ? "instructions"
+                  : "offscreen"
+              }
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
+              Must match the first password input field.
+            </p>
+
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}>
               {errMsg}
             </p>
             <button
               className="sign-button"
-              disabled={!validName || !validEmail || !validPwd ? true : false}
-              onClick={() => {
-                setisUser(true);
-                navigate("/");
-              }}
+              disabled={
+                !validName || !validEmail || !validPwd || !validConfirmPwd
+                  ? true
+                  : false
+              }
             >
-              {/* <Link to="/login" id="sign-link" className="log2"> */}
               Sign Up
-              {/* </Link> */}
             </button>
           </form>
 

@@ -1,11 +1,8 @@
 import React from "react";
-import { Box } from "@mui/material";
-import { Stack } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import { Box, Stack, Typography } from "@mui/material";
 import img1 from "../assets/images/1.png";
 import img2 from "../assets/images/2.png";
 import img3 from "../assets/images/3.png";
-// import "../../styles/home.css";
 
 export default function Card() {
   return (
@@ -18,6 +15,7 @@ export default function Card() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          padding: "20px",
         }}
       >
         <Typography
@@ -28,8 +26,7 @@ export default function Card() {
             letterSpacing: ".3rem",
             color: "black",
             textAlign: "center",
-            position: "relative",
-            top: "-20px",
+            marginBottom: "70px",
           }}
         >
           Why Us
@@ -37,23 +34,31 @@ export default function Card() {
         <Stack
           justifyContent="center"
           alignItems="center"
-          sx={{ minHeight: "800px", background: "#f3ece4" }}
+          sx={{ minHeight: "400px", background: "#f3ece4" }}
         >
           <Stack
-            direction="row"
+            direction={{ xs: "column", sm: "row" }}
             justifyContent="center"
             alignItems="center"
-            position="relative"
-            top="-60px"
-            sx={{ background: "#f3ece4", minHeight: "400px" }}
-            spacing={10}
+            sx={{ background: "#f3ece4", flexWrap: "wrap" }}
+            spacing={{ xs: 3, sm: 10 }}
           >
-            <Stack justifyContent="center" alignItems="center" spacing={1}>
+            <Stack
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+              sx={{
+                flexWrap: "wrap",
+                textAlign: "center",
+                width: { xs: "100%", sm: "250px" },
+                margin: { xs: "10px 0", sm: "0" },
+              }}
+            >
               <Box
                 sx={{
                   backgroundImage: `url(${img1})`,
-                  width: "250px",
-                  height: "250px",
+                  width: { xs: "200px", sm: "250px" },
+                  height: { xs: "200px", sm: "250px" },
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center center",
                   backgroundSize: "cover",
@@ -65,11 +70,8 @@ export default function Card() {
                 noWrap
                 sx={{
                   fontWeight: 700,
-                  //   letterSpacing: ".3rem",
                   color: "black",
-                  textAlign: "center",
-                  position: "relative",
-                  top: "20px",
+                  marginTop: "20px",
                 }}
               >
                 Wide Selection
@@ -78,22 +80,29 @@ export default function Card() {
                 variant="h6"
                 sx={{
                   color: "black",
-                  textAlign: "center",
-                  position: "relative",
-                  top: "20px",
                 }}
               >
                 Explore a diverse range <br />
-                of cuisines and dishes
-                <br /> to satisfy any craving.
+                of cuisines and dishes <br />
+                to satisfy any craving.
               </Typography>
             </Stack>
-            <Stack justifyContent="center" alignItems="center" spacing={1}>
+            <Stack
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+              sx={{
+                flexWrap: "wrap",
+                textAlign: "center",
+                width: { xs: "100%", sm: "250px" },
+                margin: { xs: "10px 0", sm: "0" },
+              }}
+            >
               <Box
                 sx={{
                   backgroundImage: `url(${img2})`,
-                  width: "250px",
-                  height: "250px",
+                  width: { xs: "200px", sm: "250px" },
+                  height: { xs: "200px", sm: "250px" },
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center center",
                   backgroundSize: "cover",
@@ -105,11 +114,8 @@ export default function Card() {
                 noWrap
                 sx={{
                   fontWeight: 700,
-                  //   letterSpacing: ".3rem",
                   color: "black",
-                  textAlign: "center",
-                  position: "relative",
-                  top: "20px",
+                  marginTop: "20px",
                 }}
               >
                 Fresh ingredients
@@ -118,22 +124,27 @@ export default function Card() {
                 variant="h6"
                 sx={{
                   color: "black",
-                  textAlign: "center",
-                  position: "relative",
-                  top: "20px",
                 }}
               >
-                Experience the vibrant taste <br />
-                of fresh ingredients in every <br />
-                bite.
+                Experience the vibrant taste fresh ingredients in every bite.
               </Typography>
             </Stack>
-            <Stack justifyContent="center" alignItems="center" spacing={1}>
+            <Stack
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+              sx={{
+                flexWrap: "wrap",
+                textAlign: "center",
+                width: { xs: "100%", sm: "250px" },
+                margin: { xs: "10px 0", sm: "0" },
+              }}
+            >
               <Box
                 sx={{
                   backgroundImage: `url(${img3})`,
-                  width: "250px",
-                  height: "250px",
+                  width: { xs: "200px", sm: "250px" },
+                  height: { xs: "200px", sm: "250px" },
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center center",
                   backgroundSize: "cover",
@@ -145,11 +156,8 @@ export default function Card() {
                 noWrap
                 sx={{
                   fontWeight: 700,
-                  //   letterSpacing: ".3rem",
                   color: "black",
-                  textAlign: "center",
-                  position: "relative",
-                  top: "20px",
+                  marginTop: "20px",
                 }}
               >
                 Exceptional Service
@@ -158,14 +166,11 @@ export default function Card() {
                 variant="h6"
                 sx={{
                   color: "black",
-                  textAlign: "center",
-                  position: "relative",
-                  top: "20px",
-                  //   left: "-20px",
                 }}
               >
-                Our dedicated team is <br /> committed to providing
-                <br /> excellent service.
+                Our dedicated team is <br />
+                committed to providing <br />
+                excellent service.
               </Typography>
             </Stack>
           </Stack>

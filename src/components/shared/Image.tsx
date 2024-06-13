@@ -12,8 +12,8 @@ const Image = ({}: IProps) => {
           alt="Placeholder Image"
           sx={{
             width: "100%",
-            height: "55vh",
-            borderRadius: "10px",
+            height: "520px",
+            borderRadius: "25px",
           }}
         />
       </Grid>

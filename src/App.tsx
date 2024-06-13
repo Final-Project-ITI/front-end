@@ -154,6 +154,7 @@ function App() {
           )}
           <Routes>
             <Route path="/menu" element={<Menu />} />
+
             <Route path="/productdetails" element={<Ditails />} />
             <Route path="/userinfo" element={<UserInfoAndOrders />} />
             <Route

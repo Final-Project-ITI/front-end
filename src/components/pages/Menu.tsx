@@ -3,8 +3,15 @@ import img from "../../assets/WhatsApp Image 2024-05-24 at 17.42.05_1ebcada5.jpg
 import Image from "../shared/Image";
 import About from "../shared/About";
 import Section from "../shared/Section";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 export const Menu = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.state);
+  }, []);
   const pizzaProducts = [
     {
       id: 1,

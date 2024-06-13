@@ -7,26 +7,17 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import item from "../../models/Item";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import CartContext from "../../context/CartProvider";
 
 const url = "http://localhost:3000/api/v1";
 
-function Cart({
-  cartItems,
-  cartQuantity,
-  cartTotal,
-  editItemQuantity,
-  deleteItemQuantity
-}: {
-  cartItems: item[];
-  cartQuantity: number;
-  cartTotal: number;
-  editItemQuantity: (itemId: string, newQuantity: number) => void;
-  deleteItemQuantity: (itemId: string) => void;
-}) {
+function Cart() {
+  //@ts-ignore
+  const {cartItems,cartQuantity,cartTotal,editItemQuantity,deleteItemQuantity }= useContext(CartContext)
   const navigate = useNavigate();
   const vat = 10;
 
@@ -169,7 +160,7 @@ function Cart({
                 </Stack>
               )}
 
-              {cartItems.map((item) => (
+              {cartItems.map((item:any) => (
                 <Stack
                   key={item.productId._id}
                   direction={"row"}

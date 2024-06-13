@@ -11,30 +11,29 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import OrderSubmitted from "../popups/OrderSubmitted";
 import AddNumber from "../popups/AddNumber";
 import AddAdress from "../popups/AddAdress";
 import axios from "axios";
+import CartContext from "../../context/CartProvider";
 const url = "http://localhost:3000/api/v1";
 
 function Checkout({
   phones,
-  addresses,
-  cartTotal,
+  addresses,  
   addPhoneNumber,
   addAddress,
-  restaurantId,
-  emptyCart,
+  restaurantId,  
 }: {
   phones: any[];
   addresses: any[];
-  cartTotal: number;
   addPhoneNumber: (phone: string) => void;
   addAddress: (address: string) => void;
   restaurantId: string;
-  emptyCart: () => void;
 }) {
+  //@ts-ignore
+  const {emptyCart, cartTotal}= useContext(CartContext)
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);

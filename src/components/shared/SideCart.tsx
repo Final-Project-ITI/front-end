@@ -1,14 +1,19 @@
 import { Box, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import item from "../../models/Item";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import CartContext from "../../context/CartProvider";
 
 const url = "http://localhost:3000/api/v1";
 
 
-function SideCart({ cartItems,setOpenSideCart,cartQuantity,cartTotal,editItemQuantity,deleteItemQuantity }: { cartItems:item[],setOpenSideCart:React.Dispatch<React.SetStateAction<boolean>> ,cartQuantity:number,cartTotal:number,editItemQuantity:(itemId: string, newQuantity: number) => void,deleteItemQuantity: (itemId: string) => void}){
+function SideCart({ setOpenSideCart}: { setOpenSideCart:React.Dispatch<React.SetStateAction<boolean>> }){
   const navigate=useNavigate()
+  //@ts-ignore
+  const { cartItems,cartQuantity,cartTotal,editItemQuantity,deleteItemQuantity}=useContext(CartContext)
+
+
   const handleDeleteItem=(item:any)=>{
     deleteItemQuantity(item.productId._id)
 
@@ -118,7 +123,7 @@ function SideCart({ cartItems,setOpenSideCart,cartQuantity,cartTotal,editItemQua
           )}
           <Box sx={{maxHeight:"calc(100vh - 250px)", overflow:"auto"}}>          
           {cartQuantity > 0 && (
-            cartItems.map((item)=> <Stack
+            cartItems.map((item:any)=> <Stack
             key={item.productId._id}
               direction={"row"}
               alignItems={"center"}

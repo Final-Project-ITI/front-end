@@ -6,7 +6,7 @@ import Cart from "./components/pages/Cart.tsx";
 import Checkout from "./components/pages/Checkout.tsx";
 import CartIcon from "./components/shared/CartIcon.tsx";
 import SideCart from "./components/shared/SideCart.tsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import item from "./models/Item.ts";
 import Home from "./components/pages/home";
@@ -17,16 +17,16 @@ import { Menu } from "./components/pages/Menu.tsx";
 import Ditails from "./components/pages/Ditails.tsx";
 import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
 import axios from "axios";
-const url = "http://localhost:3000/api/v1";
+import CartContext from "./context/CartProvider.tsx";
+const url="http://localhost:3000/api/v1"
 function App() {
   const path = useLocation().pathname;
   const [openSideCart, setOpenSideCart] = useState(false);
 
   const [isUser, setisUser] = useState(false);
 
-  const [cartItems, setCartItems] = useState<item[]>([]);
-  const [cartQuantity, setCartQuantity] = useState<number>(0);
-  const [cartTotal, setCartTotal] = useState<number>(0);
+  //@ts-ignore
+  const {cartItems, setCartItems,cartQuantity, setCartQuantity,cartTotal, setCartTotal ,emptyCart,deleteItemQuantity,editItemQuantity,calculateTotal ,calculateQuantity}=useContext(CartContext)
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
@@ -74,56 +74,7 @@ function App() {
     }
   }, [isUser]);
 
-  const calculateQuantity = (newCartItems: item[]) => {
-    const newCartQuantity = newCartItems.reduce(
-      (acc, curr) => acc + curr.quantity,
-      0
-    );
-    setCartQuantity(newCartQuantity);
-  };
-  const calculateTotal = (newCartItems: item[]) => {
-    const newCartTotal = newCartItems.reduce(
-      (acc, curr) => acc + curr.quantity * curr.productId.price,
-      0
-    );
-    setCartTotal(newCartTotal);
-  };
 
-  const editItemQuantity = (itemId: string, newQuantity: number) => {
-    const newCartItems = [...cartItems];
-    const index = newCartItems.findIndex(
-      (item) => item.productId._id === itemId
-    );
-    // if (newCartItems[index].quantity + newQuantity < 0) {
-    //   return;
-    // } else if (newCartItems[index].quantity + newQuantity === 0) {
-    //   deleteItemQuantity(itemId);
-    //   return;
-    // }
-    newCartItems[index] = {
-      ...newCartItems[index],
-      quantity: newCartItems[index].quantity + newQuantity,
-    };
-    setCartItems(newCartItems);
-    setCartQuantity((pre) => pre + newQuantity);
-    setCartTotal(
-      (pre) => pre + newQuantity * newCartItems[index].productId.price
-    );
-  };
-
-  const deleteItemQuantity = (itemId: string) => {
-    const newCartItems = cartItems.filter(
-      (item) => item.productId._id !== itemId
-    );
-    setCartItems(newCartItems);
-    calculateQuantity(newCartItems);
-    calculateTotal(newCartItems);
-  };
-  const emptyCart = () => {
-    setCartItems([]);
-    setCartQuantity(0);
-    setCartTotal(0);
-  };
   const addPhoneNumber = (phone: any) => {
     const newPhones = [...phones, phone];
     setPhones(newPhones);
@@ -145,13 +96,10 @@ function App() {
             position: "relative",
           }}
         >
-          {path !== "/register" && path !== "/login" && (
-            <NavBar
-              isUser={isUser}
-              setisUser={setisUser}
-              cartQuantity={cartQuantity}
-            ></NavBar>
-          )}
+          {(path!=="/register" && path!=="/login" )&&<NavBar
+            isUser={isUser}
+            setisUser={setisUser}
+          ></NavBar>}
           <Routes>
             <Route path="/menu" element={<Menu />} />
 
@@ -167,12 +115,10 @@ function App() {
             <Route
               path="/checkout"
               element={
-                <Checkout
-                  emptyCart={emptyCart}
+                <Checkout                
                   restaurantId={restaurantId}
                   phones={phones}
                   addresses={addresses}
-                  cartTotal={cartTotal}
                   addPhoneNumber={addPhoneNumber}
                   addAddress={addAddress}
                 />
@@ -181,13 +127,7 @@ function App() {
             <Route
               path="/cart"
               element={
-                <Cart
-                  deleteItemQuantity={deleteItemQuantity}
-                  cartQuantity={cartQuantity}
-                  cartItems={cartItems}
-                  cartTotal={cartTotal}
-                  editItemQuantity={editItemQuantity}
-                />
+                <Cart            />
               }
             />
           </Routes>
@@ -195,17 +135,10 @@ function App() {
         </Stack>
         {openSideCart && (
           <SideCart
-            deleteItemQuantity={deleteItemQuantity}
             setOpenSideCart={setOpenSideCart}
-            cartItems={cartItems}
-            cartQuantity={cartQuantity}
-            cartTotal={cartTotal}
-            editItemQuantity={editItemQuantity}
           />
         )}
-        {path !== "/register" && path !== "/login" && path !== "/cart" && (
-          <CartIcon setOpenSideCart={setOpenSideCart} cartTotal={cartTotal} />
-        )}
+        {(path!=="/register" && path!=="/login" && path!=="/cart" )&&<CartIcon setOpenSideCart={setOpenSideCart} />}
       </ThemeProvider>
     </>
   );

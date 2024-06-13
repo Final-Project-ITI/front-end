@@ -8,6 +8,7 @@ import {
   useTheme,
   Box,
   Grid,
+  Stack,
 } from "@mui/material";
 
 interface IProps {}
@@ -16,121 +17,133 @@ const Ditails = ({}: IProps) => {
 
   return (
     <>
-      <Box sx={{ padding: "100px 160px", boxSizing: "border-box" }}>
-        <Grid container spacing={0} alignItems="center">
-          <Grid item xs={12} md={5} sx={{ paddingRight: "18px" }}>
-            <CardMedia
-              component="img"
-              image={img}
-              alt="Margherita Pizza"
-              sx={{
-                width: "100%",
-                height: "500px",
-                borderRadius: "25px",
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={7}
+      <Grid
+        container
+        alignItems="center"
+        justifyContent={"center"}
+        marginBlock={"100px"}
+      >
+        <Grid item xs={12} xl={4} margin={{ xl: "0 20px 0 0", xs: "20px" }}>
+          <CardMedia
+            component="img"
+            image={img}
+            alt="Margherita Pizza"
             sx={{
-              height: "500px",
-              backgroundColor: theme.palette.secondary.main,
+              width: "100%",
+              height: { xs: "auto", md: "500px" },
               borderRadius: "25px",
-              paddingLeft: "25px",
             }}
-          >
-            <CardContent sx={{ textAlign: "left" }}>
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          xl={6}
+          margin={{ xl: "0", xs: "0 20px 20px 20px" }}
+          sx={{
+            backgroundColor: theme.palette.secondary.main,
+            borderRadius: "25px",
+            padding: { xs: "20px", md: "25px" },
+            height: { xs: "auto", md: "500px" },
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <CardContent sx={{ textAlign: "left" }}>
+            <Stack direction={"row"} justifyContent={"space-between"}>
               <Typography
                 variant="h5"
                 component="div"
                 sx={{
                   fontWeight: "700",
-                  fontSize: "32px",
-                  lineHeight: "48px",
+                  fontSize: { xs: "24px", md: "32px" },
+                  lineHeight: { xs: "32px", md: "48px" },
                   color: theme.palette.primary.main,
-                  mt: "24px",
                 }}
               >
                 Margherita Pizza
-                <Typography
-                  variant="h6"
-                  color="primary"
-                  component="span"
-                  sx={{
-                    mt: "24px",
-                    ml: "390px",
-                    fontSize: "32px",
-                    fontWeight: "700",
-                  }}
-                >
-                  EGP 80
-                </Typography>
-              </Typography>
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                sx={{ mt: "24px", fontSize: "24px", color: "black" }}
-              >
-                Experience The True Taste Of Italy With Our Classic Margherita
-                Pizza.
               </Typography>
               <Typography
                 variant="h6"
-                component="div"
+                color="primary"
+                component="span"
                 sx={{
-                  mt: "24px",
-                  fontSize: "32px",
+                  fontSize: { xs: "24px", md: "32px" },
                   fontWeight: "700",
-                  color: theme.palette.primary.main,
+                  display: { xs: "block", md: "inline" },
                 }}
               >
-                Ingredients:
+                EGP 80
               </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ mt: "8px", fontSize: "24px", color: "black" }}
-              >
-                - Fresh Tomato Sauce
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ mt: "8px", fontSize: "24px", color: "black" }}
-              >
-                - Mozzarella Cheese
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ mt: "8px", fontSize: "24px", color: "black" }}
-              >
-                - Touch Of Basil
-              </Typography>
+            </Stack>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{
+                mt: { xs: "16px", md: "24px" },
+                fontSize: { xs: "16px", md: "24px" },
+                color: "black",
+              }}
+            >
+              Experience The True Taste Of Italy With Our Classic Margherita
+              Pizza.
+            </Typography>
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{
+                mt: { xs: "16px", md: "24px" },
+                fontSize: { xs: "24px", md: "32px" },
+                fontWeight: "700",
+                color: theme.palette.primary.main,
+              }}
+            >
+              Ingredients:
+            </Typography>
+            {["Fresh Tomato Sauce", "Mozzarella Cheese", "Touch Of Basil"].map(
+              (ingredient, index) => (
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  key={index}
+                  sx={{
+                    mt: "8px",
+                    fontSize: { xs: "16px", md: "24px" },
+                    color: "black",
+                  }}
+                >
+                  - {ingredient}
+                </Typography>
+              )
+            )}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                mt: { xs: "24px", md: "60px" },
+              }}
+            >
               <Button
                 variant="contained"
                 color="primary"
                 sx={{
-                  mt: "60px",
-                  ml: "120px",
-                  width: "577px",
+                  width: { xs: "100%", md: "577px" },
                   height: "64px",
                   borderRadius: "50px",
                   padding: "10px",
                   gap: "10px",
-                  fontSize: "24px",
+                  fontSize: { xs: "20px", md: "24px" },
                   fontWeight: "700",
                 }}
               >
                 <ShoppingCartIcon />
                 Add To Cart
               </Button>
-            </CardContent>
-          </Grid>
+            </Box>
+          </CardContent>
         </Grid>
-      </Box>
+      </Grid>
     </>
   );
 };

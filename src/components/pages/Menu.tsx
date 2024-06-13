@@ -1,6 +1,8 @@
 import Category from "../shared/Category";
 import img from "../../assets/WhatsApp Image 2024-05-24 at 17.42.05_1ebcada5.jpg";
 import Image from "../shared/Image";
+import About from "../shared/About";
+import Section from "../shared/Section";
 
 export const Menu = () => {
   const pizzaProducts = [
@@ -160,6 +162,8 @@ export const Menu = () => {
   return (
     <>
       <Image />
+      <About />
+      <Section />
       <Category name="PIZZA" products={pizzaProducts} />
       <Category name="SANDWICH" products={sandwichProducts} />
       <Category name="SOUQ" products={souqProducts} />

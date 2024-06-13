@@ -1,10 +1,10 @@
 import {
-  Box,
   Grid,
   Typography,
   TextField,
   Button,
   useTheme,
+  Box,
 } from "@mui/material";
 import OrderDetailsPopup from "./OrderDetailsPopup";
 import React from "react";
@@ -16,45 +16,43 @@ const UserInfoAndOrders = () => {
   const handleClose = () => setOpen(false);
 
   return (
-    <Box
-      sx={{
-        padding: "100px 170px",
-      }}
-    >
-      <Grid container spacing={0}>
-        <Grid
-          item
-          width={1050}
-          xs={12}
-          md={8}
+    <Grid container marginBlock={"100px"} justifyContent={"center"}>
+      <Grid
+        item
+        xs={12}
+        xl={7}
+        margin={{ xl: "0 20px 0 0", xs: "20px" }}
+        sx={{
+          backgroundColor: theme.palette.secondary.main,
+          borderRadius: "25px",
+          padding: { xs: "20px", md: "25px" },
+        }}
+      >
+        <Typography
+          variant="h5"
+          gutterBottom
           sx={{
-            height: "680px",
-            padding: "0px 50px",
-            backgroundColor: theme.palette.secondary.main,
-            borderRadius: "25px",
+            fontWeight: "bold",
+            textAlign: "center",
+            fontSize: { xs: "24px", md: "26px" },
           }}
         >
-          <Typography
-            variant="h5"
-            gutterBottom
-            sx={{
-              fontWeight: "bold",
-              textAlign: "center",
-              mb: "39px",
-              mt: "32px",
-              fontSize: "26px",
-            }}
-          >
-            User Info
-          </Typography>
-          <Box sx={{ mb: "19px" }}>
+          User Info
+        </Typography>
+        {[
+          "Full Name",
+          "Phone Number",
+          "Second Phone No (Optional)",
+          "E-Mail",
+        ].map((label, index) => (
+          <Box key={index} sx={{ mb: { xs: "10px", md: "19px" } }}>
             <Typography
               variant="body1"
               gutterBottom
-              fontSize={"20px"}
+              fontSize={{ xs: "18px", md: "20px" }}
               sx={{ mb: "10px" }}
             >
-              Full Name
+              {label}
             </Typography>
             <TextField
               fullWidth
@@ -63,7 +61,6 @@ const UserInfoAndOrders = () => {
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "15px",
                   backgroundColor: "#F3ECE5",
-
                   "& fieldset": {
                     borderColor: theme.palette.primary.main,
                   },
@@ -77,185 +74,81 @@ const UserInfoAndOrders = () => {
               }}
             />
           </Box>
-          <Box sx={{ mb: "19px" }}>
-            <Typography
-              variant="body1"
-              gutterBottom
-              fontSize={"20px"}
-              sx={{ mb: "10px" }}
-            >
-              Phone Number
-            </Typography>
-            <TextField
-              fullWidth
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "15px",
-                  backgroundColor: "#F3ECE5",
-
-                  "& fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                  "&:hover fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                },
-              }}
-            />
-          </Box>
-          <Box sx={{ mb: "19px" }}>
-            <Typography
-              variant="body1"
-              gutterBottom
-              fontSize={"20px"}
-              sx={{ mb: "10px" }}
-            >
-              Second Phone No (Optional)
-            </Typography>
-            <TextField
-              fullWidth
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "15px",
-                  backgroundColor: "#ffffff",
-
-                  "& fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                  "&:hover fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                },
-              }}
-              color="primary"
-            />
-          </Box>
-          <Box sx={{ mb: "19px" }}>
-            <Typography
-              variant="body1"
-              gutterBottom
-              fontSize={"20px"}
-              sx={{ mb: "10px" }}
-            >
-              E-Mail
-            </Typography>
-            <TextField
-              fullWidth
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "15px",
-                  backgroundColor: "#ffffff",
-
-                  "& fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                  "&:hover fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: theme.palette.primary.main,
-                  },
-                },
-              }}
-            />
-          </Box>
-          <Box sx={{ textAlign: "center" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{
-                width: "256px",
-                height: "54px",
-                borderRadius: "50px",
-                mt: "27px",
-                mb: "32px",
-                fontSize: "16px",
-              }}
-            >
-              Edit User Info
-            </Button>
-          </Box>
-        </Grid>
-        <Grid
-          item
-          width={500}
-          xs={12}
-          md={4}
+        ))}
+        <Box sx={{ textAlign: "center" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              width: { xs: "100%", md: "256px" },
+              height: "54px",
+              borderRadius: "50px",
+              mt: "27px",
+              mb: "32px",
+              fontSize: { xs: "16px", md: "16px" },
+            }}
+          >
+            Edit User Info
+          </Button>
+        </Box>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        xl={3}
+        margin={{ xl: "0 20px 0 0", xs: "20px" }}
+        sx={{
+          backgroundColor: theme.palette.secondary.main,
+          borderRadius: "25px",
+          padding: { xs: "20px", md: "25px" },
+        }}
+      >
+        <Typography
+          variant="h5"
+          gutterBottom
           sx={{
-            height: "680px",
-            padding: "0px 50px",
-            backgroundColor: theme.palette.secondary.main,
-            borderRadius: "25px",
+            fontWeight: "bold",
+            textAlign: "center",
+            mb: { xs: "20px", md: "30px" },
+            mt: "32px",
+            fontSize: { xs: "24px", md: "28px" },
           }}
         >
-          <Typography
-            variant="h5"
-            gutterBottom
-            sx={{
-              fontWeight: "bold",
-              textAlign: "center",
-              mb: 3,
-              mt: "32px",
-              fontSize: "28px",
-            }}
-          >
-            Orders
-          </Typography>
-          <Box
-            sx={{
-              width: "404",
-              height: "456px",
-              padding: "32px",
-              backgroundColor: "#ffffff",
-              borderRadius: "10px",
-            }}
-          >
+          Orders
+        </Typography>
+        <Box
+          sx={{
+            width: "100%",
+            padding: "32px",
+            backgroundColor: "#F3ECE5",
+            borderRadius: "10px",
+          }}
+        >
+          {["Al Saraya", "Ox Bu Rger"].map((order, index) => (
             <Typography
               variant="body1"
+              key={index}
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                mt: "4px",
-                fontSize: "20px",
-                backgroundColor: theme.palette.primary.main,
+                mt: index === 0 ? "4px" : "10px",
+                fontSize: { xs: "18px", md: "20px" },
+                backgroundColor:
+                  index === 1 ? theme.palette.primary.main : "transparent",
                 borderRadius: "5px",
                 padding: "0px 5px",
                 cursor: "pointer",
               }}
               onClick={handleOpen}
             >
-              <span>Al Saraya</span>
+              <span>{order}</span>
               <span>EGP 440</span>
             </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mt: "10px",
-                fontSize: "20px",
-                padding: "0px 5px",
-                cursor: "pointer",
-              }}
-              onClick={handleOpen}
-            >
-              <span>Ox Bu Rger</span>
-              <span>EGP 440</span>
-            </Typography>
-          </Box>
-        </Grid>
+          ))}
+        </Box>
       </Grid>
       <OrderDetailsPopup open={open} handleClose={handleClose} />
-    </Box>
+    </Grid>
   );
 };
 

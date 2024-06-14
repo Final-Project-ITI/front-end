@@ -12,18 +12,20 @@ import MenuItem from "@mui/material/MenuItem";
 import logo from "../../assets/logo.svg";
 import { Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CartContext from "../../context/CartProvider";
 
 const pages = ["Home", "Resturants", "why us"];
 
 function NavBar({
   isUser,
   setisUser,
-  cartQuantity,
 }: {
   isUser: boolean;
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
-  cartQuantity: number;
+
 }) {
+  //@ts-ignore
+  const {cartQuantity}= React.useContext(CartContext)
   const navigate = useNavigate();
 
   const handleLogOut=()=>{

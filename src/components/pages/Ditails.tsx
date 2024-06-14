@@ -10,10 +10,19 @@ import {
   Grid,
   Stack,
 } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { IProduct } from "../../models/product.model";
 
 interface IProps {}
 const Ditails = ({}: IProps) => {
   const theme = useTheme();
+  const location = useLocation();
+  const [productdetails, setProductDetails] = useState<IProduct>();
+
+  useEffect(() => {
+    setProductDetails(location.state);
+  }, []);
 
   return (
     <>
@@ -26,7 +35,7 @@ const Ditails = ({}: IProps) => {
         <Grid item xs={12} xl={4} margin={{ xl: "0 20px 0 0", xs: "20px" }}>
           <CardMedia
             component="img"
-            image={img}
+            image={productdetails?.icon}
             alt="Margherita Pizza"
             sx={{
               width: "100%",
@@ -62,7 +71,7 @@ const Ditails = ({}: IProps) => {
                   color: theme.palette.primary.main,
                 }}
               >
-                Margherita Pizza
+                {productdetails?.title}
               </Typography>
               <Typography
                 variant="h6"
@@ -74,7 +83,7 @@ const Ditails = ({}: IProps) => {
                   display: { xs: "block", md: "inline" },
                 }}
               >
-                EGP 80
+                EGP {productdetails?.price}
               </Typography>
             </Stack>
             <Typography
@@ -86,8 +95,7 @@ const Ditails = ({}: IProps) => {
                 color: "black",
               }}
             >
-              Experience The True Taste Of Italy With Our Classic Margherita
-              Pizza.
+              {productdetails?.description}
             </Typography>
             <Typography
               variant="h6"
@@ -101,22 +109,20 @@ const Ditails = ({}: IProps) => {
             >
               Ingredients:
             </Typography>
-            {["Fresh Tomato Sauce", "Mozzarella Cheese", "Touch Of Basil"].map(
-              (ingredient, index) => (
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  key={index}
-                  sx={{
-                    mt: "8px",
-                    fontSize: { xs: "16px", md: "24px" },
-                    color: "black",
-                  }}
-                >
-                  - {ingredient}
-                </Typography>
-              )
-            )}
+            {productdetails?.ingredientsIds.map((ingredient, index) => (
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                key={index}
+                sx={{
+                  mt: "8px",
+                  fontSize: { xs: "16px", md: "24px" },
+                  color: "black",
+                }}
+              >
+                - {ingredient.name}
+              </Typography>
+            ))}
             <Box
               sx={{
                 display: "flex",

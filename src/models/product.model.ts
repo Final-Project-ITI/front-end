@@ -1,4 +1,5 @@
 import { IIngredient } from "./ingredient.model";
+import { IMenuCategory } from "./menuCategory.model";
 
 export interface IProduct {
   _id: string;
@@ -7,6 +8,6 @@ export interface IProduct {
   description: string;
   icon: string;
   restaurantId: string;
-  menuCategoryId: string;
+  menuCategoryId: IMenuCategory;
   ingredientsIds: IIngredient[];
 }

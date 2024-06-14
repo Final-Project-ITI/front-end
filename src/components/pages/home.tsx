@@ -203,7 +203,7 @@ export default function Home() {
           >
             {restaurants.slice(0, 4).map((restaurant: any) => (
               <div
-                onClick={() => navigate("/menu")}
+                onClick={() => navigate("/menu", { state: restaurant._id })}
                 key={restaurant._id}
                 className="flip-card"
               >

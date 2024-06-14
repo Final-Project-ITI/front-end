@@ -1,14 +1,17 @@
 import { Grid, CardMedia } from "@mui/material";
-import image from "../../assets/WhatsApp Image 2024-05-24 at 17.42.33_2e3495d8.jpg";
+import { IRestaurant } from "../../models/restaurant.model";
 
-interface IProps {}
-const Image = ({}: IProps) => {
+interface IProps {
+  restaurantInfo: IRestaurant;
+}
+
+const Image = ({ restaurantInfo }: IProps) => {
   return (
     <>
       <Grid>
         <CardMedia
           component="img"
-          image={image}
+          image={restaurantInfo.banner}
           alt="Placeholder Image"
           sx={{
             width: "100%",

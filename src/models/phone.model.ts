@@ -2,6 +2,6 @@ import { IUser } from "./user.model";
 
 export interface IPhone {
   _id: string;
-  userId: IUser;
+  userId?: IUser;
   phoneNumber: string;
 }

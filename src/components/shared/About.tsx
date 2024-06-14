@@ -1,7 +1,11 @@
 import { Box, Grid, Typography } from "@mui/material";
+import { IRestaurant } from "../../models/restaurant.model";
 
-interface IProps {}
-const About = ({}: IProps) => {
+interface IProps {
+  restaurantInfo: IRestaurant;
+}
+
+const About = ({ restaurantInfo }: IProps) => {
   return (
     <>
       <Grid item xs={12} sx={{ width: "100%", marginTop: "48px" }}>
@@ -13,7 +17,7 @@ const About = ({}: IProps) => {
             About
           </Typography>
           <Typography sx={{ fontWeight: "400", fontSize: "24px", mb: "16px" }}>
-            A specialized pies and pizza restaurant
+            {restaurantInfo.description}
           </Typography>
           <Typography
             variant="h6"
@@ -22,7 +26,7 @@ const About = ({}: IProps) => {
             Address
           </Typography>
           <Typography sx={{ fontWeight: "400", fontSize: "24px", mb: "16px" }}>
-            Ammar Ibn Yasser St, Al villal, Zagazig
+            {restaurantInfo.address}
           </Typography>
           <Typography
             variant="h6"
@@ -31,7 +35,7 @@ const About = ({}: IProps) => {
             Phone number
           </Typography>
           <Typography sx={{ fontWeight: "400", fontSize: "24px" }}>
-            01124095409
+            {restaurantInfo.phone}
           </Typography>
         </Box>
       </Grid>

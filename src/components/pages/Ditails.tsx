@@ -1,24 +1,57 @@
-import img from "../../assets/WhatsApp Image 2024-05-24 at 17.42.33_2e3495d8.jpg";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
+  Box,
+  Button,
   CardContent,
   CardMedia,
-  Typography,
-  Button,
-  useTheme,
-  Box,
   Grid,
   Stack,
+  Typography,
+  useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { IProduct } from "../../models/product.model";
+import axios from "../../api/axios";
+import CartContext from "../../context/CartProvider";
 
 interface IProps {}
 const Ditails = ({}: IProps) => {
   const theme = useTheme();
   const location = useLocation();
-  const [productdetails, setProductDetails] = useState<IProduct>();
+  const [productdetails, setProductDetails] = useState<IProduct>({
+    _id: "",
+    description: "",
+    icon: "",
+    ingredientsIds: [],
+    menuCategoryId: {
+      _id: "",
+      icon: "",
+      name: "",
+      restaurantId: "",
+    },
+    price: 0,
+    restaurantId: "",
+    title: "",
+  });
+  const { setCartItems, setCartQuantity } = useContext(CartContext);
+
+  const handleAddItemToCart = async (productId: string) => {
+    try {
+      const res = await axios.post(
+        "/api/v1/cart",
+        {
+          productId,
+          quantity: 1,
+        },
+        {
+          headers: { jwt: localStorage.getItem("token") },
+        }
+      );
+      setCartItems(res.data.itemsIds);
+      setCartQuantity((pre: number) => ++pre);
+    } catch (e) {}
+  };
 
   useEffect(() => {
     setProductDetails(location.state);
@@ -142,6 +175,7 @@ const Ditails = ({}: IProps) => {
                   fontSize: { xs: "20px", md: "24px" },
                   fontWeight: "700",
                 }}
+                onClick={() => handleAddItemToCart(productdetails?._id)}
               >
                 <ShoppingCartIcon />
                 Add To Cart

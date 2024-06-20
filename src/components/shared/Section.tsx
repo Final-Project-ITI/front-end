@@ -1,11 +1,14 @@
 import { Card, CardMedia, Grid, Box, Button } from "@mui/material";
 import { IMenuCategory } from "../../models/menuCategory.model";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   categories: IMenuCategory[];
 }
 
 const Section = ({ categories }: IProps) => {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -61,6 +64,9 @@ const Section = ({ categories }: IProps) => {
                             backgroundColor: "#D74339",
                             borderRadius: "10px",
                           },
+                        }}
+                        onClick={() => {
+                          navigate("#" + item._id);
                         }}
                       >
                         {item.name}

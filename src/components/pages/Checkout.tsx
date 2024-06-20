@@ -17,14 +17,15 @@ import AddNumber from "../popups/AddNumber";
 import AddAdress from "../popups/AddAdress";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
+import socket from "../../utils/socket";
 const url = "http://localhost:3000/api/v1";
 
 function Checkout({
   phones,
-  addresses,  
+  addresses,
   addPhoneNumber,
   addAddress,
-  restaurantId,  
+  restaurantId,
 }: {
   phones: any[];
   addresses: any[];
@@ -33,7 +34,7 @@ function Checkout({
   restaurantId: string;
 }) {
   //@ts-ignore
-  const {emptyCart, cartTotal}= useContext(CartContext)
+  const { emptyCart, cartTotal } = useContext(CartContext);
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);
@@ -60,7 +61,20 @@ function Checkout({
       phone: phones[phones.length - 1],
       address: addresses[addresses.length - 1],
     });
+
+    socket.on("connect", () => {
+      console.log("Connected to the server");
+    });
+
+    socket.on("new-order-res", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      socket.off("connect");
+    };
   }, []);
+
   const handlCheckout = () => {
     const fetchCheckout = async () => {
       const res = await axios.post(
@@ -70,6 +84,9 @@ function Checkout({
           headers: { jwt: localStorage.getItem("token") },
         }
       );
+
+      socket.emit("new-order-req", restaurantId);
+
       if (res.status == 201) {
         emptyCart();
         setSubmitOrderPopUp(true);

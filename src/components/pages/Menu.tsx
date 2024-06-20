@@ -8,6 +8,7 @@ import About from "../shared/About";
 import Category from "../shared/Category";
 import Image from "../shared/Image";
 import Section from "../shared/Section";
+import { Box } from "@mui/material";
 
 export const Menu = () => {
   const location = useLocation();
@@ -41,12 +42,14 @@ export const Menu = () => {
       <About restaurantInfo={restaurantInfo} />
       <Section categories={categories} />
       {categories.map((category) => (
-        <Category
-          name={category.name}
-          products={menu.filter(
-            (item) => item.menuCategoryId._id === category._id
-          )}
-        />
+        <Box id={category._id}>
+          <Category
+            name={category.name}
+            products={menu.filter(
+              (item) => item.menuCategoryId._id === category._id
+            )}
+          />
+        </Box>
       ))}
     </>
   );

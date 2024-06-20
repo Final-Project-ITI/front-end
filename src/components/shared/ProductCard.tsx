@@ -10,6 +10,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { IProduct } from "../../models/product.model";
+import axios from "../../api/axios";
+import { useContext } from "react";
+import CartContext from "../../context/CartProvider";
 
 interface ProductProps {
   product: IProduct;
@@ -18,6 +21,29 @@ interface ProductProps {
 const Product = ({ product }: ProductProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const {} = useContext(CartContext);
+
+  const { setCartItems, setCartQuantity } = useContext(CartContext);
+
+  const handleAddItemToCart = async (productId: string) => {
+    try {
+      if (!localStorage.getItem("token")) {
+        navigate("/login");
+      }
+      const res = await axios.post(
+        "/api/v1/cart",
+        {
+          productId,
+          quantity: 1,
+        },
+        {
+          headers: { jwt: localStorage.getItem("token") },
+        }
+      );
+      setCartItems(res.data.itemsIds);
+      setCartQuantity((pre: number) => ++pre);
+    } catch (e) {}
+  };
 
   return (
     <>
@@ -112,6 +138,7 @@ const Product = ({ product }: ProductProps) => {
             fontWeight: "700",
             mt: "16px",
           }}
+          onClick={() => handleAddItemToCart(product._id)}
         >
           Add To Cart
         </Button>

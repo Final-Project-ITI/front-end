@@ -38,7 +38,7 @@ function App() {
       const res = await axios.get(url + "/cart", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if (res.data.itemsIds.length) {
+      if (res.data.itemsIds?.length) {
         const newCartItems = res.data.itemsIds;
         setCartItems(newCartItems);
         setRestaurantId(res.data.itemsIds[0].productId.restaurantId);

@@ -184,6 +184,7 @@ function NavBar({
               </Button>
             ))}
           </Box>
+          
           <Button onClick={() => navigate("./cart")}>
             <svg
               width="24"

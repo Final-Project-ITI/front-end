@@ -26,11 +26,10 @@ function App() {
   const [isUser, setisUser] = useState(false);
 
   //@ts-ignore
-  const {cartItems, setCartItems,cartQuantity, setCartQuantity,cartTotal, setCartTotal ,emptyCart,deleteItemQuantity,editItemQuantity,calculateTotal ,calculateQuantity}=useContext(CartContext)
+  const {cartItems, setCartItems,cartQuantity, setCartQuantity,cartTotal, setCartTotal ,emptyCart,deleteItemQuantity,editItemQuantity,calculateTotal ,calculateQuantity,restaurantId, setRestaurantId}=useContext(CartContext)
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
-  const [restaurantId, setRestaurantId] = useState<string>("");
 
   useEffect(() => {
     const getUserCart = async () => {
@@ -116,7 +115,6 @@ function App() {
               path="/checkout"
               element={
                 <Checkout                
-                  restaurantId={restaurantId}
                   phones={phones}
                   addresses={addresses}
                   addPhoneNumber={addPhoneNumber}

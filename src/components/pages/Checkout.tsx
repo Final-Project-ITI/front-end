@@ -24,17 +24,15 @@ function Checkout({
   phones,
   addresses,
   addPhoneNumber,
-  addAddress,
-  restaurantId,
+  addAddress
 }: {
   phones: any[];
   addresses: any[];
   addPhoneNumber: (phone: string) => void;
   addAddress: (address: string) => void;
-  restaurantId: string;
 }) {
   //@ts-ignore
-  const { emptyCart, cartTotal } = useContext(CartContext);
+  const { emptyCart, cartTotal,restaurantId } = useContext(CartContext);
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);

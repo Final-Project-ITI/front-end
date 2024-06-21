@@ -82,7 +82,7 @@ function Cart() {
               paddingInline:
                 cartQuantity == 0
                   ? { xs: "1rem", sm: "2rem", md: "4rem" }
-                  : { xs: "1rem", sm: "2rem", md: "4rem" },
+                  : { xs: "0.8rem", sm: "2rem", md: "3.5rem" },
               paddingBlock: "1.5rem",
               borderRadius: cartQuantity != 0 ? "10px" : "0",
               marginTop: "3rem",
@@ -168,13 +168,13 @@ function Cart() {
                   alignItems={"center"}
                   sx={{ marginBottom: "10px" }}
                 >
-                  <Box sx={{ height: { xs: "38px", sm: "50px", md: "64px" } }}>
-                    <img height={"100%"} src={item.productId.icon?item.productId.icon:"https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"} />
+                  <Box sx={{ height: { xs: "38px", sm: "50px", md: "64px" }, width: { xs: "70px", sm: "80px", md: "90px" } }}>
+                    <img className="imageFit" src={item.productId.icon?item.productId.icon:"https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"} />
                   </Box>
                   <Typography
                     title={item.productId.title}
                     sx={{
-                      fontSize: { xs: "0.8rem", sm: "1.2rem", md: "24px" },
+                      maxWidth:{xs:"30vw"},fontSize: { xs: "0.8rem", sm: "1.1rem", md: "19px",xl:"24px" },display: "block" , overflow: "hidden",whiteSpace:"nowrap",textOverflow:" ellipsis",msTextOverflow:"ellipsis"
                     }}
                   >
                     {item.productId.title}
@@ -188,7 +188,7 @@ function Cart() {
                     <Stack
                       direction={"row"}
                       alignItems={"center"}
-                      sx={{ gap: { xs: 0.1, sm: 0.5, md: 1.5 } }}
+                      sx={{ gap: { xs: 0.1, sm: 0.5, md: 1 } }}
                       justifyContent={"space-between"}
                     >
                       <Box
@@ -215,7 +215,7 @@ function Cart() {
 
                       <Typography
                         sx={{
-                          fontSize: { xs: "0.8rem", sm: "1.2rem", md: "24px" },
+                          fontSize: { xs: "0.8rem", sm: "1.1rem",  md: "19px",xl:"24px"},
                         }}
                       >
                         {item.quantity}
@@ -244,7 +244,7 @@ function Cart() {
                     </Stack>
                     <Typography
                       sx={{
-                        fontSize: { xs: "0.8rem", sm: "1.2rem", md: "24px" },
+                        fontSize: { xs: "0.8rem", sm: "1.1rem", md: "19px",xl:"24px" },
                         fontWeight: "700",
                       }}
                     >

@@ -19,35 +19,40 @@ const pages = ["Home", "Resturants", "why us"];
 function NavBar({
   isUser,
   setisUser,
+  whyUsRef,
 }: {
   isUser: boolean;
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
-
+  whyUsRef: React.MutableRefObject<undefined>;
 }) {
   //@ts-ignore
-  const {cartQuantity}= React.useContext(CartContext)
+  const { cartQuantity } = React.useContext(CartContext);
   const navigate = useNavigate();
 
-  const handleLogOut=()=>{
-    localStorage.removeItem("token")
-    setisUser(false)
-  }
+  const scrollToWhyUs = () => {
+    const { current } = whyUsRef;
+    if (current !== null) {
+      //@ts-ignore
+      current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("token");
+    setisUser(false);
+  };
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
 
-
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
 
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "inherit", boxShadow: 0 }}>
@@ -61,7 +66,7 @@ function NavBar({
               flexGrow: 100,
             }}
           >
-            <Button onClick={()=>navigate("/")}>
+            <Button onClick={() => navigate("/")}>
               <img src={logo} alt="" />
             </Button>
           </Box>
@@ -96,20 +101,42 @@ function NavBar({
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={()=>{handleCloseNavMenu(); if(page=="Resturants"){navigate("/restaurants")}else{navigate("/")} }}>
+                <MenuItem
+                  key={page}
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    if (page == "Resturants") {
+                      navigate("/restaurants");
+                    } else if (page.toLowerCase() === "why us") {
+                      scrollToWhyUs();
+                    } else {
+                      navigate("/");
+                    }
+                  }}
+                >
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
               <Divider />
               {!isUser && (
-                <MenuItem onClick={()=>{handleCloseNavMenu(); navigate("/login")}}>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    navigate("/login");
+                  }}
+                >
                   <Typography textAlign="center" color="primary">
                     log in
                   </Typography>
                 </MenuItem>
               )}
               {isUser && (
-                <MenuItem onClick={()=>{handleCloseNavMenu(); handleLogOut()}}>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseNavMenu();
+                    handleLogOut();
+                  }}
+                >
                   <Typography textAlign="center" color="primary">
                     log out
                   </Typography>
@@ -118,7 +145,7 @@ function NavBar({
             </Menu>
           </Box>
           <Button
-          onClick={()=>navigate("/")}
+            onClick={() => navigate("/")}
             sx={{
               display: { xs: "flex", md: "none" },
               position: "absolute",
@@ -135,7 +162,16 @@ function NavBar({
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={()=>{handleCloseNavMenu(); if(page=="Resturants"){navigate("/restaurants")}else{navigate("/")} }}
+                onClick={() => {
+                  handleCloseNavMenu();
+                  if (page == "Resturants") {
+                    navigate("/restaurants");
+                  } else if (page.toLowerCase() === "why us") {
+                    scrollToWhyUs();
+                  } else {
+                    navigate("/");
+                  }
+                }}
                 sx={{
                   my: 2,
                   marginInline: "1rem",
@@ -176,7 +212,7 @@ function NavBar({
             )}
           </Button>
           {isUser && (
-            <Button onClick={()=>navigate("/userinfo")}>
+            <Button onClick={() => navigate("/userinfo")}>
               <svg
                 width="24"
                 height="64"
@@ -195,7 +231,7 @@ function NavBar({
             <>
               {" "}
               <Button
-              onClick={()=>navigate("/register")}
+                onClick={() => navigate("/register")}
                 variant="outlined"
                 color="primary"
                 sx={{
@@ -208,7 +244,9 @@ function NavBar({
                 sign up
               </Button>
               <Button
-                onClick={() => {navigate("/login") }}
+                onClick={() => {
+                  navigate("/login");
+                }}
                 variant="contained"
                 color="primary"
                 sx={{

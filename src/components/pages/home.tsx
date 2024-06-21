@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -58,7 +58,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Home() {
+export default function Home({whyUsRef}:{ whyUsRef: React.MutableRefObject<undefined>}) {
+  
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
@@ -224,7 +225,7 @@ export default function Home() {
             </Link>
           </button>
         </Stack>
-        <Box sx={{ marginTop: "40px" }}>
+        <Box sx={{ marginTop: "40px" }}  ref={whyUsRef}>
           <Card />
         </Box>
       </Box>

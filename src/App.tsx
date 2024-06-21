@@ -6,7 +6,7 @@ import Cart from "./components/pages/Cart.tsx";
 import Checkout from "./components/pages/Checkout.tsx";
 import CartIcon from "./components/shared/CartIcon.tsx";
 import SideCart from "./components/shared/SideCart.tsx";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import item from "./models/Item.ts";
 import Home from "./components/pages/home";
@@ -30,6 +30,8 @@ function App() {
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
+
+  const whyUsRef = useRef()
 
   useEffect(() => {
     const getUserCart = async () => {
@@ -98,6 +100,7 @@ function App() {
           {(path!=="/register" && path!=="/login" )&&<NavBar
             isUser={isUser}
             setisUser={setisUser}
+            whyUsRef={whyUsRef}
           ></NavBar>}
           <Routes>
             <Route path="/menu" element={<Menu />} />
@@ -109,7 +112,7 @@ function App() {
               element={<Register setisUser={setisUser} />}
             />
             <Route path="/login" element={<Login setisUser={setisUser} />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />
             <Route
               path="/checkout"

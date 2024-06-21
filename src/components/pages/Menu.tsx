@@ -15,6 +15,7 @@ export const Menu = () => {
 
   const [menu, setMenu] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<IMenuCategory[]>([]);
+  //@ts-ignore
   const [restaurantInfo, setRestaurantInfo] = useState<IRestaurant>({});
 
   const handleGetMenuItems = async () => {
@@ -42,7 +43,7 @@ export const Menu = () => {
       <About restaurantInfo={restaurantInfo} />
       <Section categories={categories} />
       {categories.map((category) => (
-        <Box id={category._id}>
+        <Box id={category._id} key={category._id}>
           <Category
             name={category.name}
             products={menu.filter(

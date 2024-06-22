@@ -82,28 +82,28 @@ function App() {
       }
     };
     // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
-    
-    
-    
-    
+
     if (localStorage.getItem("token")) {
-      const token= localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       const payload: IPayload | null = token ? jwtDecode(token) : null;
       //@ts-ignore
-      const expDate=payload?.exp * 1000
-      const nowDate=new Date().getTime()
+      const expDate = payload?.exp * 1000;
+      const nowDate = new Date().getTime();
 
-      if(expDate>nowDate){
-      setisUser(true);
-      getUserCart();
-      getUserAddresses();
-      getUserPhones();
-      }
-      else{
-        localStorage.removeItem("token")
+      if (expDate > nowDate) {
+        setisUser(true);
+        getUserCart();
+        getUserAddresses();
+        getUserPhones();
+      } else {
+        localStorage.removeItem("token");
       }
     } else {
       setisUser(false);
+      setCartItems([]);
+      setRestaurantId("");
+      setCartQuantity(0);
+      setCartTotal(0);
     }
   }, [isUser]);
 

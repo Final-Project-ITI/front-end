@@ -4,7 +4,10 @@ import axios from "axios";
 import React, { useState } from 'react'
 const url = "http://localhost:3000/api/v1";
 
-function AddAdress({setAddAddressPopUp,addAddress}:{setAddAddressPopUp:React.Dispatch<React.SetStateAction<boolean>>,addAddress: (address: string) => void}) {
+function AddAdress({setAddAddressPopUp,addAddress,setCheckoutInfo}:{setAddAddressPopUp:React.Dispatch<React.SetStateAction<boolean>>,addAddress: (address: string) => void,setCheckoutInfo: React.Dispatch<React.SetStateAction<{
+  phone: any;
+  address: any;
+}>>}) {
   let [address,setAddress]=useState("");
   let [error,setError]=useState(false);
  
@@ -15,6 +18,7 @@ function AddAdress({setAddAddressPopUp,addAddress}:{setAddAddressPopUp:React.Dis
   }
   const handleAddAddress=()=>{
     const fetchAddAddress = async () => {
+      
       const res = await axios.post(
         url + "/addresses",
         {
@@ -25,6 +29,8 @@ function AddAdress({setAddAddressPopUp,addAddress}:{setAddAddressPopUp:React.Dis
         }
       );
       addAddress(res.data);
+      setCheckoutInfo((pre:any )=> {return {phone:pre.phone,address:res.data}})
+
     };
     if(address.length<50){
       setError(true)

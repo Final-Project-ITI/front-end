@@ -69,18 +69,21 @@ function Checkout({
     };
   }, []);
 
-  // useEffect(()=>{
-  //   setCheckoutInfo((pre)=>{return{
-  //     phone: phones[phones.length - 1],
-  //     address: pre.address,
-  //   }});
-  // },phones)
-  // useEffect(()=>{
-  //   setCheckoutInfo((pre)=>{return{
-  //     phone:pre.phone,
-  //     address:  addresses[addresses.length - 1],
-  //   }});
-  // },addresses)
+  useEffect(()=>{
+    if(phones.length ){
+    setCheckoutInfo((pre)=>{return{
+      phone: phones[phones.length - 1],
+      address: pre.address,
+    }});}
+  },[phones])
+  useEffect(()=>{
+   
+    if(addresses.length ){
+    setCheckoutInfo((pre)=>{return{
+      phone:pre.phone,
+      address:  addresses[addresses.length - 1],
+    }});}
+  },[addresses])
 
   const handlCheckout = () => {
     const fetchCheckout = async () => {

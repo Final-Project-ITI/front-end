@@ -1,13 +1,19 @@
 import { Card, CardMedia, Grid, Box, Button } from "@mui/material";
 import { IMenuCategory } from "../../models/menuCategory.model";
-import { useNavigate } from "react-router-dom";
+import { MutableRefObject } from "react";
 
 interface IProps {
   categories: IMenuCategory[];
+  sectionRefs: MutableRefObject<Record<string, HTMLDivElement | null>>;
 }
 
-const Section = ({ categories }: IProps) => {
-  const navigate = useNavigate();
+const Section = ({ categories, sectionRefs }: IProps) => {
+  const scrollToSection = (id: string) => {
+    const section = sectionRefs.current[id];
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <Box
@@ -65,9 +71,7 @@ const Section = ({ categories }: IProps) => {
                             borderRadius: "10px",
                           },
                         }}
-                        onClick={() => {
-                          navigate("#" + item._id);
-                        }}
+                        onClick={() => scrollToSection(item._id)}
                       >
                         {item.name}
                       </Button>

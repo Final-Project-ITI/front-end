@@ -88,34 +88,86 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <Stack
-        height={"400px"}
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ minHeight: "500px", background: "#F9F1E5" }}
-      >
+    <>
+      <div>
+        <Stack
+          height={"400px"}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ minHeight: "500px", background: "#F9F1E5" }}
+        >
+          <Box
+            sx={{
+              backgroundImage: `url(${img})`,
+              width: "300px",
+              height: "300px",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center center",
+              backgroundSize: "cover",
+              border: "5px",
+              borderRadius: "20%",
+              position: "relative",
+              bottom: "30px",
+            }}
+          ></Box>
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            spacing={10}
+            position={"relative"}
+            top={"-40px"}
+          >
+            <Typography
+              variant="h5"
+              noWrap
+              sx={{
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "black",
+                textAlign: "center",
+                position: "initial",
+              }}
+            >
+              Order food online in Zagazig
+            </Typography>
+            <Search>
+              <StyledInputBase
+                placeholder="Search…"
+                value={searchRest}
+                onChange={handleSearchChange}
+                onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
+                inputProps={{ "aria-label": "Search" }}
+              />
+              <SearchIconWrapper>
+                <SearchIcon onClick={handleSearchSubmit} />
+              </SearchIconWrapper>
+            </Search>
+          </Stack>
+
+          <Box
+            sx={{
+              backgroundImage: `url(${img2})`,
+              width: "300px",
+              height: "300px",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center center",
+              backgroundSize: "cover",
+              border: "5px",
+              borderRadius: "5%",
+            }}
+          ></Box>
+        </Stack>
+
         <Box
           sx={{
-            backgroundImage: `url(${img})`,
-            width: "300px",
-            height: "300px",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            backgroundSize: "cover",
-            border: "5px",
-            borderRadius: "20%",
-            position: "relative",
-            bottom: "30px",
+            minHeight: "400px",
+            backgroundColor: "#f3ece4",
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
           }}
-        ></Box>
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          spacing={10}
-          position={"relative"}
-          top={"-40px"}
         >
           <Typography
             variant="h5"
@@ -125,109 +177,59 @@ export default function Home() {
               letterSpacing: ".3rem",
               color: "black",
               textAlign: "center",
-              position: "initial",
+              position: "relative",
+              top: "100px",
             }}
           >
-            Order food online in Zagazig
+            Restaurants
           </Typography>
-          <Search>
-            <StyledInputBase
-              placeholder="Search…"
-              value={searchRest}
-              onChange={handleSearchChange}
-              onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
-              inputProps={{ "aria-label": "Search" }}
-            />
-            <SearchIconWrapper>
-              <SearchIcon onClick={handleSearchSubmit} />
-            </SearchIconWrapper>
-          </Search>
-        </Stack>
-
-        <Box
-          sx={{
-            backgroundImage: `url(${img2})`,
-            width: "300px",
-            height: "300px",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            backgroundSize: "cover",
-            border: "5px",
-            borderRadius: "5%",
-          }}
-        ></Box>
-      </Stack>
-
-      <Box
-        sx={{
-          minHeight: "400px",
-          backgroundColor: "#f3ece4",
-          alignItems: "center",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
-        <Typography
-          variant="h5"
-          noWrap
-          sx={{
-            fontWeight: 700,
-            letterSpacing: ".3rem",
-            color: "black",
-            textAlign: "center",
-            position: "relative",
-            top: "100px",
-          }}
-        >
-          Restaurants
-        </Typography>
-        <Stack
-          justifyContent="center"
-          alignItems="center"
-          sx={{
-            minHeight: "800px",
-            background: "#f3ece4",
-          }}
-        >
           <Stack
-            direction="row"
             justifyContent="center"
             alignItems="center"
             sx={{
-              background: "f3ece4",
-              minHeight: "400px",
-              flexWrap: "wrap",
-              spacing: 4,
+              minHeight: "800px",
+              background: "#f3ece4",
             }}
           >
-            {restaurants.slice(0, 4).map((restaurant: any) => (
-              <div
-                onClick={() => navigate("/menu", { state: restaurant._id })}
-                key={restaurant._id}
-                className="flip-card"
-              >
-                <div className="flip-card-inner">
-                  <div className="flip-card-front">
-                    <img src={restaurant.icon} alt={restaurant.name} />
-                  </div>
-                  <div className="flip-card-back">
-                    <Typography variant="h5">{restaurant.name}</Typography>
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              sx={{
+                background: "f3ece4",
+                minHeight: "400px",
+                flexWrap: "wrap",
+                spacing: 4,
+              }}
+            >
+              {restaurants.slice(0, 4).map((restaurant: any) => (
+                <div
+                  onClick={() => navigate("/menu", { state: restaurant._id })}
+                  key={restaurant._id}
+                  className="flip-card"
+                >
+                  <div className="flip-card-inner">
+                    <div className="flip-card-front">
+                      <img src={restaurant.icon} alt={restaurant.name} />
+                    </div>
+                    <div className="flip-card-back">
+                      <Typography variant="h5">{restaurant.name}</Typography>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </Stack>
+            <button className="bb">
+              <Link to="/restaurants" id="sign-link" className="log3">
+                <h3>See More</h3>
+              </Link>
+            </button>
           </Stack>
-          <button className="bb">
-            <Link to="/restaurants" id="sign-link" className="log3">
-              <h3>See More</h3>
-            </Link>
-          </button>
-        </Stack>
-        <Box sx={{ marginTop: "40px" }}>
-          <Card />
+          <Box sx={{ marginTop: "40px" }}>
+            <Card />
+          </Box>
         </Box>
-      </Box>
-    </div>
+      </div>
+    </>
   );
 }

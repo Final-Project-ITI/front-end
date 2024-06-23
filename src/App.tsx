@@ -17,6 +17,7 @@ import { Menu } from "./components/pages/Menu.tsx";
 import Ditails from "./components/pages/Ditails.tsx";
 import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
 import axios from "axios";
+import PaymentSuccess from "./components/pages/payment_success.tsx";
 const url = "http://localhost:3000/api/v1";
 function App() {
   const path = useLocation().pathname;
@@ -156,6 +157,7 @@ function App() {
             <Route path="/menu" element={<Menu />} />
             <Route path="/productdetails" element={<Ditails />} />
             <Route path="/userinfo" element={<UserInfoAndOrders />} />
+            <Route path="/paymentSuccess" element={<PaymentSuccess />} />
             <Route
               path="/register"
               element={<Register setisUser={setisUser} />}

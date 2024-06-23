@@ -24,17 +24,15 @@ function Checkout({
   phones,
   addresses,
   addPhoneNumber,
-  addAddress,
-  restaurantId,
+  addAddress
 }: {
   phones: any[];
   addresses: any[];
   addPhoneNumber: (phone: string) => void;
   addAddress: (address: string) => void;
-  restaurantId: string;
 }) {
   //@ts-ignore
-  const { emptyCart, cartTotal } = useContext(CartContext);
+  const { emptyCart, cartTotal,restaurantId } = useContext(CartContext);
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);
@@ -57,10 +55,6 @@ function Checkout({
     setCheckoutInfo(newCheckOutInfo);
   };
   useEffect(() => {
-    setCheckoutInfo({
-      phone: phones[phones.length - 1],
-      address: addresses[addresses.length - 1],
-    });
 
     socket.on("connect", () => {
       console.log("Connected to the server");
@@ -74,6 +68,22 @@ function Checkout({
       socket.off("connect");
     };
   }, []);
+
+  useEffect(()=>{
+    if(phones.length ){
+    setCheckoutInfo((pre)=>{return{
+      phone: phones[phones.length - 1],
+      address: pre.address,
+    }});}
+  },[phones])
+  useEffect(()=>{
+   
+    if(addresses.length ){
+    setCheckoutInfo((pre)=>{return{
+      phone:pre.phone,
+      address:  addresses[addresses.length - 1],
+    }});}
+  },[addresses])
 
   const handlCheckout = () => {
     const fetchCheckout = async () => {
@@ -146,12 +156,14 @@ function Checkout({
           <AddNumber
             addPhoneNumber={addPhoneNumber}
             setAddNumberPopUp={setAddNumberPopUp}
+            setCheckoutInfo={setCheckoutInfo}
           ></AddNumber>
         )}
         {addAddressPopUp && (
           <AddAdress
             addAddress={addAddress}
             setAddAddressPopUp={setAddAddressPopUp}
+            setCheckoutInfo={setCheckoutInfo}
           ></AddAdress>
         )}
 

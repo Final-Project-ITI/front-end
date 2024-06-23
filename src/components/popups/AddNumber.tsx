@@ -7,9 +7,14 @@ const url = "http://localhost:3000/api/v1";
 function AddNumber({
   setAddNumberPopUp,
   addPhoneNumber,
+  setCheckoutInfo
 }: {
   setAddNumberPopUp: React.Dispatch<React.SetStateAction<boolean>>;
   addPhoneNumber: (phone: string) => void;
+  setCheckoutInfo: React.Dispatch<React.SetStateAction<{
+    phone: any;
+    address: any;
+}>>
 }) {
   let [phone, setPhone] = useState("");
   let [error, setError] = useState(false);
@@ -29,6 +34,8 @@ function AddNumber({
         }
       );
       addPhoneNumber(res.data);
+      setCheckoutInfo((pre:any )=> {return {phone:res.data,address:pre.address}})
+
     };
     if (!phoneRegex.test(phone)) {
       setError(true);

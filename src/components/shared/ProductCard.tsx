@@ -21,9 +21,8 @@ interface ProductProps {
 const Product = ({ product }: ProductProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const {} = useContext(CartContext);
-
-  const { setCartItems, setCartQuantity } = useContext(CartContext);
+//@ts-ignore
+  const { setCartItems, setCartQuantity,setRestaurantId,calculateTotal,calculateQuantity } = useContext(CartContext);
 
   const handleAddItemToCart = async (productId: string) => {
     try {
@@ -41,7 +40,11 @@ const Product = ({ product }: ProductProps) => {
         }
       );
       setCartItems(res.data.itemsIds);
-      setCartQuantity((pre: number) => ++pre);
+      calculateTotal(res.data.itemsIds);
+      calculateQuantity(res.data.itemsIds);
+      if(res.data.itemsIds.length==1){
+        setRestaurantId(res.data.itemsIds[0].productId.restaurantId);
+      }
     } catch (e) {}
   };
 

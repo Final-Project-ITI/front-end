@@ -6,7 +6,7 @@ import Cart from "./components/pages/Cart.tsx";
 import Checkout from "./components/pages/Checkout.tsx";
 import CartIcon from "./components/shared/CartIcon.tsx";
 import SideCart from "./components/shared/SideCart.tsx";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import item from "./models/Item.ts";
 import Home from "./components/pages/home";
@@ -18,26 +18,44 @@ import Ditails from "./components/pages/Ditails.tsx";
 import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
 import axios from "axios";
 import CartContext from "./context/CartProvider.tsx";
-const url="http://localhost:3000/api/v1"
+import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
+import IsAuthGuard from "./guards/IsAuthGuard.tsx";
+import { jwtDecode } from "jwt-decode";
+import { IPayload } from "./models/payload.mode.ts";
+const url = "http://localhost:3000/api/v1";
 function App() {
   const path = useLocation().pathname;
   const [openSideCart, setOpenSideCart] = useState(false);
 
   const [isUser, setisUser] = useState(false);
 
-  //@ts-ignore
-  const {cartItems, setCartItems,cartQuantity, setCartQuantity,cartTotal, setCartTotal ,emptyCart,deleteItemQuantity,editItemQuantity,calculateTotal ,calculateQuantity}=useContext(CartContext)
+  const {
+    cartItems,
+    setCartItems,
+    cartQuantity,
+    setCartQuantity,
+    cartTotal,
+    setCartTotal,
+    emptyCart,
+    deleteItemQuantity,
+    editItemQuantity,
+    calculateTotal,
+    calculateQuantity,
+    restaurantId,
+    setRestaurantId,
+  }: any = useContext(CartContext);
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
-  const [restaurantId, setRestaurantId] = useState<string>("");
+
+  const whyUsRef = useRef();
 
   useEffect(() => {
     const getUserCart = async () => {
       const res = await axios.get(url + "/cart", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if (res.data.itemsIds.length) {
+      if (res.data.itemsIds?.length) {
         const newCartItems = res.data.itemsIds;
         setCartItems(newCartItems);
         setRestaurantId(res.data.itemsIds[0].productId.restaurantId);
@@ -64,16 +82,30 @@ function App() {
       }
     };
     // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
+
     if (localStorage.getItem("token")) {
-      setisUser(true);
-      getUserCart();
-      getUserAddresses();
-      getUserPhones();
+      const token = localStorage.getItem("token");
+      const payload: IPayload | null = token ? jwtDecode(token) : null;
+      //@ts-ignore
+      const expDate = payload?.exp * 1000;
+      const nowDate = new Date().getTime();
+
+      if (expDate > nowDate) {
+        setisUser(true);
+        getUserCart();
+        getUserAddresses();
+        getUserPhones();
+      } else {
+        localStorage.removeItem("token");
+      }
     } else {
       setisUser(false);
+      setCartItems([]);
+      setRestaurantId("");
+      setCartQuantity(0);
+      setCartTotal(0);
     }
   }, [isUser]);
-
 
   const addPhoneNumber = (phone: any) => {
     const newPhones = [...phones, phone];
@@ -96,49 +128,49 @@ function App() {
             position: "relative",
           }}
         >
-          {(path!=="/register" && path!=="/login" )&&<NavBar
-            isUser={isUser}
-            setisUser={setisUser}
-          ></NavBar>}
+          {path !== "/register" && path !== "/login" && (
+            <NavBar
+              isUser={isUser}
+              setisUser={setisUser}
+              whyUsRef={whyUsRef}
+            ></NavBar>
+          )}
           <Routes>
             <Route path="/menu" element={<Menu />} />
 
             <Route path="/productdetails" element={<Ditails />} />
-            <Route path="/userinfo" element={<UserInfoAndOrders />} />
-            <Route
-              path="/register"
-              element={<Register setisUser={setisUser} />}
-            />
-            <Route path="/login" element={<Login setisUser={setisUser} />} />
-            <Route path="/" element={<Home />} />
+            <Route element={<IsNotAuthGuard />}>
+              <Route
+                path="/register"
+                element={<Register setisUser={setisUser} />}
+              />
+              <Route path="/login" element={<Login setisUser={setisUser} />} />
+            </Route>
+            <Route element={<IsAuthGuard role={"user"} />}>
+              <Route path="/userinfo" element={<UserInfoAndOrders />} />
+              <Route
+                path="/checkout"
+                element={
+                  <Checkout
+                    phones={phones}
+                    addresses={addresses}
+                    addPhoneNumber={addPhoneNumber}
+                    addAddress={addAddress}
+                  />
+                }
+              />
+              <Route path="/cart" element={<Cart />} />
+            </Route>
+
+            <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />
-            <Route
-              path="/checkout"
-              element={
-                <Checkout                
-                  restaurantId={restaurantId}
-                  phones={phones}
-                  addresses={addresses}
-                  addPhoneNumber={addPhoneNumber}
-                  addAddress={addAddress}
-                />
-              }
-            />
-            <Route
-              path="/cart"
-              element={
-                <Cart            />
-              }
-            />
           </Routes>
           {path !== "/register" && path !== "/login" && <Footer></Footer>}
         </Stack>
-        {openSideCart && (
-          <SideCart
-            setOpenSideCart={setOpenSideCart}
-          />
+        {openSideCart && <SideCart setOpenSideCart={setOpenSideCart} />}
+        {path !== "/register" && path !== "/login" && path !== "/cart" && (
+          <CartIcon setOpenSideCart={setOpenSideCart} />
         )}
-        {(path!=="/register" && path!=="/login" && path!=="/cart" )&&<CartIcon setOpenSideCart={setOpenSideCart} />}
       </ThemeProvider>
     </>
   );

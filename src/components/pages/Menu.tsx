@@ -17,7 +17,6 @@ export const Menu = () => {
   const [categories, setCategories] = useState<IMenuCategory[]>([]);
   const [restaurantInfo, setRestaurantInfo] = useState<IRestaurant>({});
 
-  // Initialize the ref with the correct type
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const handleGetMenuItems = async () => {

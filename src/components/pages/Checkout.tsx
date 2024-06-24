@@ -89,7 +89,7 @@ function Checkout({
     const fetchCheckout = async () => {
       const res = await axios.post(
         url + "/orders/" + restaurantId + "/user",
-        { phoneId: checkoutInfo.phone._id },
+        { phoneId: checkoutInfo.phone._id,addressId:checkoutInfo.address._id },
         {
           headers: { jwt: localStorage.getItem("token") },
         }

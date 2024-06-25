@@ -48,6 +48,7 @@ export const Menu = () => {
           id={category._id}
           key={category._id}
           ref={(el) => (sectionRefs.current[category._id] = el)}
+          sx={{ marginBottom: "-280px" }}
         >
           <Category
             name={category.name}

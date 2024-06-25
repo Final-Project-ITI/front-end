@@ -64,98 +64,137 @@ const Ditails = ({}: IProps) => {
         alignItems="center"
         justifyContent={"center"}
         marginBlock={"100px"}
+        spacing={3}
+        sx={{ height: "100%" }}
       >
-        <Grid item xs={12} xl={4} margin={{ xl: "0 20px 0 0", xs: "20px" }}>
-          <CardMedia
-            component="img"
-            image={productdetails?.icon}
-            alt="Margherita Pizza"
+        <Grid
+          item
+          xs={12}
+          xl={4}
+          sx={{
+            display: "flex",
+            alignItems: "stretch",
+            margin: { xl: "0 20px 0 0", xs: "20px" },
+          }}
+        >
+          <Box
             sx={{
               width: "100%",
-              height: { xs: "auto", md: "500px" },
               borderRadius: "25px",
+              overflow: "hidden",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
             }}
-          />
+          >
+            <CardMedia
+              component="img"
+              image={productdetails?.icon}
+              alt="Margherita Pizza"
+              sx={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          </Box>
         </Grid>
         <Grid
           item
           xs={12}
           xl={6}
-          margin={{ xl: "0", xs: "0 20px 20px 20px" }}
           sx={{
             backgroundColor: theme.palette.secondary.main,
             borderRadius: "25px",
             padding: { xs: "20px", md: "25px" },
-            height: { xs: "auto", md: "500px" },
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
           }}
         >
-          <CardContent sx={{ textAlign: "left" }}>
-            <Stack direction={"row"} justifyContent={"space-between"}>
+          <CardContent
+            sx={{
+              textAlign: "left",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <Stack direction={"row"} justifyContent={"space-between"}>
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{
+                    fontWeight: "700",
+                    fontSize: { xs: "24px", md: "32px" },
+                    lineHeight: { xs: "32px", md: "48px" },
+                    color: theme.palette.primary.main,
+                  }}
+                >
+                  {productdetails?.title}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  component="span"
+                  sx={{
+                    fontSize: { xs: "24px", md: "32px" },
+                    fontWeight: "700",
+                    display: { xs: "block", md: "inline" },
+                  }}
+                >
+                  EGP {productdetails?.price}
+                </Typography>
+              </Stack>
               <Typography
-                variant="h5"
-                component="div"
-                sx={{
-                  fontWeight: "700",
-                  fontSize: { xs: "24px", md: "32px" },
-                  lineHeight: { xs: "32px", md: "48px" },
-                  color: theme.palette.primary.main,
-                }}
-              >
-                {productdetails?.title}
-              </Typography>
-              <Typography
-                variant="h6"
-                color="primary"
-                component="span"
-                sx={{
-                  fontSize: { xs: "24px", md: "32px" },
-                  fontWeight: "700",
-                  display: { xs: "block", md: "inline" },
-                }}
-              >
-                EGP {productdetails?.price}
-              </Typography>
-            </Stack>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              sx={{
-                mt: { xs: "16px", md: "24px" },
-                fontSize: { xs: "16px", md: "24px" },
-                color: "black",
-              }}
-            >
-              {productdetails?.description}
-            </Typography>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{
-                mt: { xs: "16px", md: "24px" },
-                fontSize: { xs: "24px", md: "32px" },
-                fontWeight: "700",
-                color: theme.palette.primary.main,
-              }}
-            >
-              Ingredients:
-            </Typography>
-            {productdetails?.ingredientsIds.map((ingredient, index) => (
-              <Typography
-                variant="body2"
+                variant="body1"
                 color="text.secondary"
-                key={index}
                 sx={{
-                  mt: "8px",
+                  mt: { xs: "16px", md: "24px" },
                   fontSize: { xs: "16px", md: "24px" },
                   color: "black",
                 }}
               >
-                - {ingredient.name}
+                {productdetails?.description}
               </Typography>
-            ))}
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  mt: { xs: "16px", md: "24px" },
+                  fontSize: { xs: "24px", md: "32px" },
+                  fontWeight: "700",
+                  color: theme.palette.primary.main,
+                }}
+              >
+                Ingredients:
+              </Typography>
+              <Box
+                sx={{
+                  mt: "8px",
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                  pr: "8px",
+                }}
+              >
+                {productdetails?.ingredientsIds.map((ingredient, index) => (
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    key={index}
+                    sx={{
+                      fontSize: { xs: "16px", md: "24px" },
+                      color: "black",
+                    }}
+                  >
+                    - {ingredient.name}
+                  </Typography>
+                ))}
+              </Box>
+            </div>
             <Box
               sx={{
                 display: "flex",

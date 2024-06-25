@@ -4,18 +4,18 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { EMAIL_REGEX } from "../../regex/email";
 import { PWD_REGEX } from "../../regex/pass";
 import AuthProvider from "../../context/AuthProvider.tsx";
+import { CircularProgress } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "../../api/axios";
 import "../../styles/Log.css";
 
 const LOGIN_URL = "/api/v1/authentication/login";
-export default function login({
+
+export default function Login({
   setisUser,
 }: {
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  // const { setAuth }: any = useContext(AuthProvider);
-  // console.log(setAuth);
   const navigate = useNavigate();
   const location = useLocation();
   const home = location.state?.home?.pathname || "/";
@@ -31,11 +31,16 @@ export default function login({
   const [pwdFocus, setPwdFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     userRef.current?.focus();
   }, []);
+
   async function handleSubmit(e: any) {
     e.preventDefault();
+
+    setIsLoading(true);
 
     try {
       const res = await axios.post(LOGIN_URL, { email, password: pwd });
@@ -45,27 +50,26 @@ export default function login({
       // setAuth({ token });
 
       localStorage.setItem("token", token);
-      // console.log(token);
       setisUser(true);
       navigate(home, { replace: true });
     } catch (err: any) {
-      // console.log(err.response?.data || err.message, "err");
       if (!err.response) {
         setErrMsg("No server response");
       } else {
         setErrMsg(err.response.data.message);
-        setEmail(""), setPwd("");
+        setEmail("");
+        setPwd("");
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
   useEffect(() => {
-    // const result = EMAIL_REGEX.test(email);
     setValidEmail(true);
   }, [email]);
 
   useEffect(() => {
-    // const result = PWD_REGEX.test(pwd);
     setValidPwd(true);
   }, [pwd]);
 
@@ -149,13 +153,13 @@ export default function login({
 
             <button
               className="logn-button"
-              disabled={!pwd || !email ? true : false}
-              // onClick={() => {
-              //   setisUser(true);
-              //   navigate("/");
-              // }}
+              disabled={isLoading || !pwd || !email}
             >
-              Sign In
+              {isLoading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Sign In"
+              )}
             </button>
             <p>
               Don't have an account?

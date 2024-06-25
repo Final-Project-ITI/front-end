@@ -1,5 +1,6 @@
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { styled, keyframes } from "@mui/system";
 import successImage from "../../assets/images/payment.png";
 
@@ -42,9 +43,13 @@ const AnimatedButton = styled(Button)({
 
 export default function PaymentSuccess() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleHomeNavigation = () => {
-    navigate("/");
+    setLoading(true);
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
   };
 
   return (
@@ -75,7 +80,7 @@ export default function PaymentSuccess() {
         />
       </AnimatedBox>
       <AnimatedTypography variant="h4" sx={{ marginBottom: "20px" }}>
-        Payment Successful! ✔🎉
+        Payment Successful! ✔
       </AnimatedTypography>
       <AnimatedTypography variant="h6" sx={{ marginBottom: "40px" }}>
         Thank you for your purchase. 😊
@@ -84,8 +89,13 @@ export default function PaymentSuccess() {
         variant="contained"
         color="primary"
         onClick={handleHomeNavigation}
+        disabled={loading}
       >
-        Go to Home
+        {loading ? (
+          <CircularProgress size={24} color="inherit" />
+        ) : (
+          "Go to Home"
+        )}
       </AnimatedButton>
     </Box>
   );

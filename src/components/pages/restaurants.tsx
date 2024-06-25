@@ -18,11 +18,6 @@ export default function Restaurants() {
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const handleGetCategories = async () => {
-    const res = await axios.get("/api/v1/categories/" + location.state);
-    setCategories(res.data);
-  };
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
@@ -40,6 +35,15 @@ export default function Restaurants() {
     try {
       const { data } = await axios.get("/api/v1/restaurant/");
       setRestaurants(data);
+    } catch (err: any) {
+      console.error(err.response?.data || err.message, "err");
+    }
+  };
+
+  const handleGetCategories = async () => {
+    try {
+      const res = await axios.get("/api/v1/categories/" + location.state);
+      setCategories(res.data);
     } catch (err: any) {
       console.error(err.response?.data || err.message, "err");
     }

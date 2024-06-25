@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import item from "../../models/Item";
 import { useNavigate } from "react-router-dom";
@@ -7,52 +7,52 @@ import CartContext from "../../context/CartProvider";
 
 const url = "http://localhost:3000/api/v1";
 
+function SideCart({
+  setOpenSideCart,
+}: {
+  setOpenSideCart: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const navigate = useNavigate();
+  const {
+    cartItems,
+    cartQuantity,
+    cartTotal,
+    editItemQuantity,
+    deleteItemQuantity,
+  }:any = useContext(CartContext);
 
-function SideCart({ setOpenSideCart}: { setOpenSideCart:React.Dispatch<React.SetStateAction<boolean>> }){
-  const navigate=useNavigate()
-  //@ts-ignore
-  const { cartItems,cartQuantity,cartTotal,editItemQuantity,deleteItemQuantity}=useContext(CartContext)
-
-
-  const handleDeleteItem=(item:any)=>{
-    deleteItemQuantity(item.productId._id)
+  const handleDeleteItem = (item: any) => {
+    deleteItemQuantity(item.productId._id);
 
     const fetchDeleteItem = async () => {
-      const res = await axios.delete(
-        url + "/cart/"+item._id,
-        {
-          headers: { jwt: localStorage.getItem("token") },
-        }
-      );    
-      
+      const res = await axios.delete(url + "/cart/" + item._id, {
+        headers: { jwt: localStorage.getItem("token") },
+      });
     };
-    fetchDeleteItem()
-    
-  }
-  const handleEditItemQuantity=(item:any,newQuantity:number)=>{
+    fetchDeleteItem();
+  };
+  const handleEditItemQuantity = (item: any, newQuantity: number) => {
     if (item.quantity + newQuantity < 0) {
       return;
     } else if (item.quantity + newQuantity === 0) {
-       handleDeleteItem(item);
+      handleDeleteItem(item);
       return;
     }
-    editItemQuantity(item.productId._id, newQuantity)
+    editItemQuantity(item.productId._id, newQuantity);
     const fetchEditItemQuantity = async () => {
       const res = await axios.patch(
-        url + "/cart/"+item._id,
+        url + "/cart/" + item._id,
         {
-          quantity: item.quantity+newQuantity,
+          quantity: item.quantity + newQuantity,
         },
         {
           headers: { jwt: localStorage.getItem("token") },
         }
       );
-      console.log(res)
-     
-
+      console.log(res);
     };
-    fetchEditItemQuantity()
-  }
+    fetchEditItemQuantity();
+  };
   return (
     <>
       <Stack
@@ -75,7 +75,10 @@ function SideCart({ setOpenSideCart}: { setOpenSideCart:React.Dispatch<React.Set
             alignItems={"center"}
             justifyContent={"space-around"}
           >
-            <Box onClick={()=>setOpenSideCart(false)} sx={{"& :hover":{cursor:"pointer"}}}>
+            <Box
+              onClick={() => setOpenSideCart(false)}
+              sx={{ "& :hover": { cursor: "pointer" } }}
+            >
               <svg
                 width="49"
                 height="55"
@@ -95,12 +98,7 @@ function SideCart({ setOpenSideCart}: { setOpenSideCart:React.Dispatch<React.Set
             <Typography sx={{ fontSize: "32px", fontWeight: "700" }}>
               CART DETAILS
             </Typography>
-            <Typography
-            onClick={()=>navigate("/cart")}
-              sx={{ fontSize: "16px", fontWeight: "700", color: "#D74339","& :hover":{cursor:"pointer"} }}
-            >
-              GO TO CART
-            </Typography>
+
             <Stack
               justifyContent={"center"}
               alignItems={"center"}
@@ -121,138 +119,161 @@ function SideCart({ setOpenSideCart}: { setOpenSideCart:React.Dispatch<React.Set
               There are no items in your cart
             </Typography>
           )}
-          <Box sx={{maxHeight:"calc(100vh - 250px)", overflow:"auto"}}>          
-          {cartQuantity > 0 && (
-            cartItems.map((item:any)=> <Stack
-            key={item.productId._id}
-              direction={"row"}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-              sx={{
-                backgroundColor: "#E8DCCC",
-                height: "83px",
-                width: "440px",
-                marginInline: "auto",
-                paddingInline: "8px",
-                position: "relative",
-                marginBottom:"10px"
-              }}
-            >
-              <Box onClick={()=>handleDeleteItem(item)} sx={{ position: "absolute", top: "0.5px", right: "5px","& :hover":{cursor:"pointer"} }}>
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8.46387 15.535L15.5359 8.46503L8.46387 15.535ZM8.46387 8.46503L15.5359 15.535L8.46387 8.46503Z"
-                    fill="#1E1E1E"
-                  />
-                  <path
-                    d="M8.46387 15.535L15.5359 8.46503M8.46387 8.46503L15.5359 15.535"
-                    stroke="#E4002B"
-                    strokeOpacity="0.34"
-                    strokeWidth="1.875"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </Box>
-              <Box sx={{ height: "64px" }}>
-                <img
-                  height={"100%"}
-                  src={item.productId.icon?item.productId.icon:"https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"}
-                />
-              </Box>
-              <Typography title={item.productId.title} sx={{ fontSize: "16px" }}>
-              {item.productId.title}
-              </Typography>
-              <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} spacing={2}>
-              <Typography
-                sx={{
-                  fontSize: "16px",
-                }}
-              >
-                EGP {item.productId.price*item.quantity}{" "}
-              </Typography>
-              <Stack
-                direction={"row"}
-                alignItems={"center"}
-                sx={{ gap: { xs: 0.1, sm: 0.5, md: 1.5 } }}
-                justifyContent={"space-between"}
-              >
-                <Box
-                onClick={() => handleEditItemQuantity(item, -1)}
+          <Box sx={{ maxHeight: "calc(100vh - 250px)", overflow: "auto" }}>
+            {cartQuantity > 0 &&
+              cartItems.map((item: any) => (
+                <Stack
+                  key={item.productId._id}
+                  direction={"row"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
                   sx={{
-                    height: "24px",
-                    width: "24px",
-                    "& :hover":{cursor:"pointer"}
+                    backgroundColor: "#E8DCCC",
+                    height: "83px",
+                    width: "440px",
+                    marginInline: "auto",
+                    paddingInline: "8px",
+                    position: "relative",
+                    marginBottom: "10px",
                   }}
                 >
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 40 40"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <Box
+                    onClick={() => handleDeleteItem(item)}
+                    sx={{
+                      position: "absolute",
+                      top: "0.5px",
+                      right: "5px",
+                      "& :hover": { cursor: "pointer" },
+                    }}
                   >
-                    <path
-                      d="M20 3.75C11.04 3.75 3.75 11.04 3.75 20C3.75 28.96 11.04 36.25 20 36.25C28.96 36.25 36.25 28.96 36.25 20C36.25 11.04 28.96 3.75 20 3.75ZM20 6.25C27.6087 6.25 33.75 12.3913 33.75 20C33.75 27.6087 27.6087 33.75 20 33.75C12.3913 33.75 6.25 27.6087 6.25 20C6.25 12.3913 12.3913 6.25 20 6.25ZM12.5 18.75V21.25H27.5V18.75H12.5Z"
-                      fill="#E4002B"
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M8.46387 15.535L15.5359 8.46503L8.46387 15.535ZM8.46387 8.46503L15.5359 15.535L8.46387 8.46503Z"
+                        fill="#1E1E1E"
+                      />
+                      <path
+                        d="M8.46387 15.535L15.5359 8.46503M8.46387 8.46503L15.5359 15.535"
+                        stroke="#E4002B"
+                        strokeOpacity="0.34"
+                        strokeWidth="1.875"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </Box>
+                  <Box sx={{ height: "64px", width: "70px" }}>
+                    <img
+                      className="imageFit"
+                      height={"100%"}
+                      src={
+                        item.productId.icon
+                          ? item.productId.icon
+                          : "https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"
+                      }
                     />
-                  </svg>
-                </Box>
-
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                  }}
-                >
-                  {item.quantity}
-                </Typography>
-                <Box
-                onClick={() => handleEditItemQuantity(item, 1)}
-                  sx={{
-                    height: "24px",
-                    width: "24px",
-                    "& :hover":{cursor:"pointer"}
-                  }}
-                >
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 40 40"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                  </Box>
+                  <Typography
+                    title={item.productId.title}
+                    sx={{ fontSize: "16px" }}
                   >
-                    <path
-                      d="M20 3.75C11.04 3.75 3.75 11.04 3.75 20C3.75 28.96 11.04 36.25 20 36.25C28.96 36.25 36.25 28.96 36.25 20C36.25 11.04 28.96 3.75 20 3.75ZM20 6.25C27.6087 6.25 33.75 12.3913 33.75 20C33.75 27.6087 27.6087 33.75 20 33.75C12.3913 33.75 6.25 27.6087 6.25 20C6.25 12.3913 12.3913 6.25 20 6.25ZM18.75 12.5V18.75H12.5V21.25H18.75V27.5H21.25V21.25H27.5V18.75H21.25V12.5H18.75Z"
-                      fill="#E4002B"
-                    />
-                  </svg>
-                </Box>
-              </Stack>
+                    {item.productId.title}
+                  </Typography>
+                  <Stack
+                    direction={"row"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    spacing={2}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "16px",
+                      }}
+                    >
+                      EGP {item.productId.price * item.quantity}{" "}
+                    </Typography>
+                    <Stack
+                      direction={"row"}
+                      alignItems={"center"}
+                      sx={{ gap: { xs: 0.1, sm: 0.5, md: 1.5 } }}
+                      justifyContent={"space-between"}
+                    >
+                      <Box
+                        onClick={() => handleEditItemQuantity(item, -1)}
+                        sx={{
+                          height: "24px",
+                          width: "24px",
+                          "& :hover": { cursor: "pointer" },
+                        }}
+                      >
+                        <svg
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 40 40"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M20 3.75C11.04 3.75 3.75 11.04 3.75 20C3.75 28.96 11.04 36.25 20 36.25C28.96 36.25 36.25 28.96 36.25 20C36.25 11.04 28.96 3.75 20 3.75ZM20 6.25C27.6087 6.25 33.75 12.3913 33.75 20C33.75 27.6087 27.6087 33.75 20 33.75C12.3913 33.75 6.25 27.6087 6.25 20C6.25 12.3913 12.3913 6.25 20 6.25ZM12.5 18.75V21.25H27.5V18.75H12.5Z"
+                            fill="#E4002B"
+                          />
+                        </svg>
+                      </Box>
 
-              </Stack>
-              
-            </Stack>
-          ))}
+                      <Typography
+                        sx={{
+                          fontSize: "16px",
+                        }}
+                      >
+                        {item.quantity}
+                      </Typography>
+                      <Box
+                        onClick={() => handleEditItemQuantity(item, 1)}
+                        sx={{
+                          height: "24px",
+                          width: "24px",
+                          "& :hover": { cursor: "pointer" },
+                        }}
+                      >
+                        <svg
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 40 40"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M20 3.75C11.04 3.75 3.75 11.04 3.75 20C3.75 28.96 11.04 36.25 20 36.25C28.96 36.25 36.25 28.96 36.25 20C36.25 11.04 28.96 3.75 20 3.75ZM20 6.25C27.6087 6.25 33.75 12.3913 33.75 20C33.75 27.6087 27.6087 33.75 20 33.75C12.3913 33.75 6.25 27.6087 6.25 20C6.25 12.3913 12.3913 6.25 20 6.25ZM18.75 12.5V18.75H12.5V21.25H18.75V27.5H21.25V21.25H27.5V18.75H21.25V12.5H18.75Z"
+                            fill="#E4002B"
+                          />
+                        </svg>
+                      </Box>
+                    </Stack>
+                  </Stack>
+                </Stack>
+              ))}
           </Box>
         </Box>
-        <Stack
-        onClick={()=>navigate("/cart")}
-          alignSelf={"center"}
-          alignItems={"center"}
-          justifyContent={"space-around"}
-          direction={"row"}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/cart")}
           sx={{
             width: "424px",
             height: "64px",
             backgroundColor: "#D74339",
             gap: "32px",
             borderRadius: "50px",
-            "& :hover":{cursor:"pointer"}
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            alignSelf: "center",
+            flexDirection: "row",
+            "& :hover": { cursor: "pointer" },
           }}
         >
           <Box>
@@ -293,7 +314,7 @@ function SideCart({ setOpenSideCart}: { setOpenSideCart:React.Dispatch<React.Set
           <Typography sx={{ color: "white", fontSize: "16px" }}>
             {cartTotal} EGP
           </Typography>
-        </Stack>
+        </Button>
       </Stack>
     </>
   );

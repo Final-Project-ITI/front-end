@@ -46,7 +46,9 @@ const Details = ({}: IProps) => {
     restaurantId,
     setRestaurantId,
     cartItems,
-  } = useContext(CartContext);
+    calculateTotal,
+    calculateQuantity,
+  }:any = useContext(CartContext);
   const [showMore, setShowMore] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [isInCart, setIsInCart] = useState(false);
@@ -105,7 +107,7 @@ const Details = ({}: IProps) => {
 
     if (location.state) {
       const productInCart = cartItems.some(
-        (item) => item.productId === location.state._id
+        (item:any) => item.productId === location.state._id
       );
       setIsInCart(productInCart);
     }

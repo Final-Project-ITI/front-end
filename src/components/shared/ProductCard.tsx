@@ -18,7 +18,7 @@ const Product = ({ product }: ProductProps) => {
     setRestaurantId,
     calculateTotal,
     calculateQuantity,
-  } = useContext(CartContext);
+  }:any = useContext(CartContext);
 
   const handleAddItemToCart = async (productId: string) => {
     try {

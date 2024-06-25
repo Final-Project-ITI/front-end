@@ -154,16 +154,14 @@ export default function Restaurants() {
               </div>
               <div className="text-wrapper">
                 <Typography variant="h6">{restaurant.name}</Typography>
-                <button className="bb2">
-                  <Link
-                    to="/menu"
-                    id="sign-link"
-                    className="log4"
-                    state={restaurant._id}
-                  >
-                    View Menu
-                  </Link>
-                </button>
+                <Link
+                  to="/menu"
+                  id="sign-link"
+                  className="log4"
+                  state={restaurant._id}
+                >
+                  <button className="bb2">View Menu</button>
+                </Link>
               </div>
             </div>
           ))}

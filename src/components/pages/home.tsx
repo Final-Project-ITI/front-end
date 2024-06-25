@@ -223,17 +223,12 @@ export default function Home({
                 </div>
               ))}
             </Stack>
-            <button className="bb">
-              <Link to="/restaurants" id="sign-link" className="log3">
-                <h3>See More</h3>
-              </Link>
-            </button>
-          </Stack>
-          <button className="bb">
             <Link to="/restaurants" id="sign-link" className="log3">
-              <h3>See More</h3>
+              <button className="bb">
+                <h3>See More</h3>
+              </button>
             </Link>
-          </button>
+          </Stack>
         </Box>
         <Box sx={{ marginTop: "40px" }} ref={whyUsRef}>
           <Card />

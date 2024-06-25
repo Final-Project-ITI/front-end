@@ -41,7 +41,6 @@ export const Menu = () => {
   return (
     <>
       <Image restaurantInfo={restaurantInfo} />
-      <About restaurantInfo={restaurantInfo} />
       <Section categories={categories} sectionRefs={sectionRefs} />
       {categories.map((category) => (
         <Box
@@ -58,6 +57,7 @@ export const Menu = () => {
           />
         </Box>
       ))}
+      <About restaurantInfo={restaurantInfo} />
     </>
   );
 };

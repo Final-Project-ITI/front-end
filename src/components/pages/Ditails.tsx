@@ -16,7 +16,8 @@ import axios from "../../api/axios";
 import CartContext from "../../context/CartProvider";
 
 interface IProps {}
-const Ditails = ({}: IProps) => {
+
+const Details = ({}: IProps) => {
   const theme = useTheme();
   const location = useLocation();
   const [productdetails, setProductDetails] = useState<IProduct>({
@@ -35,6 +36,7 @@ const Ditails = ({}: IProps) => {
     title: "",
   });
   const { setCartItems, setCartQuantity } = useContext(CartContext);
+  const [showMore, setShowMore] = useState(false);
 
   const handleAddItemToCart = async (productId: string) => {
     try {
@@ -64,7 +66,7 @@ const Ditails = ({}: IProps) => {
         alignItems="center"
         justifyContent={"center"}
         marginBlock={"100px"}
-        spacing={3}
+        spacing={0}
         sx={{ height: "100%" }}
       >
         <Grid
@@ -85,7 +87,7 @@ const Ditails = ({}: IProps) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: "100%",
+              height: "600px",
             }}
           >
             <CardMedia
@@ -111,6 +113,8 @@ const Ditails = ({}: IProps) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
+            height: "600px",
+            overflowY: "auto",
           }}
         >
           <CardContent
@@ -149,17 +153,41 @@ const Ditails = ({}: IProps) => {
                   EGP {productdetails?.price}
                 </Typography>
               </Stack>
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                sx={{
-                  mt: { xs: "16px", md: "24px" },
-                  fontSize: { xs: "16px", md: "24px" },
-                  color: "black",
-                }}
+              <Box
+                sx={{ mt: { xs: "16px", md: "24px" }, position: "relative" }}
               >
-                {productdetails?.description}
-              </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{
+                    fontSize: { xs: "16px", md: "24px" },
+                    color: "black",
+                    display: "-webkit-box",
+                    WebkitLineClamp: showMore ? "none" : 3,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }}
+                >
+                  {productdetails?.description}
+                </Typography>
+                {productdetails.description.length > 100 && (
+                  <Button
+                    sx={{
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                      backgroundColor: theme.palette.secondary.main,
+                      color: theme.palette.primary.main,
+                      padding: "4px 8px",
+                      fontSize: "16px",
+                      fontWeight: "700",
+                    }}
+                    onClick={() => setShowMore(!showMore)}
+                  >
+                    {showMore ? "See Less" : "See More"}
+                  </Button>
+                )}
+              </Box>
               <Typography
                 variant="h6"
                 component="div"
@@ -175,24 +203,25 @@ const Ditails = ({}: IProps) => {
               <Box
                 sx={{
                   mt: "8px",
-                  maxHeight: "200px",
-                  overflowY: "auto",
                   pr: "8px",
                 }}
               >
-                {productdetails?.ingredientsIds.map((ingredient, index) => (
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    key={index}
-                    sx={{
-                      fontSize: { xs: "16px", md: "24px" },
-                      color: "black",
-                    }}
-                  >
-                    - {ingredient.name}
-                  </Typography>
-                ))}
+                <Grid container spacing={2}>
+                  {productdetails?.ingredientsIds.map((ingredient, index) => (
+                    <Grid item xs={6} key={index}>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          fontSize: { xs: "16px", md: "24px" },
+                          color: "black",
+                        }}
+                      >
+                        - {ingredient.name}
+                      </Typography>
+                    </Grid>
+                  ))}
+                </Grid>
               </Box>
             </div>
             <Box
@@ -227,4 +256,4 @@ const Ditails = ({}: IProps) => {
   );
 };
 
-export default Ditails;
+export default Details;

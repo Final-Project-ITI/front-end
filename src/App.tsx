@@ -6,7 +6,7 @@ import Cart from "./components/pages/Cart.tsx";
 import Checkout from "./components/pages/Checkout.tsx";
 import CartIcon from "./components/shared/CartIcon.tsx";
 import SideCart from "./components/shared/SideCart.tsx";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import item from "./models/Item.ts";
 import Home from "./components/pages/home";
@@ -17,6 +17,11 @@ import { Menu } from "./components/pages/Menu.tsx";
 import Ditails from "./components/pages/Ditails.tsx";
 import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
 import axios from "axios";
+import CartContext from "./context/CartProvider.tsx";
+import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
+import IsAuthGuard from "./guards/IsAuthGuard.tsx";
+import { jwtDecode } from "jwt-decode";
+import { IPayload } from "./models/payload.mode.ts";
 import PaymentSuccess from "./components/pages/payment_success.tsx";
 const url = "http://localhost:3000/api/v1";
 function App() {
@@ -25,20 +30,33 @@ function App() {
 
   const [isUser, setisUser] = useState(false);
 
-  const [cartItems, setCartItems] = useState<item[]>([]);
-  const [cartQuantity, setCartQuantity] = useState<number>(0);
-  const [cartTotal, setCartTotal] = useState<number>(0);
+  const {
+    cartItems,
+    setCartItems,
+    cartQuantity,
+    setCartQuantity,
+    cartTotal,
+    setCartTotal,
+    emptyCart,
+    deleteItemQuantity,
+    editItemQuantity,
+    calculateTotal,
+    calculateQuantity,
+    restaurantId,
+    setRestaurantId,
+  }: any = useContext(CartContext);
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
-  const [restaurantId, setRestaurantId] = useState<string>("");
+
+  const whyUsRef = useRef();
 
   useEffect(() => {
     const getUserCart = async () => {
       const res = await axios.get(url + "/cart", {
         headers: { jwt: localStorage.getItem("token") },
       });
-      if (res.data.itemsIds.length) {
+      if (res.data.itemsIds?.length) {
         const newCartItems = res.data.itemsIds;
         setCartItems(newCartItems);
         setRestaurantId(res.data.itemsIds[0].productId.restaurantId);
@@ -65,66 +83,31 @@ function App() {
       }
     };
     // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
+
     if (localStorage.getItem("token")) {
-      setisUser(true);
-      getUserCart();
-      getUserAddresses();
-      getUserPhones();
+      const token = localStorage.getItem("token");
+      const payload: IPayload | null = token ? jwtDecode(token) : null;
+      //@ts-ignore
+      const expDate = payload?.exp * 1000;
+      const nowDate = new Date().getTime();
+
+      if (expDate > nowDate) {
+        setisUser(true);
+        getUserCart();
+        getUserAddresses();
+        getUserPhones();
+      } else {
+        localStorage.removeItem("token");
+      }
     } else {
       setisUser(false);
+      setCartItems([]);
+      setRestaurantId("");
+      setCartQuantity(0);
+      setCartTotal(0);
     }
   }, [isUser]);
 
-  const calculateQuantity = (newCartItems: item[]) => {
-    const newCartQuantity = newCartItems.reduce(
-      (acc, curr) => acc + curr.quantity,
-      0
-    );
-    setCartQuantity(newCartQuantity);
-  };
-  const calculateTotal = (newCartItems: item[]) => {
-    const newCartTotal = newCartItems.reduce(
-      (acc, curr) => acc + curr.quantity * curr.productId.price,
-      0
-    );
-    setCartTotal(newCartTotal);
-  };
-
-  const editItemQuantity = (itemId: string, newQuantity: number) => {
-    const newCartItems = [...cartItems];
-    const index = newCartItems.findIndex(
-      (item) => item.productId._id === itemId
-    );
-    // if (newCartItems[index].quantity + newQuantity < 0) {
-    //   return;
-    // } else if (newCartItems[index].quantity + newQuantity === 0) {
-    //   deleteItemQuantity(itemId);
-    //   return;
-    // }
-    newCartItems[index] = {
-      ...newCartItems[index],
-      quantity: newCartItems[index].quantity + newQuantity,
-    };
-    setCartItems(newCartItems);
-    setCartQuantity((pre) => pre + newQuantity);
-    setCartTotal(
-      (pre) => pre + newQuantity * newCartItems[index].productId.price
-    );
-  };
-
-  const deleteItemQuantity = (itemId: string) => {
-    const newCartItems = cartItems.filter(
-      (item) => item.productId._id !== itemId
-    );
-    setCartItems(newCartItems);
-    calculateQuantity(newCartItems);
-    calculateTotal(newCartItems);
-  };
-  const emptyCart = () => {
-    setCartItems([]);
-    setCartQuantity(0);
-    setCartTotal(0);
-  };
   const addPhoneNumber = (phone: any) => {
     const newPhones = [...phones, phone];
     setPhones(newPhones);
@@ -150,62 +133,45 @@ function App() {
             <NavBar
               isUser={isUser}
               setisUser={setisUser}
-              cartQuantity={cartQuantity}
+              whyUsRef={whyUsRef}
             ></NavBar>
           )}
           <Routes>
             <Route path="/menu" element={<Menu />} />
+
             <Route path="/productdetails" element={<Ditails />} />
-            <Route path="/userinfo" element={<UserInfoAndOrders />} />
-            <Route path="/paymentSuccess" element={<PaymentSuccess />} />
-            <Route
-              path="/register"
-              element={<Register setisUser={setisUser} />}
-            />
-            <Route path="/login" element={<Login setisUser={setisUser} />} />
-            <Route path="/" element={<Home />} />
+            <Route element={<IsNotAuthGuard />}>
+              <Route
+                path="/register"
+                element={<Register setisUser={setisUser} />}
+              />
+              <Route path="/login" element={<Login setisUser={setisUser} />} />
+            </Route>
+            <Route element={<IsAuthGuard role={"user"} />}>
+              <Route path="/userinfo" element={<UserInfoAndOrders />} />
+              <Route
+                path="/checkout"
+                element={
+                  <Checkout
+                    phones={phones}
+                    addresses={addresses}
+                    addPhoneNumber={addPhoneNumber}
+                    addAddress={addAddress}
+                  />
+                }
+              />
+              <Route path="/paymentSuccess" element={<PaymentSuccess />} />
+              <Route path="/cart" element={<Cart />} />
+            </Route>
+
+            <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />
-            <Route
-              path="/checkout"
-              element={
-                <Checkout
-                  emptyCart={emptyCart}
-                  restaurantId={restaurantId}
-                  phones={phones}
-                  addresses={addresses}
-                  cartTotal={cartTotal}
-                  addPhoneNumber={addPhoneNumber}
-                  addAddress={addAddress}
-                />
-              }
-            />
-            <Route
-              path="/cart"
-              element={
-                <Cart
-                  deleteItemQuantity={deleteItemQuantity}
-                  cartQuantity={cartQuantity}
-                  cartItems={cartItems}
-                  cartTotal={cartTotal}
-                  editItemQuantity={editItemQuantity}
-                />
-              }
-            />
           </Routes>
           {path !== "/register" && path !== "/login" && <Footer></Footer>}
         </Stack>
-        {openSideCart && (
-          <SideCart
-            deleteItemQuantity={deleteItemQuantity}
-            setOpenSideCart={setOpenSideCart}
-            cartItems={cartItems}
-            cartQuantity={cartQuantity}
-            cartTotal={cartTotal}
-            editItemQuantity={editItemQuantity}
-          />
-        )}
+        {openSideCart && <SideCart setOpenSideCart={setOpenSideCart} />}
         {path !== "/register" && path !== "/login" && path !== "/cart" && (
-          <CartIcon setOpenSideCart={setOpenSideCart} cartTotal={cartTotal} />
+          <CartIcon setOpenSideCart={setOpenSideCart} />
         )}
       </ThemeProvider>
     </>

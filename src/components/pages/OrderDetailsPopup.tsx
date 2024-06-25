@@ -1,3 +1,4 @@
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
   Dialog,
@@ -11,37 +12,47 @@ import {
   TableHead,
   TableRow,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import img from "../../assets/WhatsApp Image 2024-05-24 at 17.42.05_1ebcada5.jpg";
+import { IItem } from "../../models/item.model";
+import { IOrder } from "../../models/order.model";
 
 interface OrderDetailsPopupProps {
   open: boolean;
   handleClose: () => void;
+  order: IOrder;
+  items: IItem[];
 }
 
-const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
+const OrderDetailsPopup = ({
+  open,
+  handleClose,
+  order,
+  items,
+}: OrderDetailsPopupProps) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const orderItems = [
-    { image: img, name: "Chicken BBQ Pizza", qty: 1, price: 120 },
-    { image: img, name: "Chicken Pizza", qty: 2, price: 120 },
-    { image: img, name: "Chicken Pizza", qty: 2, price: 120 },
-    { image: img, name: "Cheese Pizza", qty: 1, price: 80 },
-    { image: img, name: "Cheese Pizza", qty: 1, price: 80 },
-    { image: img, name: "Cheese Pizza", qty: 1, price: 80 },
-    { image: img, name: "Cheese Pizza", qty: 1, price: 80 },
-    { image: img, name: "Cheese Pizza", qty: 1, price: 80 },
-  ];
+  const handleTotalPrice = () => {
+    let totalPrice = 0;
 
-  const totalQty = orderItems.reduce((acc, item) => acc + item.qty, 0);
-  const totalPrice = orderItems.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0
-  );
+    items.forEach((ele) => {
+      totalPrice += ele.productId.price * ele.quantity;
+    });
+
+    return totalPrice;
+  };
+
+  const handleTotalQuantity = () => {
+    let totalQuantity = 0;
+
+    items.forEach((ele) => {
+      totalQuantity += ele.quantity;
+    });
+
+    return totalQuantity;
+  };
 
   return (
     <Dialog
@@ -155,7 +166,7 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orderItems.map((item, index) => (
+              {items.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell sx={{ borderBottom: "none" }}>
                     <Box
@@ -164,8 +175,8 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
                       sx={{ width: "202px", mb: "-16px" }}
                     >
                       <img
-                        src={item.image}
-                        alt={item.name}
+                        src={item.productId.icon}
+                        alt={item.productId.title}
                         style={{
                           width: "41px",
                           height: "40px",
@@ -173,7 +184,7 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
                         }}
                       />
                       <Typography sx={{ fontSize: "16px" }}>
-                        {item.name}
+                        {item.productId.title}
                       </Typography>
                     </Box>
                   </TableCell>
@@ -186,7 +197,7 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
                       fontSize: "16px",
                     }}
                   >
-                    {item.qty}
+                    {item.quantity}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -197,7 +208,7 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
                       fontSize: "16px",
                     }}
                   >
-                    EGP {item.price}
+                    EGP {item.productId.price}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -208,7 +219,7 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
                       fontSize: "16px",
                     }}
                   >
-                    EGP {item.price * item.qty}
+                    EGP {item.productId.price * item.quantity}
                   </TableCell>
                 </TableRow>
               ))}
@@ -238,7 +249,7 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
               Total
             </Typography>
             <Typography variant="body1" sx={{ textAlign: "center" }}>
-              EGP {totalPrice}
+              EGP {}
             </Typography>
           </Box>
           <Box
@@ -258,7 +269,7 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
               Qty
             </Typography>
             <Typography variant="body1" sx={{ textAlign: "center" }}>
-              {totalQty}
+              {handleTotalQuantity()}
             </Typography>
           </Box>
           <Box>
@@ -273,7 +284,7 @@ const OrderDetailsPopup = ({ open, handleClose }: OrderDetailsPopupProps) => {
               Price
             </Typography>
             <Typography variant="body1" sx={{ textAlign: "center" }}>
-              EGP {totalPrice}
+              EGP {handleTotalPrice()}
             </Typography>
           </Box>
         </Box>

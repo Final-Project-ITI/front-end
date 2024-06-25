@@ -1,7 +1,10 @@
 import { Stack, Typography } from '@mui/material'
-import React from 'react'
+import React, { useContext } from 'react'
+import CartContext from '../../context/CartProvider'
 
-function CartIcon({setOpenSideCart,cartTotal}:{setOpenSideCart:React.Dispatch<React.SetStateAction<boolean>>,cartTotal:number}) {
+function CartIcon({setOpenSideCart}:{setOpenSideCart:React.Dispatch<React.SetStateAction<boolean>>}) {
+  //@ts-ignore
+  const {cartTotal}=useContext(CartContext)
   return (
     <>
             <Stack

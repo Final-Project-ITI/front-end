@@ -1,22 +1,16 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 import Product from "./ProductCard";
-
-interface ProductType {
-  id: number;
-  name: string;
-  image: string;
-  price: string;
-}
+import { IProduct } from "../../models/product.model";
 
 interface IProps {
   name: string;
-  products: ProductType[];
+  products: IProduct[];
 }
 
 const Category = ({ name, products }: IProps) => {
   return (
-    <Grid container sx={{ padding: "8px" }}>
-      <Grid item xs={12}>
+    <Grid container sx={{ padding: "48px" }}>
+      <Grid item xs={12} alignItems={"flex-end"}>
         <Typography
           variant="h4"
           gutterBottom
@@ -25,18 +19,28 @@ const Category = ({ name, products }: IProps) => {
           alignItems="center"
           sx={{
             height: "40vh",
-            fontWeight: "bold",
-            fontSize: "32px",
-            mt: -5,
-            mb: 0,
+            fontWeight: "700",
+            fontSize: "40px",
           }}
         >
           {name}
         </Typography>
       </Grid>
-      {products.map((product) => (
-        <Product key={product.id} product={product} />
-      ))}
+      <Grid item xs={12}>
+        <Stack
+          direction={"row"}
+          justifyContent={"space-around"}
+          flexWrap={"wrap"}
+        >
+          {products.length ? (
+            products.map((product) => (
+              <Product key={product._id} product={product} />
+            ))
+          ) : (
+            <Typography variant="h2">Stay Tuned For Upcoming Items</Typography>
+          )}
+        </Stack>
+      </Grid>
     </Grid>
   );
 };

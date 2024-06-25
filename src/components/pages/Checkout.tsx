@@ -11,30 +11,28 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import OrderSubmitted from "../popups/OrderSubmitted";
 import AddNumber from "../popups/AddNumber";
 import AddAdress from "../popups/AddAdress";
 import axios from "axios";
+import CartContext from "../../context/CartProvider";
+import socket from "../../utils/socket";
 const url = "http://localhost:3000/api/v1";
 
 function Checkout({
   phones,
   addresses,
-  cartTotal,
   addPhoneNumber,
-  addAddress,
-  restaurantId,
-  emptyCart,
+  addAddress
 }: {
   phones: any[];
   addresses: any[];
-  cartTotal: number;
   addPhoneNumber: (phone: string) => void;
   addAddress: (address: string) => void;
-  restaurantId: string;
-  emptyCart: () => void;
 }) {
+  //@ts-ignore
+  const { emptyCart, cartTotal,restaurantId } = useContext(CartContext);
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);
@@ -57,20 +55,48 @@ function Checkout({
     setCheckoutInfo(newCheckOutInfo);
   };
   useEffect(() => {
-    setCheckoutInfo({
-      phone: phones[phones.length - 1],
-      address: addresses[addresses.length - 1],
+
+    socket.on("connect", () => {
+      console.log("Connected to the server");
     });
+
+    socket.on("new-order-res", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      socket.off("connect");
+    };
   }, []);
+
+  useEffect(()=>{
+    if(phones.length ){
+    setCheckoutInfo((pre)=>{return{
+      phone: phones[phones.length - 1],
+      address: pre.address,
+    }});}
+  },[phones])
+  useEffect(()=>{
+   
+    if(addresses.length ){
+    setCheckoutInfo((pre)=>{return{
+      phone:pre.phone,
+      address:  addresses[addresses.length - 1],
+    }});}
+  },[addresses])
+
   const handlCheckout = () => {
     const fetchCheckout = async () => {
       const res = await axios.post(
         url + "/orders/" + restaurantId + "/user",
-        { phoneId: checkoutInfo.phone._id },
+        { phoneId: checkoutInfo.phone._id,addressId:checkoutInfo.address._id },
         {
           headers: { jwt: localStorage.getItem("token") },
         }
       );
+
+      socket.emit("new-order-req", restaurantId);
+
       if (res.status == 201) {
         emptyCart();
         setSubmitOrderPopUp(true);
@@ -130,12 +156,14 @@ function Checkout({
           <AddNumber
             addPhoneNumber={addPhoneNumber}
             setAddNumberPopUp={setAddNumberPopUp}
+            setCheckoutInfo={setCheckoutInfo}
           ></AddNumber>
         )}
         {addAddressPopUp && (
           <AddAdress
             addAddress={addAddress}
             setAddAddressPopUp={setAddAddressPopUp}
+            setCheckoutInfo={setCheckoutInfo}
           ></AddAdress>
         )}
 

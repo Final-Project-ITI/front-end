@@ -22,6 +22,7 @@ import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
 import IsAuthGuard from "./guards/IsAuthGuard.tsx";
 import { jwtDecode } from "jwt-decode";
 import { IPayload } from "./models/payload.mode.ts";
+import PaymentSuccess from "./components/pages/payment_success.tsx";
 const url = "http://localhost:3000/api/v1";
 function App() {
   const path = useLocation().pathname;
@@ -159,6 +160,7 @@ function App() {
                   />
                 }
               />
+              <Route path="/paymentSuccess" element={<PaymentSuccess />} />
               <Route path="/cart" element={<Cart />} />
             </Route>
 

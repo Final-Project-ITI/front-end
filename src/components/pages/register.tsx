@@ -4,6 +4,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { USER_REGEX } from "../../regex/user";
 import { PWD_REGEX } from "../../regex/pass";
 import { EMAIL_REGEX } from "../../regex/email";
+import { CircularProgress } from "@mui/material";
 import "../../styles/Auth.css";
 import axios from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -37,6 +38,7 @@ export default function Register({
   const [confirmPwdFocus, setConfirmPwdFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     userRef.current?.focus();
@@ -73,6 +75,8 @@ export default function Register({
       return;
     }
 
+    setIsLoading(true);
+
     try {
       await axios.post(REGISTER_URL, {
         fullName: user,
@@ -81,7 +85,6 @@ export default function Register({
       });
 
       setErrMsg("");
-
       navigate("/login", { replace: true });
     } catch (err: any) {
       if (!err.response) {
@@ -89,6 +92,8 @@ export default function Register({
       } else {
         setErrMsg(err.response.data.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -219,12 +224,18 @@ export default function Register({
             <button
               className="sign-button"
               disabled={
-                !validName || !validEmail || !validPwd || !validConfirmPwd
-                  ? true
-                  : false
+                isLoading ||
+                !validName ||
+                !validEmail ||
+                !validPwd ||
+                !validConfirmPwd
               }
             >
-              Sign Up
+              {isLoading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </form>
 

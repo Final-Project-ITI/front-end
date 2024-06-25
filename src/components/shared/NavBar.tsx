@@ -10,9 +10,14 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import logo from "../../assets/logo.svg";
-import { Divider } from "@mui/material";
+import { Divider, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CartContext from "../../context/CartProvider";
+import axios from "axios";
+import socket from "../../utils/socket";
+import { jwtDecode } from "jwt-decode";
+
+const url = "http://localhost:3000/api/v1";
 
 const pages = ["Home", "Resturants", "why us"];
 
@@ -27,6 +32,9 @@ function NavBar({
 }) {
   //@ts-ignore
   const { cartQuantity } = React.useContext(CartContext);
+  const [notifications, setNotifications] = React.useState<any>([]);
+  const [newNotification, setNewNotification] = React.useState<any>({});
+  const [showNotifications, setShowNotifications] = React.useState(false);
   const navigate = useNavigate();
 
   const scrollToWhyUs = () => {
@@ -53,6 +61,66 @@ function NavBar({
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const handleGetNotifications = async () => {
+    const res = await axios.get(url + "/notification/user", {
+      headers: { jwt: localStorage.getItem("token") },
+    });
+
+    if (res.status == 200) {
+      setNotifications(res.data);
+    }
+  };
+
+  const handleGetNotificationById = async (id: string) => {
+    const res = await axios.get(url + "/notification/user/" + id, {
+      headers: { jwt: localStorage.getItem("token") },
+    });
+
+    if (res.status == 200) {
+      setNewNotification(res.data);
+    }
+  };
+
+  const handleDate = (date: any) => {
+    date = new Date(date);
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    const dayOfWeekIndex = date.getDay();
+    const dayOfWeek = daysOfWeek[dayOfWeekIndex];
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${dayOfWeek}, ${hours}:${minutes}`;
+  };
+
+  React.useEffect(() => {
+    handleGetNotifications();
+
+    const decoded: any = jwtDecode(localStorage.getItem("token")!);
+
+    socket.on("connect", () => {
+      socket.emit("join-room", decoded._id);
+      socket.on("notify-user", (data) => handleGetNotificationById(data));
+    });
+
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
+
+  React.useEffect(() => {
+    setNotifications((pre: any) => [newNotification, ...pre]);
+  }, [newNotification]);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "inherit", boxShadow: 0 }}>
@@ -211,6 +279,97 @@ function NavBar({
               </Box>
             )}
           </Button>
+          {isUser && (
+            /*********************/
+            <Box position={"relative"}>
+              <Button
+                onClick={() => {
+                  setShowNotifications((pre) => !pre);
+                }}
+              >
+                <svg
+                  width="24"
+                  height="64"
+                  viewBox="0 0 24 64"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21 26.5C21 28.43 19.43 30 17.5 30C15.57 30 14 28.43 14 26.5C14 24.57 15.57 23 17.5 23C19.43 23 21 24.57 21 26.5ZM19 31.79C18.5 31.92 18 32 17.5 32C16.0421 31.9974 14.6447 31.4171 13.6138 30.3862C12.583 29.3553 12.0026 27.9579 12 26.5C12 25.03 12.58 23.7 13.5 22.71C13.3185 22.4875 13.0897 22.3084 12.8302 22.1855C12.5707 22.0627 12.2871 21.9993 12 22C10.9 22 10 22.9 10 24V24.29C7.03 25.17 5 27.9 5 31V37L3 39V40H21V39L19 37V31.79ZM12 43C13.11 43 14 42.11 14 41H10C10 41.5304 10.2107 42.0391 10.5858 42.4142C10.9609 42.7893 11.4696 43 12 43Z"
+                    fill="#111111"
+                  />
+                </svg>
+              </Button>
+              {showNotifications && (
+                <Stack
+                  position={"absolute"}
+                  alignItems={"flex-end"}
+                  right={0}
+                  zIndex={1}
+                >
+                  <Box
+                    sx={{
+                      width: 0,
+                      height: 0,
+                      borderLeft: "10px solid transparent",
+                      borderRight: "10px solid transparent",
+
+                      borderBottom: "10px solid black",
+                      marginRight: "20px",
+                    }}
+                  ></Box>
+
+                  <Stack
+                    sx={{
+                      width: "400px",
+                      maxHeight: "350px",
+                      border: "black solid 1px",
+                      backgroundColor: "#E8DCCC",
+                      borderRadius: "20px 0 0 20px",
+                      padding: "20px",
+                      overflow: "scroll",
+                      overflowX: "hidden",
+                    }}
+                    alignItems={"flex-start"}
+                  >
+                    {notifications.map((notification: any) => (
+                      <Stack
+                        direction={"row"}
+                        color={"black"}
+                        alignItems={"center"}
+                        marginBottom={"10px"}
+                        key={notification?._id}
+                      >
+                        <img
+                          src={notification?.notificationType.restaurantIcon}
+                          title="icon"
+                          style={{
+                            objectFit: "cover",
+                            width: "64px",
+                            height: "64px",
+                            borderRadius: "50%",
+                            marginRight: "10px",
+                          }}
+                        />
+                        <Box>
+                          <Stack direction={"row"}>
+                            {" "}
+                            <Typography>Your order has been </Typography>
+                            <Typography fontWeight={"bold"} marginLeft={"5px"}>
+                              {notification?.notificationType.name}
+                            </Typography>
+                          </Stack>
+                          <Typography fontSize={"small"} color={"gray"}>
+                            {handleDate(notification?.createdAt)}
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    ))}
+                  </Stack>
+                </Stack>
+              )}
+            </Box>
+          )}
           {isUser && (
             <Button onClick={() => navigate("/userinfo")}>
               <svg

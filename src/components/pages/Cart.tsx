@@ -11,11 +11,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import item from "../../models/Item";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
+import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 
 const url = "http://localhost:3000/api/v1";
 
@@ -29,6 +30,8 @@ function Cart() {
   }: any = useContext(CartContext);
   const navigate = useNavigate();
   const vat = 10;
+  const [showDeleteItemPopUp, setShowDeleteItemPopUp] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleDeleteItem = (item: any) => {
     deleteItemQuantity(item.productId._id);
@@ -45,7 +48,6 @@ function Cart() {
     if (item.quantity + newQuantity < 0) {
       return;
     } else if (item.quantity + newQuantity === 0) {
-      handleDeleteItem(item);
       return;
     }
     editItemQuantity(item.productId._id, newQuantity);
@@ -65,6 +67,14 @@ function Cart() {
   };
   return (
     <>
+      {showDeleteItemPopUp && itemToDelete && (
+        <ConfirmDeleteFromCart
+          itemToDelete={itemToDelete}
+          setItemToDelete={setItemToDelete}
+          setShowDeleteItemPopUp={setShowDeleteItemPopUp}
+          handleDeleteItem={handleDeleteItem}
+        />
+      )}
       <Container maxWidth="xl">
         <Grid
           container
@@ -90,11 +100,13 @@ function Cart() {
               boxShadow: cartQuantity != 0 ? "10" : "0",
             }}
           >
-            <Stack >
+            <Stack>
               <Table>
                 <TableBody>
                   <TableRow>
-                    <TableCell sx={{ position: "relative", paddingInline:"0" }}>
+                    <TableCell
+                      sx={{ position: "relative", paddingInline: "0" }}
+                    >
                       <Stack direction={"row"}>
                         <Typography
                           sx={{ fontSize: { xs: "32px", md: "40px" } }}
@@ -114,15 +126,15 @@ function Cart() {
                             color: "white",
                             fontSize: { xs: "1.3rem", md: "1.5rem" },
                             position: "absolute",
-                            left: {xs:"80px",md:"100px"},
-                            top: {xs:"22.5px",md:"27px"},
+                            left: { xs: "80px", md: "100px" },
+                            top: { xs: "22.5px", md: "27px" },
                           }}
                         >
                           {cartQuantity}
                         </Stack>
                       </Stack>
                     </TableCell>
-                    <TableCell  ></TableCell>
+                    <TableCell></TableCell>
                     <TableCell>
                       <Typography
                         sx={{
@@ -149,10 +161,10 @@ function Cart() {
 
                   {cartItems.map((item: any) => (
                     <TableRow key={item.productId._id}>
-                      <TableCell sx={{padding:"0"}}>
+                      <TableCell sx={{ padding: "10px 0" }}>
                         <Box
                           sx={{
-                            height: { xs: "38px", sm: "50px", md: "80px" },
+                            height: { xs: "38px", sm: "50px", md: "65px" },
                             width: { xs: "60px", sm: "80px", md: "90px" },
                           }}
                         >
@@ -179,25 +191,35 @@ function Cart() {
                           whiteSpace: "nowrap",
                           textOverflow: " ellipsis",
                           msTextOverflow: "ellipsis",
-                          padding:"0"
+                          padding: "0",
                         }}
                       >
                         <Typography
-                    title={item.productId.title}
-                    sx={{
-                      maxWidth:{xs:"30vw"},fontSize: { xs: "0.8rem", sm: "1.1rem", md: "19px",xl:"24px" },display: "block" , overflow: "hidden",whiteSpace:"nowrap",textOverflow:" ellipsis",msTextOverflow:"ellipsis"
-                    }}
-                  >
-                    {item.productId.title}
-                  </Typography>
-                        
+                          title={item.productId.title}
+                          sx={{
+                            maxWidth: { xs: "30vw" },
+                            fontSize: {
+                              xs: "0.8rem",
+                              sm: "1.1rem",
+                              md: "19px",
+                              xl: "24px",
+                            },
+                            display: "block",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            textOverflow: " ellipsis",
+                            msTextOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.productId.title}
+                        </Typography>
                       </TableCell>
-                      <TableCell sx={{padding:"0"}} >
+                      <TableCell sx={{ padding: "0" }}>
                         <Stack
                           direction={"row"}
                           alignItems={"center"}
-                          sx={{ gap: { xs: 0.1, sm: 0.5, md: 1 } }}
-                          justifyContent={"space-between"}
+                          sx={{ gap: { xs: 0.1, sm: 0.5, md: 0.7 } }}
+                          justifyContent={"center"}
                         >
                           <Box
                             sx={{
@@ -256,7 +278,13 @@ function Cart() {
                           </Box>
                         </Stack>
                       </TableCell>
-                      <TableCell sx={{ textAlign: "center",padding:"0" }}>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                          padding: "0",
+                          position: "relative",
+                        }}
+                      >
                         <Typography
                           sx={{
                             fontSize: {
@@ -270,6 +298,38 @@ function Cart() {
                         >
                           EGP {item.quantity * item.productId.price}{" "}
                         </Typography>
+                        <Box
+                          onClick={() => {
+                            setItemToDelete(item);
+                            setShowDeleteItemPopUp(true);
+                          }}
+                          sx={{
+                            position: "absolute",
+                            top: "0.5px",
+                            right: "0px",
+                            "& :hover": { cursor: "pointer" },
+                          }}
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.46387 15.535L15.5359 8.46503L8.46387 15.535ZM8.46387 8.46503L15.5359 15.535L8.46387 8.46503Z"
+                              fill="#1E1E1E"
+                            />
+                            <path
+                              d="M8.46387 15.535L15.5359 8.46503M8.46387 8.46503L15.5359 15.535"
+                              stroke="#E4002B"
+                              strokeOpacity="0.34"
+                              strokeWidth="1.875"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </Box>
                       </TableCell>
                     </TableRow>
                   ))}

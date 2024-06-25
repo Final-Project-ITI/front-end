@@ -1,9 +1,10 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import item from "../../models/Item";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
+import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 
 const url = "http://localhost:3000/api/v1";
 
@@ -19,7 +20,10 @@ function SideCart({
     cartTotal,
     editItemQuantity,
     deleteItemQuantity,
-  }:any = useContext(CartContext);
+  }: any = useContext(CartContext);
+
+  const [showDeleteItemPopUp, setShowDeleteItemPopUp] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleDeleteItem = (item: any) => {
     deleteItemQuantity(item.productId._id);
@@ -35,7 +39,6 @@ function SideCart({
     if (item.quantity + newQuantity < 0) {
       return;
     } else if (item.quantity + newQuantity === 0) {
-      handleDeleteItem(item);
       return;
     }
     editItemQuantity(item.productId._id, newQuantity);
@@ -55,6 +58,15 @@ function SideCart({
   };
   return (
     <>
+      {showDeleteItemPopUp && itemToDelete && (
+        <ConfirmDeleteFromCart
+          itemToDelete={itemToDelete}
+          setItemToDelete={setItemToDelete}
+          setShowDeleteItemPopUp={setShowDeleteItemPopUp}
+          handleDeleteItem={handleDeleteItem}
+        />
+      )}
+
       <Stack
         direction={"column"}
         justifyContent={"space-between"}
@@ -64,7 +76,7 @@ function SideCart({
           width: "488px",
           right: "0",
           top: "0",
-          zIndex: "300",
+          zIndex: "3",
           backgroundColor: "#F3ECE5",
           paddingBlock: "45px 100px",
         }}
@@ -138,7 +150,10 @@ function SideCart({
                   }}
                 >
                   <Box
-                    onClick={() => handleDeleteItem(item)}
+                    onClick={() => {
+                      setItemToDelete(item);
+                      setShowDeleteItemPopUp(true);
+                    }}
                     sx={{
                       position: "absolute",
                       top: "0.5px",

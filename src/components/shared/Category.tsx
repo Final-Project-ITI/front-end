@@ -21,8 +21,6 @@ const Category = ({ name, products }: IProps) => {
             height: "40vh",
             fontWeight: "700",
             fontSize: "40px",
-            // mt: -5,
-            // mb: 0,
           }}
         >
           {name}

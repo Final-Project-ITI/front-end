@@ -35,29 +35,60 @@ const Details = ({}: IProps) => {
     restaurantId: "",
     title: "",
   });
-  const { setCartItems, setCartQuantity } = useContext(CartContext);
+  const {
+    setCartItems,
+    setCartQuantity,
+    setCartTotal,
+    restaurantId,
+    setRestaurantId,
+    cartItems,
+  } = useContext(CartContext);
   const [showMore, setShowMore] = useState(false);
 
-  const handleAddItemToCart = async (productId: string) => {
+  const handleAddItemToCart = async (product: IProduct) => {
     try {
       const res = await axios.post(
         "/api/v1/cart",
         {
-          productId,
+          productId: product._id,
           quantity: 1,
         },
         {
           headers: { jwt: localStorage.getItem("token") },
         }
       );
-      setCartItems(res.data.itemsIds);
-      setCartQuantity((pre: number) => ++pre);
-    } catch (e) {}
+
+      if (restaurantId && restaurantId !== product.restaurantId) {
+        // Reset the cart if the restaurantId is different
+        setCartItems([]);
+        setCartQuantity(0);
+        setCartTotal(0);
+      }
+
+      // Add the new item to the cart
+      const existingItemIndex = cartItems.findIndex(
+        (item) => item.productId._id === product._id
+      );
+
+      if (existingItemIndex !== -1) {
+        const newCartItems = [...cartItems];
+        newCartItems[existingItemIndex].quantity += 1;
+        setCartItems(newCartItems);
+      } else {
+        setCartItems([...cartItems, { productId: product, quantity: 1 }]);
+      }
+
+      setCartQuantity((prevQuantity: number) => prevQuantity + 1);
+      setCartTotal((prevTotal: number) => prevTotal + product.price);
+      setRestaurantId(product.restaurantId);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   useEffect(() => {
     setProductDetails(location.state);
-  }, []);
+  }, [location.state]);
 
   return (
     <>
@@ -243,7 +274,7 @@ const Details = ({}: IProps) => {
                   fontSize: { xs: "20px", md: "24px" },
                   fontWeight: "700",
                 }}
-                onClick={() => handleAddItemToCart(productdetails?._id)}
+                onClick={() => handleAddItemToCart(productdetails)}
               >
                 <ShoppingCartIcon />
                 Add To Cart

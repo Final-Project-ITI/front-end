@@ -34,7 +34,7 @@ function AddNumber({
         }
       );
       addPhoneNumber(res.data);
-      setCheckoutInfo((pre:any )=> {return {phone:res.data,address:pre.address}})
+      setCheckoutInfo((pre:any )=> {return {phone:res.data._id,address:pre.address}})
 
     };
     if (!phoneRegex.test(phone)) {

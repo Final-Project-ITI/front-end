@@ -46,8 +46,7 @@ function App() {
     setRestaurantId,
   }: any = useContext(CartContext);
 
-  const [phones, setPhones] = useState<string[]>([]);
-  const [addresses, setAddresses] = useState<string[]>([]);
+
 
   const whyUsRef = useRef();
 
@@ -64,24 +63,7 @@ function App() {
         calculateTotal(newCartItems);
       }
     };
-    const getUserAddresses = async () => {
-      const res = await axios.get(url + "/addresses", {
-        headers: { jwt: localStorage.getItem("token") },
-      });
-      if (!res.data.message) {
-        const newAddresses = res.data;
-        setAddresses(newAddresses);
-      }
-    };
-    const getUserPhones = async () => {
-      const res = await axios.get(url + "/phones", {
-        headers: { jwt: localStorage.getItem("token") },
-      });
-      if (!res.data.message) {
-        const newPhones = res.data;
-        setPhones(newPhones);
-      }
-    };
+
     // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
 
     if (localStorage.getItem("token")) {
@@ -94,8 +76,6 @@ function App() {
       if (expDate > nowDate) {
         setisUser(true);
         getUserCart();
-        getUserAddresses();
-        getUserPhones();
       } else {
         localStorage.removeItem("token");
       }
@@ -108,14 +88,7 @@ function App() {
     }
   }, [isUser]);
 
-  const addPhoneNumber = (phone: any) => {
-    const newPhones = [...phones, phone];
-    setPhones(newPhones);
-  };
-  const addAddress = (address: any) => {
-    const newAddresses = [...addresses, address];
-    setAddresses(newAddresses);
-  };
+
 
   return (
     <>
@@ -152,12 +125,7 @@ function App() {
               <Route
                 path="/checkout"
                 element={
-                  <Checkout
-                    phones={phones}
-                    addresses={addresses}
-                    addPhoneNumber={addPhoneNumber}
-                    addAddress={addAddress}
-                  />
+                  <Checkout/>
                 }
               />
               <Route path="/cart" element={<Cart />} />

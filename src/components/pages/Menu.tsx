@@ -15,7 +15,9 @@ export const Menu = () => {
 
   const [menu, setMenu] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<IMenuCategory[]>([]);
-  const [restaurantInfo, setRestaurantInfo] = useState<IRestaurant>({});
+  const [restaurantInfo, setRestaurantInfo] = useState<IRestaurant>(
+    {} as IRestaurant
+  );
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -23,10 +25,12 @@ export const Menu = () => {
     const res = await axios.get("/api/v1/products/" + location.state);
     setMenu(res.data);
   };
+
   const handleGetCategories = async () => {
     const res = await axios.get("/api/v1/categories/" + location.state);
     setCategories(res.data);
   };
+
   const handleGetRestaurantInfo = async () => {
     const res = await axios.get("/api/v1/restaurant/" + location.state);
     setRestaurantInfo(res.data);
@@ -36,7 +40,7 @@ export const Menu = () => {
     handleGetMenuItems();
     handleGetCategories();
     handleGetRestaurantInfo();
-  }, []);
+  }, [location.state]);
 
   return (
     <>

@@ -4,9 +4,12 @@ import {
   Container,
   Divider,
   FormControl,
+  FormControlLabel,
   Grid,
   InputLabel,
   MenuItem,
+  Radio,
+  RadioGroup,
   Select,
   Stack,
   Typography,
@@ -18,34 +21,40 @@ import AddAdress from "../popups/AddAdress";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
 import socket from "../../utils/socket";
+import { IPhone } from "../../models/phone.model";
+import { IAddress } from "../../models/address.model";
 const url = "http://localhost:3000/api/v1";
 
-function Checkout({
-  phones,
-  addresses,
-  addPhoneNumber,
-  addAddress
-}: {
-  phones: any[];
-  addresses: any[];
-  addPhoneNumber: (phone: string) => void;
-  addAddress: (address: string) => void;
-}) {
-  //@ts-ignore
-  const { emptyCart, cartTotal,restaurantId } = useContext(CartContext);
+function Checkout({}) {
+  const [phones, setPhones] = useState<IPhone[]>([]);
+  const [addresses, setAddresses] = useState<IAddress[]>([]);
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const addPhoneNumber = (phone: any) => {
+    const newPhones = [...phones, phone];
+    setPhones(newPhones);
+  };
+  const addAddress = (address: any) => {
+    const newAddresses = [...addresses, address];
+    setAddresses(newAddresses);
+  };
+
+  const { emptyCart, cartTotal, restaurantId }: any = useContext(CartContext);
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);
   const [addressError, setAddressError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
+  const [paymentError, setPaymentError] = useState(false);
+  const [error, setError] = useState("");
 
-  const [checkoutInfo, setCheckoutInfo] = useState({
-    phone: phones[phones.length - 1] || "",
-    address: addresses[addresses.length - 1] || "",
+  const [checkoutInfo, setCheckoutInfo] = useState<{
+    phone: string;
+    address: string;
+  }>({
+    phone: "",
+    address: "",
   });
 
-  const ITEM_HEIGHT = 30;
-  const ITEM_PADDING_TOP = 8;
   const vat: number = 10;
 
   const handleInfoChange = (newCheckOutInfo: {
@@ -55,6 +64,27 @@ function Checkout({
     setCheckoutInfo(newCheckOutInfo);
   };
   useEffect(() => {
+    const getUserAddresses = async () => {
+      const res = await axios.get(url + "/addresses", {
+        headers: { jwt: localStorage.getItem("token") },
+      });
+      if (!res.data.message) {
+        const newAddresses = res.data;
+        setAddresses(newAddresses);
+      }
+    };
+    const getUserPhones = async () => {
+      const res = await axios.get(url + "/phones", {
+        headers: { jwt: localStorage.getItem("token") },
+      });
+      if (!res.data.message) {
+        const newPhones = res.data;
+        setPhones(newPhones);
+      }
+    };
+
+    getUserAddresses();
+    getUserPhones();
 
     socket.on("connect", () => {
       console.log("Connected to the server");
@@ -69,78 +99,90 @@ function Checkout({
     };
   }, []);
 
-  useEffect(()=>{
-    if(phones.length ){
-    setCheckoutInfo((pre)=>{return{
-      phone: phones[phones.length - 1],
-      address: pre.address,
-    }});}
-  },[phones])
-  useEffect(()=>{
-   
-    if(addresses.length ){
-    setCheckoutInfo((pre)=>{return{
-      phone:pre.phone,
-      address:  addresses[addresses.length - 1],
-    }});}
-  },[addresses])
+  useEffect(() => {
+    if (phones.length) {
+      setCheckoutInfo((pre) => {
+        return {
+          phone: phones[phones.length - 1]._id,
+          address: pre.address,
+        };
+      });
+    }
+  }, [phones]);
+
+  useEffect(() => {
+    if (addresses.length) {
+      setCheckoutInfo((pre) => {
+        return {
+          phone: pre.phone,
+          address: addresses[addresses.length - 1]._id,
+        };
+      });
+    }
+  }, [addresses]);
 
   const handlCheckout = () => {
     const fetchCheckout = async () => {
-      const res = await axios.post(
-        url + "/orders/" + restaurantId + "/user",
-        { phoneId: checkoutInfo.phone._id,addressId:checkoutInfo.address._id },
-        {
-          headers: { jwt: localStorage.getItem("token") },
+      try {
+        const res = await axios.post(
+          url + "/orders/" + restaurantId + "/user",
+          { phoneId: checkoutInfo.phone, addressId: checkoutInfo.address },
+          {
+            headers: { jwt: localStorage.getItem("token") },
+          }
+        );
+
+        socket.emit("new-order-req", restaurantId);
+
+        if (res.status == 201) {
+          emptyCart();
+          setSubmitOrderPopUp(true);
         }
-      );
-
-      socket.emit("new-order-req", restaurantId);
-
-      if (res.status == 201) {
-        emptyCart();
-        setSubmitOrderPopUp(true);
+      } catch (error: any) {
+        setError(error.message);
       }
     };
+    const fetchStripe= async()=>{
+      const res = await axios.post(
+          url + "/payments",
+          { phoneId: checkoutInfo.phone, addressId: checkoutInfo.address },
+          {
+            headers: { jwt: localStorage.getItem("token") },
+          }
+        );
+        window.location.replace(res.data.session.url)
+
+        // socket.emit("new-order-req", restaurantId);
+
+        // if (res.status == 201) {
+        //   emptyCart();
+        //   setSubmitOrderPopUp(true);
+        // }
+
+    }
     if (!checkoutInfo.phone) {
       setPhoneError(true);
     }
     if (!checkoutInfo.address) {
       setAddressError(true);
     }
-    if (checkoutInfo.phone && checkoutInfo.address) {
+    if (!paymentMethod) {
+      setPaymentError(true);
+    }
+    if (checkoutInfo.phone && checkoutInfo.address && paymentMethod) {
       setAddressError(false);
       setPhoneError(false);
-      fetchCheckout();
+      setError("");
+      paymentMethod=="cash"?fetchCheckout():fetchStripe();
     }
   };
 
   const MenuProps = {
     PaperProps: {
       style: {
-        // maxHeight: ITEM_HEIGHT * 4 + ITEM_PADDING_TOP,
         width: 250,
         borderRadius: "15px",
         border: "1px solid #d84339",
-
-        // "&::-webkit-scrollbar": {
-        //   width: "5px",
-        //   height: "8px",
-        //   backgroundColor: "red",
-        //   color:"red"
-        // },
-        // "&.::-webkit-scrollbar-track": {
-        //   width: "5px",
-        //   height: "8px",
-        //   backgroundColor: "red",
-        //   color:"red"
-        // },
-        // "&::-webkit-scrollbar-thumb": {
-        //   width: "5px",
-        //   height: "8px",
-        //   backgroundColor: "red",
-        //   color:"red"
-        // }
       },
     },
   };
@@ -199,29 +241,28 @@ function Checkout({
                 contact info
               </Typography>
               <FormControl fullWidth>
-                <Box>
+                <Box sx={{ marginInline: "auto", width: "100%" }}>
                   <Typography sx={{ color: "#111111BA", fontSize: "18px" }}>
                     Phone Number
                   </Typography>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
-                    justifyContent={"center"}
+                    justifyContent={"start"}
                     spacing={2}
+                    sx={{ paddingInline: "0px", position: "relative" }}
                   >
                     <Select
                       error={phoneError}
                       MenuProps={MenuProps}
                       sx={{
-                        width: "100%",
-                        maxWidth: "100%",
+                        width: { xs: "92%" },
                         border: "1px solid #d84339",
                         backgroundColor: "#F3ECE5",
                         borderRadius: "15px",
                         height: "50px",
                       }}
                       id="demo-simple-select"
-                      // defaultValue={phones[phones.length-1]}
                       value={checkoutInfo.phone}
                       onChange={(e) =>
                         handleInfoChange({
@@ -231,7 +272,7 @@ function Checkout({
                       }
                     >
                       {phones.map((phone) => (
-                        <MenuItem key={phone} value={phone}>
+                        <MenuItem key={phone.phoneNumber} value={phone._id}>
                           {phone.phoneNumber}
                         </MenuItem>
                       ))}
@@ -240,7 +281,11 @@ function Checkout({
                       onClick={() => {
                         setAddNumberPopUp(true);
                       }}
-                      sx={{ "&:hover": { cursor: "pointer" } }}
+                      sx={{
+                        "&:hover": { cursor: "pointer" },
+                        position: "absolute",
+                        right: "0px",
+                      }}
                     >
                       <svg
                         width="24"
@@ -258,24 +303,28 @@ function Checkout({
                   </Stack>
                 </Box>
               </FormControl>
+              {phoneError && (
+                <Typography sx={{ color: "red", alignSelf: "start" }}>
+                  select an Number!
+                </Typography>
+              )}
               <FormControl fullWidth sx={{ marginTop: "8px" }}>
-                <Box>
+                <Box sx={{ marginInline: "auto", width: "100%" }}>
                   <Typography sx={{ color: "#111111BA", fontSize: "18px" }}>
                     Address
                   </Typography>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
-                    justifyContent={"center"}
+                    justifyContent={"start"}
                     spacing={2}
-                    sx={{ paddingInline: "0px" }}
+                    sx={{ paddingInline: "0px", position: "relative" }}
                   >
                     <Select
                       error={addressError}
-                      //  defaultValue={addresses[addresses.length-1]}
                       MenuProps={MenuProps}
                       sx={{
-                        width: "100%",
+                        width: { xs: "92%" },
                         border: "1px solid #d84339",
                         backgroundColor: "#F3ECE5",
                         borderRadius: "15px",
@@ -294,7 +343,7 @@ function Checkout({
                       }
                     >
                       {addresses.map((addresse) => (
-                        <MenuItem key={addresse} value={addresse}>
+                        <MenuItem key={addresse._id} value={addresse._id}>
                           {addresse.details}
                         </MenuItem>
                       ))}
@@ -303,7 +352,11 @@ function Checkout({
                       onClick={() => {
                         setAddAddressPopUp(true);
                       }}
-                      sx={{ "&:hover": { cursor: "pointer" } }}
+                      sx={{
+                        "&:hover": { cursor: "pointer" },
+                        position: "absolute",
+                        right: "0px",
+                      }}
                     >
                       <svg
                         width="24"
@@ -321,6 +374,52 @@ function Checkout({
                   </Stack>
                 </Box>
               </FormControl>
+              {addressError && (
+                <Typography sx={{ color: "red", alignSelf: "start" }}>
+                  select an Address!
+                </Typography>
+              )}
+              <FormControl fullWidth sx={{ marginTop: "8px" }}>
+                <Box sx={{ marginInline: "auto", width: "100%" }}>
+                  <Typography sx={{ color: "#111111BA", fontSize: "18px" }}>
+                    Payment method
+                  </Typography>
+                  <Stack
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"start"}
+                    spacing={2}
+                    sx={{ paddingInline: "0px", position: "relative" }}
+                  >
+                    <RadioGroup
+                      name="payment-method"
+                      value={paymentMethod}
+                      onChange={(e)=>setPaymentMethod(e.target.value)}
+                    >
+                      <FormControlLabel
+                        value="cash"
+                        control={<Radio />}
+                        label="cash"
+                      />
+                      <FormControlLabel
+                        value="stripe"
+                        control={<Radio />}
+                        label="stripe"
+                      />
+                    </RadioGroup>
+                  </Stack>
+                </Box>
+              </FormControl>
+              {paymentError && (
+                <Typography sx={{ color: "red", alignSelf: "start" }}>
+                  select a payment method!
+                </Typography>
+              )}
+              {error && (
+                <Typography sx={{ color: "red", alignSelf: "start" }}>
+                  {error}
+                </Typography>
+              )}
             </Stack>
           </Grid>
           {

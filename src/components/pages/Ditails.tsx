@@ -8,12 +8,16 @@ import {
   Stack,
   Typography,
   useTheme,
+  IconButton,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { IProduct } from "../../models/product.model";
 import axios from "../../api/axios";
 import CartContext from "../../context/CartProvider";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface IProps {}
 
@@ -35,29 +39,86 @@ const Details = ({}: IProps) => {
     restaurantId: "",
     title: "",
   });
-  const { setCartItems, setCartQuantity } = useContext(CartContext);
+  const {
+    setCartItems,
+    setCartQuantity,
+    setCartTotal,
+    restaurantId,
+    setRestaurantId,
+    cartItems,
+    calculateTotal,
+    calculateQuantity,
+  }: any = useContext(CartContext);
   const [showMore, setShowMore] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [isInCart, setIsInCart] = useState(false);
 
-  const handleAddItemToCart = async (productId: string) => {
+  const handleAddItemToCart = async (product: IProduct, quantity: number) => {
     try {
       const res = await axios.post(
         "/api/v1/cart",
         {
-          productId,
-          quantity: 1,
+          productId: product._id,
+          quantity: quantity,
         },
         {
           headers: { jwt: localStorage.getItem("token") },
         }
       );
+
+      if (restaurantId && restaurantId !== product.restaurantId) {
+        setCartItems([]);
+        setCartQuantity(0);
+        setCartTotal(0);
+      }
+
       setCartItems(res.data.itemsIds);
-      setCartQuantity((pre: number) => ++pre);
-    } catch (e) {}
+      setCartQuantity((prevQuantity: number) => prevQuantity + quantity);
+      setCartTotal((prevTotal: number) => prevTotal + product.price * quantity);
+      setRestaurantId(product.restaurantId);
+      setIsInCart(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleRemoveItemFromCart = async (productId: string) => {
+    try {
+      const res = await axios.delete(`/api/v1/cart/${productId}`, {
+        headers: { jwt: localStorage.getItem("token") },
+      });
+
+      setCartItems(res.data.itemsIds);
+      setCartQuantity((prevQuantity: number) => prevQuantity - 1);
+      setCartTotal((prevTotal: number) => prevTotal - productdetails.price);
+      setIsInCart(false);
+
+      if (res.data.itemsIds.length === 0) {
+        setRestaurantId("");
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   useEffect(() => {
     setProductDetails(location.state);
-  }, []);
+
+    if (location.state) {
+      const productInCart = cartItems.some(
+        (item: any) => item.productId === location.state._id
+      );
+      setIsInCart(productInCart);
+    }
+  }, [location.state, cartItems]);
+
+  const handleIncreaseQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const handleDecreaseQuantity = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+  };
 
   return (
     <>
@@ -87,7 +148,7 @@ const Details = ({}: IProps) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              height: "600px",
+              height: "700px",
             }}
           >
             <CardMedia
@@ -113,7 +174,7 @@ const Details = ({}: IProps) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            height: "600px",
+            height: "700px",
             overflowY: "auto",
           }}
         >
@@ -224,6 +285,34 @@ const Details = ({}: IProps) => {
                 </Grid>
               </Box>
             </div>
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+              sx={{ mt: { xs: "24px", md: "60px" } }}
+            >
+              <IconButton
+                color="primary"
+                sx={{ borderRadius: "50%", backgroundColor: "#f3ece4" }}
+                onClick={handleDecreaseQuantity}
+              >
+                <RemoveIcon />
+              </IconButton>
+              <Typography
+                variant="h6"
+                sx={{ fontSize: { xs: "20px", md: "24px" }, fontWeight: "700" }}
+              >
+                {quantity}
+              </Typography>
+              <IconButton
+                color="primary"
+                sx={{ borderRadius: "50%", backgroundColor: "#f3ece4" }}
+                onClick={handleIncreaseQuantity}
+              >
+                <AddIcon />
+              </IconButton>
+            </Stack>
             <Box
               sx={{
                 display: "flex",
@@ -231,23 +320,43 @@ const Details = ({}: IProps) => {
                 mt: { xs: "24px", md: "60px" },
               }}
             >
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{
-                  width: { xs: "100%", md: "577px" },
-                  height: "64px",
-                  borderRadius: "50px",
-                  padding: "10px",
-                  gap: "10px",
-                  fontSize: { xs: "20px", md: "24px" },
-                  fontWeight: "700",
-                }}
-                onClick={() => handleAddItemToCart(productdetails?._id)}
-              >
-                <ShoppingCartIcon />
-                Add To Cart
-              </Button>
+              {isInCart ? (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  sx={{
+                    width: { xs: "100%", md: "577px" },
+                    height: "64px",
+                    borderRadius: "50px",
+                    padding: "10px",
+                    gap: "10px",
+                    fontSize: { xs: "20px", md: "24px" },
+                    fontWeight: "700",
+                  }}
+                  onClick={() => handleRemoveItemFromCart(productdetails._id)}
+                >
+                  <DeleteIcon />
+                  Remove From Cart
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    width: { xs: "100%", md: "577px" },
+                    height: "64px",
+                    borderRadius: "50px",
+                    padding: "10px",
+                    gap: "10px",
+                    fontSize: { xs: "20px", md: "24px" },
+                    fontWeight: "700",
+                  }}
+                  onClick={() => handleAddItemToCart(productdetails, quantity)}
+                >
+                  <ShoppingCartIcon />
+                  Add To Cart
+                </Button>
+              )}
             </Box>
           </CardContent>
         </Grid>

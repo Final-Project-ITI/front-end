@@ -18,14 +18,15 @@ export default function Restaurants() {
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const handleGetCategories = async () => {
-    const res = await axios.get("/api/v1/categories/" + location.state);
-    setCategories(res.data);
-  };
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+
+  const handleGetCategories = async () => {
+    const res = await axios.get("/api/v1/categories/" + location.state);
+    setCategories(res.data);
+    console.log(res.data);
+  };
 
   useEffect(() => {
     getAllRestaurants();

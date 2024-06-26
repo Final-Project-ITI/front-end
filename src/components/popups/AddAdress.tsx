@@ -29,7 +29,7 @@ function AddAdress({setAddAddressPopUp,addAddress,setCheckoutInfo}:{setAddAddres
         }
       );
       addAddress(res.data);
-      setCheckoutInfo((pre:any )=> {return {phone:pre.phone,address:res.data}})
+      setCheckoutInfo((pre:any )=> {return {phone:pre.phone,address:res.data._id}})
 
     };
     if(address.length<50){

@@ -18,43 +18,67 @@ import AddAdress from "../popups/AddAdress";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
 import socket from "../../utils/socket";
+import { IPhone } from "../../models/phone.model";
+import { IAddress } from "../../models/address.model";
 const url = "http://localhost:3000/api/v1";
 
-function Checkout({
-  phones,
-  addresses,
-  addPhoneNumber,
-  addAddress
-}: {
-  phones: any[];
-  addresses: any[];
-  addPhoneNumber: (phone: string) => void;
-  addAddress: (address: string) => void;
-}) {
-  //@ts-ignore
-  const { emptyCart, cartTotal,restaurantId } = useContext(CartContext);
+function Checkout({}) {
+
+  const [phones, setPhones] = useState<IPhone[]>([]);
+  const [addresses, setAddresses] = useState<IAddress[]>([]);
+  const addPhoneNumber = (phone: any) => {
+    const newPhones = [...phones, phone];
+    setPhones(newPhones);
+  };
+  const addAddress = (address: any) => {
+    const newAddresses = [...addresses, address];
+    setAddresses(newAddresses);
+  };
+
+  const { emptyCart, cartTotal,restaurantId }:any = useContext(CartContext);
   const [submitOrderPopUp, setSubmitOrderPopUp] = useState(false);
   const [addNumberPopUp, setAddNumberPopUp] = useState(false);
   const [addAddressPopUp, setAddAddressPopUp] = useState(false);
   const [addressError, setAddressError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
+  const [error,setError]=useState("")
 
-  const [checkoutInfo, setCheckoutInfo] = useState({
-    phone: phones[phones.length - 1] || "",
-    address: addresses[addresses.length - 1] || "",
+  const [checkoutInfo, setCheckoutInfo] = useState<{phone:string;address:string}>({
+    phone:  "",
+    address: ""
   });
 
-  const ITEM_HEIGHT = 30;
-  const ITEM_PADDING_TOP = 8;
+
   const vat: number = 10;
 
   const handleInfoChange = (newCheckOutInfo: {
     address: string;
-    phone: string;
+    phone:string;
   }) => {
     setCheckoutInfo(newCheckOutInfo);
   };
   useEffect(() => {
+    const getUserAddresses = async () => {
+      const res = await axios.get(url + "/addresses", {
+        headers: { jwt: localStorage.getItem("token") },
+      });
+      if (!res.data.message) {
+        const newAddresses = res.data;
+        setAddresses(newAddresses);
+      }
+    };
+    const getUserPhones = async () => {
+      const res = await axios.get(url + "/phones", {
+        headers: { jwt: localStorage.getItem("token") },
+      });
+      if (!res.data.message) {
+        const newPhones = res.data;
+        setPhones(newPhones);
+      }
+    };
+
+    getUserAddresses();
+    getUserPhones();
 
     socket.on("connect", () => {
       console.log("Connected to the server");
@@ -67,29 +91,33 @@ function Checkout({
     return () => {
       socket.off("connect");
     };
+
+
+
   }, []);
 
   useEffect(()=>{
     if(phones.length ){
     setCheckoutInfo((pre)=>{return{
-      phone: phones[phones.length - 1],
+      phone: phones[phones.length - 1]._id,
       address: pre.address,
     }});}
   },[phones])
-  useEffect(()=>{
-   
+
+  useEffect(()=>{   
     if(addresses.length ){
     setCheckoutInfo((pre)=>{return{
       phone:pre.phone,
-      address:  addresses[addresses.length - 1],
+      address:  addresses[addresses.length - 1]._id,
     }});}
   },[addresses])
 
   const handlCheckout = () => {
     const fetchCheckout = async () => {
+      try{
       const res = await axios.post(
         url + "/orders/" + restaurantId + "/user",
-        { phoneId: checkoutInfo.phone._id,addressId:checkoutInfo.address._id },
+        { phoneId: checkoutInfo.phone,addressId:checkoutInfo.address },
         {
           headers: { jwt: localStorage.getItem("token") },
         }
@@ -100,6 +128,8 @@ function Checkout({
       if (res.status == 201) {
         emptyCart();
         setSubmitOrderPopUp(true);
+      }}catch(error){
+        setError(error.message)
       }
     };
     if (!checkoutInfo.phone) {
@@ -111,6 +141,7 @@ function Checkout({
     if (checkoutInfo.phone && checkoutInfo.address) {
       setAddressError(false);
       setPhoneError(false);
+      setError("")
       fetchCheckout();
     }
   };
@@ -231,7 +262,7 @@ function Checkout({
                       }
                     >
                       {phones.map((phone) => (
-                        <MenuItem key={phone} value={phone}>
+                        <MenuItem key={phone.phoneNumber} value={phone._id}>
                           {phone.phoneNumber}
                         </MenuItem>
                       ))}
@@ -258,6 +289,7 @@ function Checkout({
                   </Stack>
                 </Box>
               </FormControl>
+              {phoneError&&<Typography sx={{color:"red",alignSelf:"start"}}>select an Number!</Typography>}
               <FormControl fullWidth sx={{ marginTop: "8px" }}>
                 <Box>
                   <Typography sx={{ color: "#111111BA", fontSize: "18px" }}>
@@ -294,7 +326,7 @@ function Checkout({
                       }
                     >
                       {addresses.map((addresse) => (
-                        <MenuItem key={addresse} value={addresse}>
+                        <MenuItem key={addresse._id} value={addresse._id}>
                           {addresse.details}
                         </MenuItem>
                       ))}
@@ -321,6 +353,8 @@ function Checkout({
                   </Stack>
                 </Box>
               </FormControl>
+              {addressError&&<Typography sx={{color:"red",alignSelf:"start"}}>select an Address!</Typography>}
+              {error&&<Typography sx={{color:"red",alignSelf:"start"}}>{error}</Typography>}
             </Stack>
           </Grid>
           {

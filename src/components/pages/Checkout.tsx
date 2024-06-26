@@ -128,7 +128,7 @@ function Checkout({}) {
       if (res.status == 201) {
         emptyCart();
         setSubmitOrderPopUp(true);
-      }}catch(error){
+      }}catch(error:any){
         setError(error.message)
       }
     };

@@ -160,9 +160,9 @@ function App() {
                   />
                 }
               />
-              <Route path="/paymentSuccess" element={<PaymentSuccess />} />
               <Route path="/cart" element={<Cart />} />
             </Route>
+            <Route path="/paymentSuccess" element={<PaymentSuccess />} />
 
             <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />

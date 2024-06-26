@@ -27,6 +27,7 @@ export default function Card() {
             color: "black",
             textAlign: "center",
             marginBottom: "70px",
+            paddingBottom: "30px",
           }}
         >
           Why Us

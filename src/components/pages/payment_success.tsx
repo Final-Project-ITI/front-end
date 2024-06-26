@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { styled, keyframes } from "@mui/system";
 import successImage from "../../assets/images/payment.png";
+import CartContext from "../../context/CartProvider";
 
 const fadeIn = keyframes`
   from {
@@ -44,6 +45,13 @@ const AnimatedButton = styled(Button)({
 export default function PaymentSuccess() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { emptyCart}: any = useContext(CartContext);
+
+
+  useEffect(()=>{
+    emptyCart()
+
+  },[])
 
   const handleHomeNavigation = () => {
     setLoading(true);

@@ -149,29 +149,9 @@ function Checkout({}) {
   const MenuProps = {
     PaperProps: {
       style: {
-        // maxHeight: ITEM_HEIGHT * 4 + ITEM_PADDING_TOP,
         width: 250,
         borderRadius: "15px",
         border: "1px solid #d84339",
-
-        // "&::-webkit-scrollbar": {
-        //   width: "5px",
-        //   height: "8px",
-        //   backgroundColor: "red",
-        //   color:"red"
-        // },
-        // "&.::-webkit-scrollbar-track": {
-        //   width: "5px",
-        //   height: "8px",
-        //   backgroundColor: "red",
-        //   color:"red"
-        // },
-        // "&::-webkit-scrollbar-thumb": {
-        //   width: "5px",
-        //   height: "8px",
-        //   backgroundColor: "red",
-        //   color:"red"
-        // }
       },
     },
   };
@@ -230,29 +210,28 @@ function Checkout({}) {
                 contact info
               </Typography>
               <FormControl fullWidth>
-                <Box>
+                <Box sx={{marginInline:"auto",width:"100%"}}>
                   <Typography sx={{ color: "#111111BA", fontSize: "18px" }}>
                     Phone Number
                   </Typography>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
-                    justifyContent={"center"}
+                    justifyContent={"start"}
                     spacing={2}
+                    sx={{ paddingInline: "0px",position:"relative" }}
                   >
                     <Select
                       error={phoneError}
                       MenuProps={MenuProps}
                       sx={{
-                        width: "100%",
-                        maxWidth: "100%",
+                        width: {xs:"92%"},
                         border: "1px solid #d84339",
                         backgroundColor: "#F3ECE5",
                         borderRadius: "15px",
                         height: "50px",
                       }}
                       id="demo-simple-select"
-                      // defaultValue={phones[phones.length-1]}
                       value={checkoutInfo.phone}
                       onChange={(e) =>
                         handleInfoChange({
@@ -271,7 +250,7 @@ function Checkout({}) {
                       onClick={() => {
                         setAddNumberPopUp(true);
                       }}
-                      sx={{ "&:hover": { cursor: "pointer" } }}
+                      sx={{ "&:hover": { cursor: "pointer" },position:"absolute",right:"0px" }}
                     >
                       <svg
                         width="24"
@@ -291,23 +270,22 @@ function Checkout({}) {
               </FormControl>
               {phoneError&&<Typography sx={{color:"red",alignSelf:"start"}}>select an Number!</Typography>}
               <FormControl fullWidth sx={{ marginTop: "8px" }}>
-                <Box>
+                <Box sx={{marginInline:"auto",width:"100%"}}>
                   <Typography sx={{ color: "#111111BA", fontSize: "18px" }}>
                     Address
                   </Typography>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
-                    justifyContent={"center"}
+                    justifyContent={"start"}
                     spacing={2}
-                    sx={{ paddingInline: "0px" }}
+                    sx={{ paddingInline: "0px",position:"relative" }}
                   >
                     <Select
                       error={addressError}
-                      //  defaultValue={addresses[addresses.length-1]}
                       MenuProps={MenuProps}
                       sx={{
-                        width: "100%",
+                        width: {xs:"92%"},
                         border: "1px solid #d84339",
                         backgroundColor: "#F3ECE5",
                         borderRadius: "15px",
@@ -335,7 +313,7 @@ function Checkout({}) {
                       onClick={() => {
                         setAddAddressPopUp(true);
                       }}
-                      sx={{ "&:hover": { cursor: "pointer" } }}
+                      sx={{ "&:hover": { cursor: "pointer" } ,position:"absolute",right:"0px"}}
                     >
                       <svg
                         width="24"

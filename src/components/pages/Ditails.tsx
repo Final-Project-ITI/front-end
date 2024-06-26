@@ -48,7 +48,7 @@ const Details = ({}: IProps) => {
     cartItems,
     calculateTotal,
     calculateQuantity,
-  }:any = useContext(CartContext);
+  }: any = useContext(CartContext);
   const [showMore, setShowMore] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [isInCart, setIsInCart] = useState(false);
@@ -93,7 +93,6 @@ const Details = ({}: IProps) => {
       setCartTotal((prevTotal: number) => prevTotal - productdetails.price);
       setIsInCart(false);
 
-      // If the cart is empty, reset the restaurantId
       if (res.data.itemsIds.length === 0) {
         setRestaurantId("");
       }
@@ -107,7 +106,7 @@ const Details = ({}: IProps) => {
 
     if (location.state) {
       const productInCart = cartItems.some(
-        (item:any) => item.productId === location.state._id
+        (item: any) => item.productId === location.state._id
       );
       setIsInCart(productInCart);
     }

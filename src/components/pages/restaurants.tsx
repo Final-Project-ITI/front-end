@@ -22,6 +22,12 @@ export default function Restaurants() {
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
+  const handleGetCategories = async () => {
+    const res = await axios.get("/api/v1/categories/" + location.state);
+    setCategories(res.data);
+    console.log(res.data);
+  };
+
   useEffect(() => {
     getAllRestaurants();
     handleGetCategories();
@@ -35,15 +41,6 @@ export default function Restaurants() {
     try {
       const { data } = await axios.get("/api/v1/restaurant/");
       setRestaurants(data);
-    } catch (err: any) {
-      console.error(err.response?.data || err.message, "err");
-    }
-  };
-
-  const handleGetCategories = async () => {
-    try {
-      const res = await axios.get("/api/v1/categories/" + location.state);
-      setCategories(res.data);
     } catch (err: any) {
       console.error(err.response?.data || err.message, "err");
     }

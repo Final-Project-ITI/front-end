@@ -167,7 +167,7 @@ export default function Restaurants() {
             </div>
           ))}
         </Stack>
-        <Stack direction="row" spacing={2} alignItems="center">
+       {Math.ceil(filteredRestaurants.length / itemsInPage)>1 &&  <Stack direction="row" spacing={2} alignItems="center">
           <Button sx={{ fontSize: "2rem" }} onClick={handlePrev}>
             &larr;
           </Button>
@@ -177,7 +177,7 @@ export default function Restaurants() {
           <Button sx={{ fontSize: "2rem" }} onClick={handleNext}>
             &rarr;
           </Button>
-        </Stack>
+        </Stack>}
       </Stack>
     </div>
   );

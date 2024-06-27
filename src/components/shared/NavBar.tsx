@@ -11,11 +11,12 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import logo from "../../assets/logo.svg";
 import { Divider, Stack } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CartContext from "../../context/CartProvider";
 import axios from "axios";
 import socket from "../../utils/socket";
 import { jwtDecode } from "jwt-decode";
+import { useEffect } from "react";
 
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 
@@ -24,11 +25,11 @@ const pages = ["Home", "Resturants", "why us"];
 function NavBar({
   isUser,
   setisUser,
-  whyUsRef,
+  whyUsRef
 }: {
   isUser: boolean;
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
-  whyUsRef: React.MutableRefObject<undefined>;
+  whyUsRef: React.MutableRefObject<undefined>
 }) {
   //@ts-ignore
   const { cartQuantity } = React.useContext(CartContext);
@@ -36,6 +37,7 @@ function NavBar({
   const [newNotification, setNewNotification] = React.useState<any>({});
   const [showNotifications, setShowNotifications] = React.useState(false);
   const navigate = useNavigate();
+  const location= useLocation()
 
   const scrollToWhyUs = () => {
     const { current } = whyUsRef;
@@ -175,7 +177,7 @@ function NavBar({
                       if (page == "Resturants") {
                         navigate("/restaurants");
                       } else if (page.toLowerCase() === "why us") {
-                        scrollToWhyUs();
+                        location.pathname=="/"?scrollToWhyUs():navigate("/",{ state: { section: "why us" } })
                       } else {
                         navigate("/");
                       }
@@ -257,7 +259,7 @@ function NavBar({
                     if (page == "Resturants") {
                       navigate("/restaurants");
                     } else if (page.toLowerCase() === "why us") {
-                      scrollToWhyUs();
+                      location.pathname=="/"?scrollToWhyUs():navigate("/",{ state: { section: "why us" } })
                     } else {
                       navigate("/");
                     }

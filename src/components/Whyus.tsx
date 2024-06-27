@@ -16,6 +16,7 @@ export default function Card() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "20px",
+          marginBottom:"60px"
         }}
       >
         <Typography

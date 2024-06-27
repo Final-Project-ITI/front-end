@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Stack,
@@ -45,6 +45,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   color: "gray",
 }));
 
+
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
@@ -58,11 +59,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Home({
-  whyUsRef,
-}: {
-  whyUsRef: React.MutableRefObject<undefined>;
-}) {
+export default function Home({whyUsRef}:{whyUsRef: React.MutableRefObject<undefined>}) {
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
@@ -90,6 +87,27 @@ export default function Home({
   const handleSearchSubmit = () => {
     navigate(`/restaurants?search=${searchRest}`);
   };
+
+const location = useLocation();
+
+
+
+
+
+const scrollToWhyUs = () => {
+  const { current } = whyUsRef;
+  if (current !== null) {
+    //@ts-ignore
+    current.scrollIntoView({ behavior: "smooth" });
+  }
+};
+
+useEffect(()=>{
+    if(location?.state?.section){
+      scrollToWhyUs();
+    }
+},[]);
+
 
   return (
     <>
@@ -230,7 +248,7 @@ export default function Home({
             </Link>
           </Stack>
         </Box>
-        <Box sx={{ marginTop: "40px" }} ref={whyUsRef}>
+        <Box sx={{ marginTop: "0px" }} ref={whyUsRef}>
           <Card />
         </Box>
       </div>

@@ -25,11 +25,11 @@ const pages = ["Home", "Resturants", "why us"];
 function NavBar({
   isUser,
   setisUser,
-  whyUsRef
+  whyUsRef,
 }: {
   isUser: boolean;
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
-  whyUsRef: React.MutableRefObject<undefined>
+  whyUsRef: React.MutableRefObject<undefined>;
 }) {
   //@ts-ignore
   const { cartQuantity } = React.useContext(CartContext);
@@ -37,7 +37,7 @@ function NavBar({
   const [newNotification, setNewNotification] = React.useState<any>({});
   const [showNotifications, setShowNotifications] = React.useState(false);
   const navigate = useNavigate();
-  const location= useLocation()
+  const location = useLocation();
 
   const scrollToWhyUs = () => {
     const { current } = whyUsRef;
@@ -74,6 +74,7 @@ function NavBar({
         setNotifications(res.data);
       }
     }
+    console,log(notifications)
   };
 
   const handleGetNotificationById = async (id: string) => {
@@ -177,7 +178,9 @@ function NavBar({
                       if (page == "Resturants") {
                         navigate("/restaurants");
                       } else if (page.toLowerCase() === "why us") {
-                        location.pathname=="/"?scrollToWhyUs():navigate("/",{ state: { section: "why us" } })
+                        location.pathname == "/"
+                          ? scrollToWhyUs()
+                          : navigate("/", { state: { section: "why us" } });
                       } else {
                         navigate("/");
                       }
@@ -259,7 +262,9 @@ function NavBar({
                     if (page == "Resturants") {
                       navigate("/restaurants");
                     } else if (page.toLowerCase() === "why us") {
-                      location.pathname=="/"?scrollToWhyUs():navigate("/",{ state: { section: "why us" } })
+                      location.pathname == "/"
+                        ? scrollToWhyUs()
+                        : navigate("/", { state: { section: "why us" } });
                     } else {
                       navigate("/");
                     }
@@ -335,20 +340,38 @@ function NavBar({
                   <Button
                     onClick={() => {
                       setShowNotifications((pre) => !pre);
+                      if (newNotification._id) {
+                        setNewNotification({});
+                      }
                     }}
                   >
-                    <svg
-                      width="24"
-                      height="64"
-                      viewBox="0 0 24 64"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M21 26.5C21 28.43 19.43 30 17.5 30C15.57 30 14 28.43 14 26.5C14 24.57 15.57 23 17.5 23C19.43 23 21 24.57 21 26.5ZM19 31.79C18.5 31.92 18 32 17.5 32C16.0421 31.9974 14.6447 31.4171 13.6138 30.3862C12.583 29.3553 12.0026 27.9579 12 26.5C12 25.03 12.58 23.7 13.5 22.71C13.3185 22.4875 13.0897 22.3084 12.8302 22.1855C12.5707 22.0627 12.2871 21.9993 12 22C10.9 22 10 22.9 10 24V24.29C7.03 25.17 5 27.9 5 31V37L3 39V40H21V39L19 37V31.79ZM12 43C13.11 43 14 42.11 14 41H10C10 41.5304 10.2107 42.0391 10.5858 42.4142C10.9609 42.7893 11.4696 43 12 43Z"
-                        fill="#111111"
-                      />
-                    </svg>
+                    {newNotification._id ? (
+                      <svg
+                        width="24"
+                        height="64"
+                        viewBox="0 0 24 64"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M21 26.5C21 28.43 19.43 30 17.5 30C15.57 30 14 28.43 14 26.5C14 24.57 15.57 23 17.5 23C19.43 23 21 24.57 21 26.5ZM19 31.79C18.5 31.92 18 32 17.5 32C16.0421 31.9974 14.6447 31.4171 13.6138 30.3862C12.583 29.3553 12.0026 27.9579 12 26.5C12 25.03 12.58 23.7 13.5 22.71C13.3185 22.4875 13.0897 22.3084 12.8302 22.1855C12.5707 22.0627 12.2871 21.9993 12 22C10.9 22 10 22.9 10 24V24.29C7.03 25.17 5 27.9 5 31V37L3 39V40H21V39L19 37V31.79ZM12 43C13.11 43 14 42.11 14 41H10C10 41.5304 10.2107 42.0391 10.5858 42.4142C10.9609 42.7893 11.4696 43 12 43Z"
+                          fill="#111111"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.9997 2C10.1432 2 8.36269 2.7375 7.04994 4.05025C5.73718 5.36301 4.99969 7.14348 4.99969 9V12.528C4.99983 12.6831 4.96388 12.8362 4.89469 12.975L3.17769 16.408C3.09381 16.5757 3.05421 16.7621 3.06263 16.9494C3.07106 17.1368 3.12724 17.3188 3.22583 17.4783C3.32442 17.6379 3.46216 17.7695 3.62595 17.8608C3.78975 17.9521 3.97416 18 4.16169 18H19.8377C20.0252 18 20.2096 17.9521 20.3734 17.8608C20.5372 17.7695 20.675 17.6379 20.7735 17.4783C20.8721 17.3188 20.9283 17.1368 20.9367 16.9494C20.9452 16.7621 20.9056 16.5757 20.8217 16.408L19.1057 12.975C19.0361 12.8362 18.9999 12.6832 18.9997 12.528V9C18.9997 7.14348 18.2622 5.36301 16.9494 4.05025C15.6367 2.7375 13.8562 2 11.9997 2ZM11.9997 21C11.379 21.0003 10.7736 20.8081 10.2667 20.4499C9.75985 20.0917 9.37657 19.5852 9.16969 19H14.8297C14.6228 19.5852 14.2395 20.0917 13.7327 20.4499C13.2258 20.8081 12.6203 21.0003 11.9997 21Z"
+                          fill="#111111"
+                        />
+                      </svg>
+                    )}
                   </Button>
                   {showNotifications && (
                     <Stack
@@ -382,49 +405,55 @@ function NavBar({
                         }}
                         alignItems={"flex-start"}
                       >
-                        {notifications.map((notification: any) => (
-                          <Stack
-                            direction={"row"}
-                            color={"black"}
-                            alignItems={"center"}
-                            marginBottom={"10px"}
-                            key={notification?._id}
-                          >
-                            <img
-                              src={
-                                notification?.notificationType.restaurantIcon
-                              }
-                              title="icon"
-                              style={{
-                                objectFit: "cover",
-                                width: "64px",
-                                height: "64px",
-                                borderRadius: "50%",
-                                marginRight: "10px",
-                              }}
-                            />
-                            <Box>
-                              <Stack direction={"row"}>
-                                {" "}
-                                <Typography>Your order has been </Typography>
-                                <Typography
-                                  fontWeight={"bold"}
-                                  marginLeft={"5px"}
-                                >
-                                  {notification?.notificationType.name}
-                                </Typography>
+                        {notifications.length
+                          ? notifications.map((notification: any) => (
+                              <Stack
+                                direction={"row"}
+                                color={"black"}
+                                alignItems={"center"}
+                                marginBottom={"10px"}
+                                key={notification?._id}
+                              >
+                                <img
+                                  src={
+                                    notification?.notificationType
+                                      ?.restaurantIcon
+                                  }
+                                  title="icon"
+                                  style={{
+                                    objectFit: "cover",
+                                    width: "64px",
+                                    height: "64px",
+                                    borderRadius: "50%",
+                                    marginRight: "10px",
+                                  }}
+                                />
+                                <Box>
+                                  <Stack direction={"row"}>
+                                    {" "}
+                                    <Typography>
+                                      Your order has been{" "}
+                                    </Typography>
+                                    <Typography
+                                      fontWeight={"bold"}
+                                      marginLeft={"5px"}
+                                    >
+                                      {notification?.notificationType?.name}
+                                    </Typography>
+                                  </Stack>
+                                  <Typography fontSize={"small"} color={"gray"}>
+                                    {handleDate(notification?.createdAt)}
+                                  </Typography>
+                                </Box>
                               </Stack>
-                              <Typography fontSize={"small"} color={"gray"}>
-                                {handleDate(notification?.createdAt)}
-                              </Typography>
-                            </Box>
-                          </Stack>
-                        ))}
+                            ))
+                          : ""}
                       </Stack>
                     </Stack>
                   )}
                 </Box>
               )}
+
               {!isUser && (
                 <>
                   {" "}

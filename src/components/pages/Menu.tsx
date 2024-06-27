@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "../../api/axios";
 import { IMenuCategory } from "../../models/menuCategory.model";
@@ -15,8 +15,9 @@ export const Menu = () => {
 
   const [menu, setMenu] = useState<IProduct[]>([]);
   const [categories, setCategories] = useState<IMenuCategory[]>([]);
-  //@ts-ignore
   const [restaurantInfo, setRestaurantInfo] = useState<IRestaurant>({});
+
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const handleGetMenuItems = async () => {
     const res = await axios.get("/api/v1/products/" + location.state);
@@ -26,7 +27,7 @@ export const Menu = () => {
     const res = await axios.get("/api/v1/categories/" + location.state);
     setCategories(res.data);
   };
-  const handleGetRestauarntInfo = async () => {
+  const handleGetRestaurantInfo = async () => {
     const res = await axios.get("/api/v1/restaurant/" + location.state);
     setRestaurantInfo(res.data);
   };
@@ -34,16 +35,21 @@ export const Menu = () => {
   useEffect(() => {
     handleGetMenuItems();
     handleGetCategories();
-    handleGetRestauarntInfo();
+    handleGetRestaurantInfo();
   }, []);
 
   return (
     <>
       <Image restaurantInfo={restaurantInfo} />
       <About restaurantInfo={restaurantInfo} />
-      <Section categories={categories} />
+      <Section categories={categories} sectionRefs={sectionRefs} />
       {categories.map((category) => (
-        <Box id={category._id} key={category._id}>
+        <Box
+          id={category._id}
+          key={category._id}
+          ref={(el) => (sectionRefs.current[category._id] = el)}
+          sx={{ marginBottom: "-280px" }}
+        >
           <Category
             name={category.name}
             products={menu.filter(
@@ -52,6 +58,7 @@ export const Menu = () => {
           />
         </Box>
       ))}
+      <Box marginBottom={"100px"}></Box>
     </>
   );
 };

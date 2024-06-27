@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Box, Stack, Typography, Button } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import "../../styles/restaurant.css";
 import img from "../../assets/images/21.png";
 import img2 from "../../assets/images/22.png";
 import axios from "../../api/axios";
+import Section from "../shared/Section";
+import { IMenuCategory } from "../../models/menuCategory.model";
 
 const itemsInPage = 8;
 
@@ -12,6 +14,14 @@ export default function Restaurants() {
   const [restaurants, setRestaurants] = useState([]);
   const [page, setPage] = useState(0);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [categories, setCategories] = useState<IMenuCategory[]>([]);
+
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const handleGetCategories = async () => {
+    const res = await axios.get("/api/v1/categories/" + location.state);
+    setCategories(res.data);
+  };
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -19,6 +29,7 @@ export default function Restaurants() {
 
   useEffect(() => {
     getAllRestaurants();
+    handleGetCategories();
   }, []);
 
   useEffect(() => {
@@ -123,6 +134,7 @@ export default function Restaurants() {
         sx={{ minHeight: "800px", background: "#f3ece4" }}
         spacing={4}
       >
+        <Section categories={categories} sectionRefs={sectionRefs} />
         <Stack
           direction="row"
           justifyContent="center"

@@ -1,13 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Grid,
-  useTheme,
-  Button,
-  Stack,
-} from "@mui/material";
+import { CardMedia, Typography, useTheme, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { IProduct } from "../../models/product.model";
 import axios from "../../api/axios";
@@ -21,8 +12,13 @@ interface ProductProps {
 const Product = ({ product }: ProductProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
-//@ts-ignore
-  const { setCartItems, setCartQuantity,setRestaurantId,calculateTotal,calculateQuantity } = useContext(CartContext);
+  const {
+    setCartItems,
+    setCartQuantity,
+    setRestaurantId,
+    calculateTotal,
+    calculateQuantity,
+  } = useContext(CartContext);
 
   const handleAddItemToCart = async (productId: string) => {
     try {
@@ -42,7 +38,7 @@ const Product = ({ product }: ProductProps) => {
       setCartItems(res.data.itemsIds);
       calculateTotal(res.data.itemsIds);
       calculateQuantity(res.data.itemsIds);
-      if(res.data.itemsIds.length==1){
+      if (res.data.itemsIds.length == 1) {
         setRestaurantId(res.data.itemsIds[0].productId.restaurantId);
       }
     } catch (e) {}

@@ -13,55 +13,53 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
 
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function Cart() {
   //@ts-ignore
-  const {cartItems,cartQuantity,cartTotal,editItemQuantity,deleteItemQuantity }= useContext(CartContext)
+  const {
+    cartItems,
+    cartQuantity,
+    cartTotal,
+    editItemQuantity,
+    deleteItemQuantity,
+  } = useContext(CartContext);
   const navigate = useNavigate();
   const vat = 10;
 
-  const handleDeleteItem=(item:any)=>{
-    deleteItemQuantity(item.productId._id)
+  const handleDeleteItem = (item: any) => {
+    deleteItemQuantity(item.productId._id);
 
     const fetchDeleteItem = async () => {
-      const res = await axios.delete(
-        url + "/cart/"+item._id,
-        {
-          headers: { jwt: localStorage.getItem("token") },
-        }
-      );
-      
-      
+      const res = await axios.delete(url + "/cart/" + item._id, {
+        headers: { jwt: localStorage.getItem("token") },
+      });
     };
-    fetchDeleteItem()
-    
-  }
+    fetchDeleteItem();
+  };
 
-  const handleEditItemQuantity=(item:any,newQuantity:number)=>{
+  const handleEditItemQuantity = (item: any, newQuantity: number) => {
     if (item.quantity + newQuantity < 0) {
       return;
     } else if (item.quantity + newQuantity === 0) {
-       handleDeleteItem(item);
+      handleDeleteItem(item);
       return;
     }
-    editItemQuantity(item.productId._id, newQuantity)
+    editItemQuantity(item.productId._id, newQuantity);
     const fetchEditItemQuantity = async () => {
       const res = await axios.patch(
-        url + "/cart/"+item._id,
+        url + "/cart/" + item._id,
         {
-          quantity: item.quantity+newQuantity,
+          quantity: item.quantity + newQuantity,
         },
         {
           headers: { jwt: localStorage.getItem("token") },
         }
       );
-      console.log(res)
-     
-
+      console.log(res);
     };
-    fetchEditItemQuantity()
-  }
+    fetchEditItemQuantity();
+  };
   return (
     <>
       <Container maxWidth="xl">
@@ -160,7 +158,7 @@ function Cart() {
                 </Stack>
               )}
 
-              {cartItems.map((item:any) => (
+              {cartItems.map((item: any) => (
                 <Stack
                   key={item.productId._id}
                   direction={"row"}
@@ -168,13 +166,36 @@ function Cart() {
                   alignItems={"center"}
                   sx={{ marginBottom: "10px" }}
                 >
-                  <Box sx={{ height: { xs: "38px", sm: "50px", md: "64px" }, width: { xs: "70px", sm: "80px", md: "90px" } }}>
-                    <img className="imageFit" src={item.productId.icon?item.productId.icon:"https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"} />
+                  <Box
+                    sx={{
+                      height: { xs: "38px", sm: "50px", md: "64px" },
+                      width: { xs: "70px", sm: "80px", md: "90px" },
+                    }}
+                  >
+                    <img
+                      className="imageFit"
+                      src={
+                        item.productId.icon
+                          ? item.productId.icon
+                          : "https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"
+                      }
+                    />
                   </Box>
                   <Typography
                     title={item.productId.title}
                     sx={{
-                      maxWidth:{xs:"30vw"},fontSize: { xs: "0.8rem", sm: "1.1rem", md: "19px",xl:"24px" },display: "block" , overflow: "hidden",whiteSpace:"nowrap",textOverflow:" ellipsis",msTextOverflow:"ellipsis"
+                      maxWidth: { xs: "30vw" },
+                      fontSize: {
+                        xs: "0.8rem",
+                        sm: "1.1rem",
+                        md: "19px",
+                        xl: "24px",
+                      },
+                      display: "block",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      textOverflow: " ellipsis",
+                      msTextOverflow: "ellipsis",
                     }}
                   >
                     {item.productId.title}
@@ -215,7 +236,12 @@ function Cart() {
 
                       <Typography
                         sx={{
-                          fontSize: { xs: "0.8rem", sm: "1.1rem",  md: "19px",xl:"24px"},
+                          fontSize: {
+                            xs: "0.8rem",
+                            sm: "1.1rem",
+                            md: "19px",
+                            xl: "24px",
+                          },
                         }}
                       >
                         {item.quantity}
@@ -226,7 +252,7 @@ function Cart() {
                           height: { xs: "25px", sm: "30px", md: "40px" },
                           width: { xs: "25px", sm: "30px", md: "40px" },
                         }}
-                        onClick={() =>handleEditItemQuantity(item, 1) }
+                        onClick={() => handleEditItemQuantity(item, 1)}
                       >
                         <svg
                           width="100%"
@@ -244,7 +270,12 @@ function Cart() {
                     </Stack>
                     <Typography
                       sx={{
-                        fontSize: { xs: "0.8rem", sm: "1.1rem", md: "19px",xl:"24px" },
+                        fontSize: {
+                          xs: "0.8rem",
+                          sm: "1.1rem",
+                          md: "19px",
+                          xl: "24px",
+                        },
                         fontWeight: "700",
                       }}
                     >

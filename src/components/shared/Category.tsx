@@ -19,10 +19,8 @@ const Category = ({ name, products }: IProps) => {
           alignItems="center"
           sx={{
             height: "40vh",
-            fontWeight: "bold",
-            fontSize: "32px",
-            mt: -5,
-            mb: 0,
+            fontWeight: "700",
+            fontSize: "40px",
           }}
         >
           {name}

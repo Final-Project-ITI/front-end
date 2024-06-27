@@ -18,20 +18,37 @@ import Ditails from "./components/pages/Ditails.tsx";
 import UserInfoAndOrders from "./components/pages/UserInfoAndOrders.tsx";
 import axios from "axios";
 import CartContext from "./context/CartProvider.tsx";
-const url="http://localhost:3000/api/v1"
+import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
+import IsAuthGuard from "./guards/IsAuthGuard.tsx";
+import { jwtDecode } from "jwt-decode";
+import { IPayload } from "./models/payload.mode.ts";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 function App() {
   const path = useLocation().pathname;
   const [openSideCart, setOpenSideCart] = useState(false);
 
   const [isUser, setisUser] = useState(false);
 
-  //@ts-ignore
-  const {cartItems, setCartItems,cartQuantity, setCartQuantity,cartTotal, setCartTotal ,emptyCart,deleteItemQuantity,editItemQuantity,calculateTotal ,calculateQuantity,restaurantId, setRestaurantId}=useContext(CartContext)
+  const {
+    cartItems,
+    setCartItems,
+    cartQuantity,
+    setCartQuantity,
+    cartTotal,
+    setCartTotal,
+    emptyCart,
+    deleteItemQuantity,
+    editItemQuantity,
+    calculateTotal,
+    calculateQuantity,
+    restaurantId,
+    setRestaurantId,
+  }: any = useContext(CartContext);
 
   const [phones, setPhones] = useState<string[]>([]);
   const [addresses, setAddresses] = useState<string[]>([]);
 
-  const whyUsRef = useRef()
+  const whyUsRef = useRef();
 
   useEffect(() => {
     const getUserCart = async () => {
@@ -65,16 +82,30 @@ function App() {
       }
     };
     // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
+
     if (localStorage.getItem("token")) {
-      setisUser(true);
-      getUserCart();
-      getUserAddresses();
-      getUserPhones();
+      const token = localStorage.getItem("token");
+      const payload: IPayload | null = token ? jwtDecode(token) : null;
+      //@ts-ignore
+      const expDate = payload?.exp * 1000;
+      const nowDate = new Date().getTime();
+
+      if (expDate > nowDate) {
+        setisUser(true);
+        getUserCart();
+        getUserAddresses();
+        getUserPhones();
+      } else {
+        localStorage.removeItem("token");
+      }
     } else {
       setisUser(false);
+      setCartItems([]);
+      setRestaurantId("");
+      setCartQuantity(0);
+      setCartTotal(0);
     }
   }, [isUser]);
-
 
   const addPhoneNumber = (phone: any) => {
     const newPhones = [...phones, phone];
@@ -97,49 +128,49 @@ function App() {
             position: "relative",
           }}
         >
-          {(path!=="/register" && path!=="/login" )&&<NavBar
-            isUser={isUser}
-            setisUser={setisUser}
-            whyUsRef={whyUsRef}
-          ></NavBar>}
+          {path !== "/register" && path !== "/login" && (
+            <NavBar
+              isUser={isUser}
+              setisUser={setisUser}
+              whyUsRef={whyUsRef}
+            ></NavBar>
+          )}
           <Routes>
             <Route path="/menu" element={<Menu />} />
 
             <Route path="/productdetails" element={<Ditails />} />
-            <Route path="/userinfo" element={<UserInfoAndOrders />} />
-            <Route
-              path="/register"
-              element={<Register setisUser={setisUser} />}
-            />
-            <Route path="/login" element={<Login setisUser={setisUser} />} />
+            <Route element={<IsNotAuthGuard />}>
+              <Route
+                path="/register"
+                element={<Register setisUser={setisUser} />}
+              />
+              <Route path="/login" element={<Login setisUser={setisUser} />} />
+            </Route>
+            <Route element={<IsAuthGuard role={"user"} />}>
+              <Route path="/userinfo" element={<UserInfoAndOrders />} />
+              <Route
+                path="/checkout"
+                element={
+                  <Checkout
+                    phones={phones}
+                    addresses={addresses}
+                    addPhoneNumber={addPhoneNumber}
+                    addAddress={addAddress}
+                  />
+                }
+              />
+              <Route path="/cart" element={<Cart />} />
+            </Route>
+
             <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />
-            <Route
-              path="/checkout"
-              element={
-                <Checkout                
-                  phones={phones}
-                  addresses={addresses}
-                  addPhoneNumber={addPhoneNumber}
-                  addAddress={addAddress}
-                />
-              }
-            />
-            <Route
-              path="/cart"
-              element={
-                <Cart            />
-              }
-            />
           </Routes>
           {path !== "/register" && path !== "/login" && <Footer></Footer>}
         </Stack>
-        {openSideCart && (
-          <SideCart
-            setOpenSideCart={setOpenSideCart}
-          />
+        {openSideCart && <SideCart setOpenSideCart={setOpenSideCart} />}
+        {path !== "/register" && path !== "/login" && path !== "/cart" && (
+          <CartIcon setOpenSideCart={setOpenSideCart} />
         )}
-        {(path!=="/register" && path!=="/login" && path!=="/cart" )&&<CartIcon setOpenSideCart={setOpenSideCart} />}
       </ThemeProvider>
     </>
   );

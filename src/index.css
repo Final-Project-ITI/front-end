@@ -13,8 +13,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.imageFit{
+.imageFit {
   height: 100%;
   width: 100%;
   object-fit: cover;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #d74339;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

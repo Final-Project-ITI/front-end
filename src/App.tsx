@@ -63,7 +63,6 @@ function App() {
       }
     };
 
-    // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
 
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
@@ -130,7 +129,7 @@ function App() {
           {path !== "/register" && path !== "/login" && <Footer></Footer>}
         </Stack>
         {openSideCart && <SideCart setOpenSideCart={setOpenSideCart} />}
-        {path !== "/register" && path !== "/login" && path !== "/cart" && (
+        {path !== "/register" && path !== "/login" && path !== "/cart" && isUser && (
           <CartIcon setOpenSideCart={setOpenSideCart} />
         )}
       </ThemeProvider>

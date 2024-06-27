@@ -63,22 +63,26 @@ function NavBar({
   };
 
   const handleGetNotifications = async () => {
-    const res = await axios.get(url + "/notification/user", {
-      headers: { jwt: localStorage.getItem("token") },
-    });
+    if (isUser) {
+      const res = await axios.get(url + "/notification/user", {
+        headers: { jwt: localStorage.getItem("token") },
+      });
 
-    if (res.status == 200) {
-      setNotifications(res.data);
+      if (res.status == 200) {
+        setNotifications(res.data);
+      }
     }
   };
 
   const handleGetNotificationById = async (id: string) => {
-    const res = await axios.get(url + "/notification/user/" + id, {
-      headers: { jwt: localStorage.getItem("token") },
-    });
+    if (isUser) {
+      const res = await axios.get(url + "/notification/user/" + id, {
+        headers: { jwt: localStorage.getItem("token") },
+      });
 
-    if (res.status == 200) {
-      setNewNotification(res.data);
+      if (res.status == 200) {
+        setNewNotification(res.data);
+      }
     }
   };
 
@@ -104,18 +108,20 @@ function NavBar({
   };
 
   React.useEffect(() => {
-    handleGetNotifications();
+    if (isUser) {
+      handleGetNotifications();
 
-    const decoded: any = jwtDecode(localStorage.getItem("token")!);
+      const decoded: any = jwtDecode(localStorage.getItem("token")!);
 
-    socket.on("connect", () => {
-      socket.emit("join-room", decoded._id);
-      socket.on("notify-user", (data) => handleGetNotificationById(data));
-    });
+      socket.on("connect", () => {
+        socket.emit("join-room", decoded._id);
+        socket.on("notify-user", (data) => handleGetNotificationById(data));
+      });
 
-    return () => {
-      socket.off("connect");
-    };
+      return () => {
+        socket.off("connect");
+      };
+    }
   }, []);
 
   React.useEffect(() => {

@@ -224,7 +224,8 @@ useEffect(()=>{
                 spacing: 4,
               }}
             >
-              {restaurants.slice(0, 4).map((restaurant: any) => (
+
+              {restaurants.length&&restaurants.slice(0, 4).map((restaurant: any) => (
                 <div
                   onClick={() => navigate("/menu", { state: restaurant._id })}
                   key={restaurant._id}

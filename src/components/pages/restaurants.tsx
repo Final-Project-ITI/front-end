@@ -12,6 +12,7 @@ const itemsInPage = 8;
 
 export default function Restaurants() {
   const [restaurants, setRestaurants] = useState([]);
+  const [allRestaurants, setAllRestaurants] = useState([]);
   const [page, setPage] = useState(0);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [categories, setCategories] = useState<IMenuCategory[]>([]);
@@ -23,9 +24,15 @@ export default function Restaurants() {
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
   const handleGetCategories = async () => {
-    const res = await axios.get("/api/v1/categories/" + location.state);
+    const res = await axios.get("/api/v1/restaurantCategory");
     setCategories(res.data);
-    console.log(res.data);
+  };
+
+  const handleCategoryClick = (categoryId: string) => {
+    const filtered = allRestaurants.filter((restaurant: any) =>
+      restaurant.categoryIds?.includes(categoryId)
+    );
+    setFilteredRestaurants(filtered);
   };
 
   useEffect(() => {
@@ -41,6 +48,7 @@ export default function Restaurants() {
     try {
       const { data } = await axios.get("/api/v1/restaurant/");
       setRestaurants(data);
+      setAllRestaurants(data);
     } catch (err: any) {
       console.error(err.response?.data || err.message, "err");
     }
@@ -48,12 +56,12 @@ export default function Restaurants() {
 
   const filterRestaurants = () => {
     if (searchQuery) {
-      const filtered = restaurants.filter((restaurant: any) =>
+      const filtered = allRestaurants.filter((restaurant: any) =>
         restaurant.name.toLowerCase().includes(searchQuery)
       );
       setFilteredRestaurants(filtered);
     } else {
-      setFilteredRestaurants(restaurants);
+      setFilteredRestaurants(allRestaurants);
     }
     setPage(0);
   };
@@ -135,7 +143,11 @@ export default function Restaurants() {
         sx={{ minHeight: "800px", background: "#f3ece4" }}
         spacing={4}
       >
-        <Section categories={categories} sectionRefs={sectionRefs} />
+        <Section
+          categories={categories}
+          sectionRefs={sectionRefs}
+          onCategoryClick={handleCategoryClick}
+        />
         <Stack
           direction="row"
           justifyContent="center"

@@ -126,7 +126,7 @@ function App() {
             <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />
           </Routes>
-          {path !== "/register" && path !== "/login" && <Footer></Footer>}
+          {path !== "/register" && path !== "/login" && <Footer whyUsRef={whyUsRef}/>}
         </Stack>
         {openSideCart && <SideCart setOpenSideCart={setOpenSideCart} />}
         {path !== "/register" && path !== "/login" && path !== "/cart" && isUser && (

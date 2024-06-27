@@ -2,19 +2,21 @@ import { Box, Button, TextField, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 const phoneRegex = new RegExp(/^01[0-2,5]{1}[0-9]{8}$/);
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function AddNumber({
   setAddNumberPopUp,
   addPhoneNumber,
-  setCheckoutInfo
+  setCheckoutInfo,
 }: {
   setAddNumberPopUp: React.Dispatch<React.SetStateAction<boolean>>;
   addPhoneNumber: (phone: string) => void;
-  setCheckoutInfo: React.Dispatch<React.SetStateAction<{
-    phone: any;
-    address: any;
-}>>
+  setCheckoutInfo: React.Dispatch<
+    React.SetStateAction<{
+      phone: any;
+      address: any;
+    }>
+  >;
 }) {
   let [phone, setPhone] = useState("");
   let [error, setError] = useState(false);
@@ -34,13 +36,14 @@ function AddNumber({
         }
       );
       addPhoneNumber(res.data);
-      setCheckoutInfo((pre:any )=> {return {phone:res.data._id,address:pre.address}})
-
+      setCheckoutInfo((pre: any) => {
+        return { phone: res.data._id, address: pre.address };
+      });
     };
     if (!phoneRegex.test(phone)) {
       setError(true);
     } else {
-      setError(false);      
+      setError(false);
       fetchAddPhone();
       setAddNumberPopUp(false);
     }

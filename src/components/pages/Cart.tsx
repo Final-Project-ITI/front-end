@@ -18,7 +18,7 @@ import axios from "axios";
 import CartContext from "../../context/CartProvider";
 import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function Cart() {
   const {
@@ -27,7 +27,8 @@ function Cart() {
     cartTotal,
     editItemQuantity,
     deleteItemQuantity,
-  }: any = useContext(CartContext);
+  } = useContext(CartContext);
+
   const navigate = useNavigate();
   const vat = 10;
   const [showDeleteItemPopUp, setShowDeleteItemPopUp] = useState(false);
@@ -48,6 +49,7 @@ function Cart() {
     if (item.quantity + newQuantity < 0) {
       return;
     } else if (item.quantity + newQuantity === 0) {
+      handleDeleteItem(item);
       return;
     }
     editItemQuantity(item.productId._id, newQuantity);

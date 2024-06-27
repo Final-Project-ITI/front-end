@@ -22,8 +22,9 @@ import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
 import IsAuthGuard from "./guards/IsAuthGuard.tsx";
 import { jwtDecode } from "jwt-decode";
 import { IPayload } from "./models/payload.mode.ts";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 import PaymentSuccess from "./components/pages/payment_success.tsx";
-const url = "http://localhost:3000/api/v1";
+
 function App() {
   const path = useLocation().pathname;
   const [openSideCart, setOpenSideCart] = useState(false);
@@ -46,8 +47,6 @@ function App() {
     setRestaurantId,
   }: any = useContext(CartContext);
 
-
-
   const whyUsRef = useRef();
 
   useEffect(() => {
@@ -63,8 +62,6 @@ function App() {
         calculateTotal(newCartItems);
       }
     };
-
-    // localStorage.setItem("token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NDhkYjIzOTY1ZjcyZGQ4YjhkY2M4MSIsInJvbGUiOnsiX2lkIjoiNjYzZGZlOWJhMmVkZTE3N2U2ODg1ZTQxIiwibmFtZSI6ImFkbWluIn0sImlhdCI6MTcxNzg3MzUyNSwiZXhwIjoxNzE3ODk1MTI1fQ.fd943kL94iZYZPnEvYuZFJRWzb7laqnNkHbPitysi9g")
 
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
@@ -87,8 +84,6 @@ function App() {
       setCartTotal(0);
     }
   }, [isUser]);
-
-
 
   return (
     <>
@@ -122,12 +117,8 @@ function App() {
             </Route>
             <Route element={<IsAuthGuard role={"user"} />}>
               <Route path="/userinfo" element={<UserInfoAndOrders />} />
-              <Route
-                path="/checkout"
-                element={
-                  <Checkout/>
-                }
-              />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/paymentSuccess" element={<PaymentSuccess />} />
               <Route path="/cart" element={<Cart />} />
             </Route>
             <Route path="/paymentSuccess" element={<PaymentSuccess />} />
@@ -135,12 +126,15 @@ function App() {
             <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />
           </Routes>
-          {path !== "/register" && path !== "/login" && <Footer></Footer>}
+          {path !== "/register" && path !== "/login" && (
+            <Footer whyUsRef={whyUsRef} />
+          )}
         </Stack>
         {openSideCart && <SideCart setOpenSideCart={setOpenSideCart} />}
-        {path !== "/register" && path !== "/login" && path !== "/cart" && (
-          <CartIcon setOpenSideCart={setOpenSideCart} />
-        )}
+        {path !== "/register" &&
+          path !== "/login" &&
+          path !== "/cart" &&
+          isUser && <CartIcon setOpenSideCart={setOpenSideCart} />}
       </ThemeProvider>
     </>
   );

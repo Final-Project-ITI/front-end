@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Stack,
@@ -14,6 +14,7 @@ import img from "../../assets/images/11.png";
 import img2 from "../../assets/images/12.png";
 import Card from "../Whyus";
 import axios from "../../api/axios";
+import Loader from "../shared/loader";
 
 const Search = styled("div")(({ theme }) => ({
   paddingLeft: "20px",
@@ -64,6 +65,7 @@ export default function Home({
   whyUsRef: React.MutableRefObject<undefined>;
 }) {
   const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
 
@@ -73,6 +75,7 @@ export default function Home({
 
   const getAllRestaurants = async () => {
     try {
+      setLoading(true);
       const Rest_URL = searchRest
         ? `/api/v1/restaurant/search/${searchRest}`
         : "/api/v1/restaurant/";
@@ -80,6 +83,8 @@ export default function Home({
       setRestaurants(data);
     } catch (err: any) {
       console.error(err.response?.data || err.message, "err");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,6 +95,22 @@ export default function Home({
   const handleSearchSubmit = () => {
     navigate(`/restaurants?search=${searchRest}`);
   };
+
+  const location = useLocation();
+
+  const scrollToWhyUs = () => {
+    const { current } = whyUsRef;
+    if (current !== null) {
+      //@ts-ignore
+      current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    if (location?.state?.section) {
+      scrollToWhyUs();
+    }
+  }, []);
 
   return (
     <>
@@ -163,74 +184,83 @@ export default function Home({
           ></Box>
         </Stack>
 
-        <Box
-          sx={{
-            minHeight: "400px",
-            backgroundColor: "#f3ece4",
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          <Typography
-            variant="h5"
-            noWrap
+        {loading ? (
+          <Loader />
+        ) : (
+          <Box
             sx={{
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "black",
-              textAlign: "center",
-              position: "relative",
-              top: "100px",
+              minHeight: "400px",
+              backgroundColor: "#f3ece4",
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
           >
-            Restaurants
-          </Typography>
-          <Stack
-            justifyContent="center"
-            alignItems="center"
-            sx={{
-              minHeight: "800px",
-              background: "#f3ece4",
-            }}
-          >
+            <Typography
+              variant="h5"
+              noWrap
+              sx={{
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "black",
+                textAlign: "center",
+                position: "relative",
+                top: "100px",
+              }}
+            >
+              Restaurants
+            </Typography>
             <Stack
-              direction="row"
               justifyContent="center"
               alignItems="center"
               sx={{
-                background: "f3ece4",
-                minHeight: "400px",
-                flexWrap: "wrap",
-                spacing: 4,
+                minHeight: "800px",
+                background: "#f3ece4",
               }}
             >
-              {restaurants.slice(0, 4).map((restaurant: any) => (
-                <div
-                  onClick={() => navigate("/menu", { state: restaurant._id })}
-                  key={restaurant._id}
-                  className="flip-card"
-                >
-                  <div className="flip-card-inner">
-                    <div className="flip-card-front">
-                      <img src={restaurant.icon} alt={restaurant.name} />
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  background: "f3ece4",
+                  minHeight: "400px",
+                  flexWrap: "wrap",
+                  spacing: 4,
+                }}
+              >
+                {restaurants.length &&
+                  restaurants.slice(0, 4).map((restaurant: any) => (
+                    <div
+                      onClick={() =>
+                        navigate("/menu", { state: restaurant._id })
+                      }
+                      key={restaurant._id}
+                      className="flip-card"
+                    >
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
+                          <img src={restaurant.icon} alt={restaurant.name} />
+                        </div>
+                        <div className="flip-card-back">
+                          <Typography variant="h5">
+                            {restaurant.name}
+                          </Typography>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flip-card-back">
-                      <Typography variant="h5">{restaurant.name}</Typography>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  ))}
+              </Stack>
+              <Link to="/restaurants" id="sign-link" className="log3">
+                <button className="bb">
+                  <h3>See More</h3>
+                </button>
+              </Link>
             </Stack>
-            <Link to="/restaurants" id="sign-link" className="log3">
-              <button className="bb">
-                <h3>See More</h3>
-              </button>
-            </Link>
-          </Stack>
-        </Box>
-        <Box sx={{ marginTop: "40px" }} ref={whyUsRef}>
+          </Box>
+        )}
+        <Box sx={{ marginTop: "0px" }} ref={whyUsRef}>
           <Card />
         </Box>
       </div>

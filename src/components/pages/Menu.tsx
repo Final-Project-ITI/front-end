@@ -29,6 +29,7 @@ export const Menu = () => {
   const handleGetCategories = async () => {
     const res = await axios.get("/api/v1/categories/" + location.state);
     setCategories(res.data);
+    console.log(res.data);
   };
 
   const handleGetRestaurantInfo = async () => {
@@ -42,10 +43,18 @@ export const Menu = () => {
     handleGetRestaurantInfo();
   }, [location.state]);
 
+  const handleCategoryClick = (categoryId: string) => {
+    console.log("Category clicked:", categoryId);
+  };
+
   return (
     <>
       <Image restaurantInfo={restaurantInfo} />
-      <Section categories={categories} sectionRefs={sectionRefs} />
+      <Section
+        categories={categories}
+        sectionRefs={sectionRefs}
+        onCategoryClick={handleCategoryClick}
+      />
       {categories.map((category) => (
         <Box
           id={category._id}

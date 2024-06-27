@@ -23,7 +23,7 @@ import CartContext from "../../context/CartProvider";
 import socket from "../../utils/socket";
 import { IPhone } from "../../models/phone.model";
 import { IAddress } from "../../models/address.model";
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function Checkout({}) {
   const [phones, setPhones] = useState<IPhone[]>([]);
@@ -109,7 +109,6 @@ function Checkout({}) {
       });
     }
   }, [phones]);
-
   useEffect(() => {
     if (addresses.length) {
       setCheckoutInfo((pre) => {
@@ -142,24 +141,23 @@ function Checkout({}) {
         setError(error.message);
       }
     };
-    const fetchStripe= async()=>{
+    const fetchStripe = async () => {
       const res = await axios.post(
-          url + "/payments",
-          { phoneId: checkoutInfo.phone, addressId: checkoutInfo.address },
-          {
-            headers: { jwt: localStorage.getItem("token") },
-          }
-        );
-        window.location.replace(res.data.session.url)
+        url + "/payments",
+        { phoneId: checkoutInfo.phone, addressId: checkoutInfo.address },
+        {
+          headers: { jwt: localStorage.getItem("token") },
+        }
+      );
+      window.location.replace(res.data.session.url);
 
-        // socket.emit("new-order-req", restaurantId);
+      // socket.emit("new-order-req", restaurantId);
 
-        // if (res.status == 201) {
-        //   emptyCart();
-        //   setSubmitOrderPopUp(true);
-        // }
-
-    }
+      // if (res.status == 201) {
+      //   emptyCart();
+      //   setSubmitOrderPopUp(true);
+      // }
+    };
     if (!checkoutInfo.phone) {
       setPhoneError(true);
     }
@@ -173,7 +171,7 @@ function Checkout({}) {
       setAddressError(false);
       setPhoneError(false);
       setError("");
-      paymentMethod=="cash"?fetchCheckout():fetchStripe();
+      paymentMethod == "cash" ? fetchCheckout() : fetchStripe();
     }
   };
 
@@ -394,7 +392,7 @@ function Checkout({}) {
                     <RadioGroup
                       name="payment-method"
                       value={paymentMethod}
-                      onChange={(e)=>setPaymentMethod(e.target.value)}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
                     >
                       <FormControlLabel
                         value="cash"

@@ -45,13 +45,11 @@ const AnimatedButton = styled(Button)({
 export default function PaymentSuccess() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { emptyCart}: any = useContext(CartContext);
+  const { emptyCart }: any = useContext(CartContext);
 
-
-  useEffect(()=>{
-    emptyCart()
-
-  },[])
+  useEffect(() => {
+    emptyCart();
+  }, []);
 
   const handleHomeNavigation = () => {
     setLoading(true);

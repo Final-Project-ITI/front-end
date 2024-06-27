@@ -5,9 +5,10 @@ import { MutableRefObject } from "react";
 interface IProps {
   categories: IMenuCategory[];
   sectionRefs: MutableRefObject<Record<string, HTMLDivElement | null>>;
+  onCategoryClick: (categoryId: string) => void;
 }
 
-const Section = ({ categories, sectionRefs }: IProps) => {
+const Section = ({ categories, sectionRefs, onCategoryClick }: IProps) => {
   const scrollToSection = (id: string) => {
     const section = sectionRefs.current[id];
     if (section) {
@@ -77,7 +78,10 @@ const Section = ({ categories, sectionRefs }: IProps) => {
                           borderRadius: "10px",
                         },
                       }}
-                      onClick={() => scrollToSection(item._id)}
+                      onClick={() => {
+                        scrollToSection(item._id);
+                        onCategoryClick(item._id);
+                      }}
                     >
                       {item.name}
                     </Button>

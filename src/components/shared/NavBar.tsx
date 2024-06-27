@@ -74,7 +74,6 @@ function NavBar({
         setNotifications(res.data);
       }
     }
-    console,log(notifications)
   };
 
   const handleGetNotificationById = async (id: string) => {

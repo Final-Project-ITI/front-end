@@ -9,7 +9,14 @@ const About = ({ restaurantInfo }: IProps) => {
   return (
     <>
       <Grid item xs={12} sx={{ width: "100%", marginTop: "48px" }}>
-        <Box sx={{ textAlign: "center", marginBottom: 4 }}>
+        <Box
+          sx={{
+            textAlign: "center",
+            marginBottom: 4,
+            maxWidth: "800px", // Set max width to control text wrapping
+            margin: "0 auto", // Center the box horizontally
+          }}
+        >
           <Typography
             variant="h6"
             sx={{ fontWeight: "700", fontSize: "32px", mb: "8px" }}

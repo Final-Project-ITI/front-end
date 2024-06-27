@@ -1,9 +1,10 @@
-import { Box, Stack, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import React, { useContext, useState } from "react";
 import item from "../../models/Item";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
+import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 
@@ -13,7 +14,6 @@ function SideCart({
   setOpenSideCart: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const navigate = useNavigate();
-  //@ts-ignore
   const {
     cartItems,
     cartQuantity,
@@ -21,6 +21,9 @@ function SideCart({
     editItemQuantity,
     deleteItemQuantity,
   } = useContext(CartContext);
+
+  const [showDeleteItemPopUp, setShowDeleteItemPopUp] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleDeleteItem = (item: any) => {
     deleteItemQuantity(item.productId._id);
@@ -56,6 +59,15 @@ function SideCart({
   };
   return (
     <>
+      {showDeleteItemPopUp && itemToDelete && (
+        <ConfirmDeleteFromCart
+          itemToDelete={itemToDelete}
+          setItemToDelete={setItemToDelete}
+          setShowDeleteItemPopUp={setShowDeleteItemPopUp}
+          handleDeleteItem={handleDeleteItem}
+        />
+      )}
+
       <Stack
         direction={"column"}
         justifyContent={"space-between"}
@@ -65,7 +77,7 @@ function SideCart({
           width: "488px",
           right: "0",
           top: "0",
-          zIndex: "300",
+          zIndex: "3",
           backgroundColor: "#F3ECE5",
           paddingBlock: "45px 100px",
         }}
@@ -98,17 +110,6 @@ function SideCart({
             </Box>
             <Typography sx={{ fontSize: "32px", fontWeight: "700" }}>
               CART DETAILS
-            </Typography>
-            <Typography
-              onClick={() => navigate("/cart")}
-              sx={{
-                fontSize: "16px",
-                fontWeight: "700",
-                color: "#D74339",
-                "& :hover": { cursor: "pointer" },
-              }}
-            >
-              GO TO CART
             </Typography>
             <Stack
               justifyContent={"center"}
@@ -149,7 +150,10 @@ function SideCart({
                   }}
                 >
                   <Box
-                    onClick={() => handleDeleteItem(item)}
+                    onClick={() => {
+                      setItemToDelete(item);
+                      setShowDeleteItemPopUp(true);
+                    }}
                     sx={{
                       position: "absolute",
                       top: "0.5px",
@@ -177,8 +181,9 @@ function SideCart({
                       />
                     </svg>
                   </Box>
-                  <Box sx={{ height: "64px" }}>
+                  <Box sx={{ height: "64px", width: "70px" }}>
                     <img
+                      className="imageFit"
                       height={"100%"}
                       src={
                         item.productId.icon
@@ -268,18 +273,21 @@ function SideCart({
               ))}
           </Box>
         </Box>
-        <Stack
+        <Button
+          variant="contained"
+          color="primary"
           onClick={() => navigate("/cart")}
-          alignSelf={"center"}
-          alignItems={"center"}
-          justifyContent={"space-around"}
-          direction={"row"}
           sx={{
             width: "424px",
             height: "64px",
             backgroundColor: "#D74339",
             gap: "32px",
             borderRadius: "50px",
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center",
+            alignSelf: "center",
+            flexDirection: "row",
             "& :hover": { cursor: "pointer" },
           }}
         >
@@ -321,7 +329,7 @@ function SideCart({
           <Typography sx={{ color: "white", fontSize: "16px" }}>
             {cartTotal} EGP
           </Typography>
-        </Stack>
+        </Button>
       </Stack>
     </>
   );

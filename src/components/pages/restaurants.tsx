@@ -18,14 +18,15 @@ export default function Restaurants() {
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const handleGetCategories = async () => {
-    const res = await axios.get("/api/v1/categories/" + location.state);
-    setCategories(res.data);
-  };
-
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
+
+  const handleGetCategories = async () => {
+    const res = await axios.get("/api/v1/categories/" + location.state);
+    setCategories(res.data);
+    console.log(res.data);
+  };
 
   useEffect(() => {
     getAllRestaurants();
@@ -154,16 +155,14 @@ export default function Restaurants() {
               </div>
               <div className="text-wrapper">
                 <Typography variant="h6">{restaurant.name}</Typography>
-                <button className="bb2">
-                  <Link
-                    to="/menu"
-                    id="sign-link"
-                    className="log4"
-                    state={restaurant._id}
-                  >
-                    View Menu
-                  </Link>
-                </button>
+                <Link
+                  to="/menu"
+                  id="sign-link"
+                  className="log4"
+                  state={restaurant._id}
+                >
+                  <button className="bb2">View Menu</button>
+                </Link>
               </div>
             </div>
           ))}

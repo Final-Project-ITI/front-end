@@ -37,7 +37,7 @@ function AddAdress({
       );
       addAddress(res.data);
       setCheckoutInfo((pre: any) => {
-        return { phone: pre.phone, address: res.data };
+        return { phone: pre.phone, address: res.data._id };
       });
     };
     if (address.length < 50) {

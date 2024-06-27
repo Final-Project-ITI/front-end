@@ -5,18 +5,22 @@ import {
   Divider,
   Grid,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
   Typography,
 } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import item from "../../models/Item";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
+import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function Cart() {
-  //@ts-ignore
   const {
     cartItems,
     cartQuantity,
@@ -24,8 +28,11 @@ function Cart() {
     editItemQuantity,
     deleteItemQuantity,
   } = useContext(CartContext);
+
   const navigate = useNavigate();
   const vat = 10;
+  const [showDeleteItemPopUp, setShowDeleteItemPopUp] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const handleDeleteItem = (item: any) => {
     deleteItemQuantity(item.productId._id);
@@ -62,6 +69,14 @@ function Cart() {
   };
   return (
     <>
+      {showDeleteItemPopUp && itemToDelete && (
+        <ConfirmDeleteFromCart
+          itemToDelete={itemToDelete}
+          setItemToDelete={setItemToDelete}
+          setShowDeleteItemPopUp={setShowDeleteItemPopUp}
+          handleDeleteItem={handleDeleteItem}
+        />
+      )}
       <Container maxWidth="xl">
         <Grid
           container
@@ -87,63 +102,241 @@ function Cart() {
               boxShadow: cartQuantity != 0 ? "10" : "0",
             }}
           >
-            <Stack direction={"row"} justifyContent={"space-between"}>
-              <Stack
-                direction={"row"}
-                alignItems={"center"}
-                justifyContent={"space-between"}
-                sx={{ gap: { xs: 2.5, md: 4 } }}
-              >
-                <Typography
-                  sx={{ fontSize: { xs: "32px", md: "40px" } }}
-                  fontWeight={700}
-                  color={"primary"}
-                >
-                  Cart
-                </Typography>
-                <Stack
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  sx={{
-                    height: { xs: "32px", md: "38px" },
-                    width: { xs: "32px", md: "38px" },
-                    borderRadius: "50%",
-                    bgcolor: "black",
-                    color: "white",
-                    fontSize: { xs: "1.3rem", md: "1.5rem" },
-                  }}
-                >
-                  {cartQuantity}
-                </Stack>
-              </Stack>
-              <Stack
-                direction={"row"}
-                justifyContent={"space-between"}
-                alignItems={"center"}
-                sx={{
-                  paddingRight: { sm: "1rem", md: "2rem" },
-                  gap: { xs: 3.5, sm: 4, md: 6 },
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: "#00000069",
-                    fontSize: { xs: "24px", sm: "28px", md: "32px" },
-                  }}
-                >
-                  Qty
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "#00000069",
-                    fontSize: { xs: "24px", sm: "28px", md: "32px" },
-                  }}
-                >
-                  Total
-                </Typography>
-              </Stack>
-            </Stack>
-            <Stack sx={{ marginTop: "32px" }}>
+            <Stack>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell
+                      sx={{ position: "relative", paddingInline: "0" }}
+                    >
+                      <Stack direction={"row"}>
+                        <Typography
+                          sx={{ fontSize: { xs: "32px", md: "40px" } }}
+                          fontWeight={700}
+                          color={"primary"}
+                        >
+                          Cart
+                        </Typography>
+                        <Stack
+                          justifyContent={"center"}
+                          alignItems={"center"}
+                          sx={{
+                            height: { xs: "32px", md: "38px" },
+                            width: { xs: "32px", md: "38px" },
+                            borderRadius: "50%",
+                            bgcolor: "black",
+                            color: "white",
+                            fontSize: { xs: "1.3rem", md: "1.5rem" },
+                            position: "absolute",
+                            left: { xs: "80px", md: "100px" },
+                            top: { xs: "22.5px", md: "27px" },
+                          }}
+                        >
+                          {cartQuantity}
+                        </Stack>
+                      </Stack>
+                    </TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>
+                      <Typography
+                        sx={{
+                          color: "#00000069",
+                          fontSize: { xs: "24px", sm: "28px", md: "32px" },
+                          textAlign: "center",
+                        }}
+                      >
+                        Qty
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        sx={{
+                          color: "#00000069",
+                          fontSize: { xs: "24px", sm: "28px", md: "32px" },
+                          textAlign: "center",
+                        }}
+                      >
+                        Total
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+
+                  {cartItems.map((item: any) => (
+                    <TableRow key={item.productId._id}>
+                      <TableCell sx={{ padding: "10px 0" }}>
+                        <Box
+                          sx={{
+                            height: { xs: "38px", sm: "50px", md: "65px" },
+                            width: { xs: "60px", sm: "80px", md: "90px" },
+                          }}
+                        >
+                          <img
+                            className="imageFit"
+                            src={
+                              item.productId.icon
+                                ? item.productId.icon
+                                : "https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"
+                            }
+                          />
+                        </Box>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          maxWidth: { xs: "25vw" },
+                          fontSize: {
+                            xs: "0.8rem",
+                            sm: "1.1rem",
+                            md: "19px",
+                            xl: "24px",
+                          },
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                          textOverflow: " ellipsis",
+                          msTextOverflow: "ellipsis",
+                          padding: "0",
+                        }}
+                      >
+                        <Typography
+                          title={item.productId.title}
+                          sx={{
+                            maxWidth: { xs: "30vw" },
+                            fontSize: {
+                              xs: "0.8rem",
+                              sm: "1.1rem",
+                              md: "19px",
+                              xl: "24px",
+                            },
+                            display: "block",
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            textOverflow: " ellipsis",
+                            msTextOverflow: "ellipsis",
+                          }}
+                        >
+                          {item.productId.title}
+                        </Typography>
+                      </TableCell>
+                      <TableCell sx={{ padding: "0" }}>
+                        <Stack
+                          direction={"row"}
+                          alignItems={"center"}
+                          sx={{ gap: { xs: 0.1, sm: 0.5, md: 0.7 } }}
+                          justifyContent={"center"}
+                        >
+                          <Box
+                            sx={{
+                              "&:hover": { cursor: "pointer" },
+                              height: { xs: "25px", sm: "30px", md: "40px" },
+                              width: { xs: "25px", sm: "30px", md: "40px" },
+                            }}
+                            onClick={() => handleEditItemQuantity(item, -1)}
+                          >
+                            <svg
+                              width="100%"
+                              height="100%"
+                              viewBox="0 0 40 40"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M20 3.75C11.04 3.75 3.75 11.04 3.75 20C3.75 28.96 11.04 36.25 20 36.25C28.96 36.25 36.25 28.96 36.25 20C36.25 11.04 28.96 3.75 20 3.75ZM20 6.25C27.6087 6.25 33.75 12.3913 33.75 20C33.75 27.6087 27.6087 33.75 20 33.75C12.3913 33.75 6.25 27.6087 6.25 20C6.25 12.3913 12.3913 6.25 20 6.25ZM12.5 18.75V21.25H27.5V18.75H12.5Z"
+                                fill="#E4002B"
+                              />
+                            </svg>
+                          </Box>
+
+                          <Typography
+                            sx={{
+                              fontSize: {
+                                xs: "0.8rem",
+                                sm: "1.1rem",
+                                md: "19px",
+                                xl: "24px",
+                              },
+                            }}
+                          >
+                            {item.quantity}
+                          </Typography>
+                          <Box
+                            sx={{
+                              "&:hover": { cursor: "pointer" },
+                              height: { xs: "25px", sm: "30px", md: "40px" },
+                              width: { xs: "25px", sm: "30px", md: "40px" },
+                            }}
+                            onClick={() => handleEditItemQuantity(item, 1)}
+                          >
+                            <svg
+                              width="100%"
+                              height="100%"
+                              viewBox="0 0 40 40"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M20 3.75C11.04 3.75 3.75 11.04 3.75 20C3.75 28.96 11.04 36.25 20 36.25C28.96 36.25 36.25 28.96 36.25 20C36.25 11.04 28.96 3.75 20 3.75ZM20 6.25C27.6087 6.25 33.75 12.3913 33.75 20C33.75 27.6087 27.6087 33.75 20 33.75C12.3913 33.75 6.25 27.6087 6.25 20C6.25 12.3913 12.3913 6.25 20 6.25ZM18.75 12.5V18.75H12.5V21.25H18.75V27.5H21.25V21.25H27.5V18.75H21.25V12.5H18.75Z"
+                                fill="#E4002B"
+                              />
+                            </svg>
+                          </Box>
+                        </Stack>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: "center",
+                          padding: "0",
+                          position: "relative",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: {
+                              xs: "0.8rem",
+                              sm: "1.1rem",
+                              md: "19px",
+                              xl: "24px",
+                            },
+                            fontWeight: "700",
+                          }}
+                        >
+                          EGP {item.quantity * item.productId.price}{" "}
+                        </Typography>
+                        <Box
+                          onClick={() => {
+                            setItemToDelete(item);
+                            setShowDeleteItemPopUp(true);
+                          }}
+                          sx={{
+                            position: "absolute",
+                            top: "0.5px",
+                            right: "0px",
+                            "& :hover": { cursor: "pointer" },
+                          }}
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M8.46387 15.535L15.5359 8.46503L8.46387 15.535ZM8.46387 8.46503L15.5359 15.535L8.46387 8.46503Z"
+                              fill="#1E1E1E"
+                            />
+                            <path
+                              d="M8.46387 15.535L15.5359 8.46503M8.46387 8.46503L15.5359 15.535"
+                              stroke="#E4002B"
+                              strokeOpacity="0.34"
+                              strokeWidth="1.875"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
               {cartQuantity === 0 && (
                 <Stack>
                   <Typography
@@ -157,133 +350,6 @@ function Cart() {
                   </Typography>
                 </Stack>
               )}
-
-              {cartItems.map((item: any) => (
-                <Stack
-                  key={item.productId._id}
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                  sx={{ marginBottom: "10px" }}
-                >
-                  <Box
-                    sx={{
-                      height: { xs: "38px", sm: "50px", md: "64px" },
-                      width: { xs: "70px", sm: "80px", md: "90px" },
-                    }}
-                  >
-                    <img
-                      className="imageFit"
-                      src={
-                        item.productId.icon
-                          ? item.productId.icon
-                          : "https://www.dirtyapronrecipes.com/wp-content/uploads/2015/10/food-placeholder.png"
-                      }
-                    />
-                  </Box>
-                  <Typography
-                    title={item.productId.title}
-                    sx={{
-                      maxWidth: { xs: "30vw" },
-                      fontSize: {
-                        xs: "0.8rem",
-                        sm: "1.1rem",
-                        md: "19px",
-                        xl: "24px",
-                      },
-                      display: "block",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                      textOverflow: " ellipsis",
-                      msTextOverflow: "ellipsis",
-                    }}
-                  >
-                    {item.productId.title}
-                  </Typography>
-                  <Stack
-                    direction={"row"}
-                    sx={{ gap: { xs: 2, sm: 2.2, md: 3 } }}
-                    alignItems={"center"}
-                    justifyContent={"space-between"}
-                  >
-                    <Stack
-                      direction={"row"}
-                      alignItems={"center"}
-                      sx={{ gap: { xs: 0.1, sm: 0.5, md: 1 } }}
-                      justifyContent={"space-between"}
-                    >
-                      <Box
-                        sx={{
-                          "&:hover": { cursor: "pointer" },
-                          height: { xs: "25px", sm: "30px", md: "40px" },
-                          width: { xs: "25px", sm: "30px", md: "40px" },
-                        }}
-                        onClick={() => handleEditItemQuantity(item, -1)}
-                      >
-                        <svg
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 40 40"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M20 3.75C11.04 3.75 3.75 11.04 3.75 20C3.75 28.96 11.04 36.25 20 36.25C28.96 36.25 36.25 28.96 36.25 20C36.25 11.04 28.96 3.75 20 3.75ZM20 6.25C27.6087 6.25 33.75 12.3913 33.75 20C33.75 27.6087 27.6087 33.75 20 33.75C12.3913 33.75 6.25 27.6087 6.25 20C6.25 12.3913 12.3913 6.25 20 6.25ZM12.5 18.75V21.25H27.5V18.75H12.5Z"
-                            fill="#E4002B"
-                          />
-                        </svg>
-                      </Box>
-
-                      <Typography
-                        sx={{
-                          fontSize: {
-                            xs: "0.8rem",
-                            sm: "1.1rem",
-                            md: "19px",
-                            xl: "24px",
-                          },
-                        }}
-                      >
-                        {item.quantity}
-                      </Typography>
-                      <Box
-                        sx={{
-                          "&:hover": { cursor: "pointer" },
-                          height: { xs: "25px", sm: "30px", md: "40px" },
-                          width: { xs: "25px", sm: "30px", md: "40px" },
-                        }}
-                        onClick={() => handleEditItemQuantity(item, 1)}
-                      >
-                        <svg
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 40 40"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M20 3.75C11.04 3.75 3.75 11.04 3.75 20C3.75 28.96 11.04 36.25 20 36.25C28.96 36.25 36.25 28.96 36.25 20C36.25 11.04 28.96 3.75 20 3.75ZM20 6.25C27.6087 6.25 33.75 12.3913 33.75 20C33.75 27.6087 27.6087 33.75 20 33.75C12.3913 33.75 6.25 27.6087 6.25 20C6.25 12.3913 12.3913 6.25 20 6.25ZM18.75 12.5V18.75H12.5V21.25H18.75V27.5H21.25V21.25H27.5V18.75H21.25V12.5H18.75Z"
-                            fill="#E4002B"
-                          />
-                        </svg>
-                      </Box>
-                    </Stack>
-                    <Typography
-                      sx={{
-                        fontSize: {
-                          xs: "0.8rem",
-                          sm: "1.1rem",
-                          md: "19px",
-                          xl: "24px",
-                        },
-                        fontWeight: "700",
-                      }}
-                    >
-                      EGP {item.quantity * item.productId.price}{" "}
-                    </Typography>
-                  </Stack>
-                </Stack>
-              ))}
             </Stack>
           </Grid>
           {cartQuantity > 0 && (

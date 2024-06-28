@@ -7,14 +7,17 @@ import img2 from "../../assets/images/22.png";
 import axios from "../../api/axios";
 import Section from "../shared/Section";
 import { IMenuCategory } from "../../models/menuCategory.model";
+import { IRestaurant } from "../../models/restaurant.model";
 
 const itemsInPage = 8;
 
 export default function Restaurants() {
-  const [restaurants, setRestaurants] = useState([]);
-  const [allRestaurants, setAllRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
+  const [allRestaurants, setAllRestaurants] = useState<IRestaurant[]>([]);
   const [page, setPage] = useState(0);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState<IRestaurant[]>(
+    []
+  );
   const [categories, setCategories] = useState<IMenuCategory[]>([]);
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -29,10 +32,11 @@ export default function Restaurants() {
   };
 
   const handleCategoryClick = (categoryId: string) => {
-    const filtered = allRestaurants.filter((restaurant: any) =>
-      restaurant.categoryIds?.includes(categoryId)
+    const filtered = allRestaurants.filter((restaurant) =>
+      restaurant.categoriesIds?.includes(categoryId)
     );
     setFilteredRestaurants(filtered);
+    setPage(0);
   };
 
   useEffect(() => {
@@ -56,7 +60,7 @@ export default function Restaurants() {
 
   const filterRestaurants = () => {
     if (searchQuery) {
-      const filtered = allRestaurants.filter((restaurant: any) =>
+      const filtered = allRestaurants.filter((restaurant) =>
         restaurant.name.toLowerCase().includes(searchQuery)
       );
       setFilteredRestaurants(filtered);
@@ -143,11 +147,13 @@ export default function Restaurants() {
         sx={{ minHeight: "800px", background: "#f3ece4" }}
         spacing={4}
       >
-        <Section
-          categories={categories}
-          sectionRefs={sectionRefs}
-          onCategoryClick={handleCategoryClick}
-        />
+        {categories.length > 0 && (
+          <Section
+            categories={categories}
+            sectionRefs={sectionRefs}
+            onCategoryClick={handleCategoryClick}
+          />
+        )}
         <Stack
           direction="row"
           justifyContent="center"
@@ -160,7 +166,7 @@ export default function Restaurants() {
           }}
           spacing={4}
         >
-          {currentItems.map((restaurant: any, index) => (
+          {currentItems.map((restaurant, index) => (
             <div key={restaurant._id} className="card">
               <div className="image-wrapper">
                 <img src={restaurant.icon} alt={`Image ${index}`} />
@@ -179,7 +185,7 @@ export default function Restaurants() {
             </div>
           ))}
         </Stack>
-       {Math.ceil(filteredRestaurants.length / itemsInPage)>1 &&  <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} alignItems="center">
           <Button sx={{ fontSize: "2rem" }} onClick={handlePrev}>
             &larr;
           </Button>
@@ -189,7 +195,7 @@ export default function Restaurants() {
           <Button sx={{ fontSize: "2rem" }} onClick={handleNext}>
             &rarr;
           </Button>
-        </Stack>}
+        </Stack>
       </Stack>
     </div>
   );

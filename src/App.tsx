@@ -22,7 +22,7 @@ import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
 import IsAuthGuard from "./guards/IsAuthGuard.tsx";
 import { jwtDecode } from "jwt-decode";
 import { IPayload } from "./models/payload.mode.ts";
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 import PaymentSuccess from "./components/pages/payment_success.tsx";
 
 function App() {

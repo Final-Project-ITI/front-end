@@ -45,7 +45,6 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   color: "gray",
 }));
 
-
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
@@ -59,7 +58,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Home({whyUsRef}:{whyUsRef: React.MutableRefObject<undefined>}) {
+export default function Home({
+  whyUsRef,
+}: {
+  whyUsRef: React.MutableRefObject<undefined>;
+}) {
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
@@ -88,26 +91,21 @@ export default function Home({whyUsRef}:{whyUsRef: React.MutableRefObject<undefi
     navigate(`/restaurants?search=${searchRest}`);
   };
 
-const location = useLocation();
+  const location = useLocation();
 
+  const scrollToWhyUs = () => {
+    const { current } = whyUsRef;
+    if (current !== null) {
+      //@ts-ignore
+      current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-
-
-
-const scrollToWhyUs = () => {
-  const { current } = whyUsRef;
-  if (current !== null) {
-    //@ts-ignore
-    current.scrollIntoView({ behavior: "smooth" });
-  }
-};
-
-useEffect(()=>{
-    if(location?.state?.section){
+  useEffect(() => {
+    if (location?.state?.section) {
       scrollToWhyUs();
     }
-},[]);
-
+  }, []);
 
   return (
     <>
@@ -131,7 +129,7 @@ useEffect(()=>{
               borderRadius: "20%",
               position: "relative",
               bottom: "30px",
-              visibility:{xs:"hidden",sm:"visible"}
+              visibility: { xs: "hidden", sm: "visible" },
             }}
           ></Box>
           <Stack
@@ -149,7 +147,7 @@ useEffect(()=>{
                 color: "black",
                 textAlign: "center",
                 position: "initial",
-                fontSize:{xs:"3.5vw",sm:"20px"}
+                fontSize: { xs: "3.5vw", sm: "20px" },
               }}
             >
               Order food online in Zagazig
@@ -179,7 +177,7 @@ useEffect(()=>{
               backgroundSize: "cover",
               border: "5px",
               borderRadius: "5%",
-              visibility:{xs:"hidden",sm:"visible"}
+              visibility: { xs: "hidden", sm: "visible" },
             }}
           ></Box>
         </Stack>
@@ -202,7 +200,7 @@ useEffect(()=>{
               letterSpacing: ".3rem",
               color: "black",
               textAlign: "center",
-              marginTop:"90px"
+              marginTop: "90px",
             }}
           >
             Restaurants
@@ -211,7 +209,7 @@ useEffect(()=>{
             justifyContent="center"
             alignItems="center"
             sx={{
-              marginBlock:"40px",
+              marginBlock: "40px",
               background: "#f3ece4",
             }}
           >
@@ -226,23 +224,36 @@ useEffect(()=>{
                 spacing: 4,
               }}
             >
-
-              {restaurants.length&&restaurants.slice(0, 4).map((restaurant: any) => (
-                <div
-                  onClick={() => navigate("/menu", { state: restaurant._id })}
-                  key={restaurant._id}
-                  className="flip-card"
-                >
-                  <div className="flip-card-inner">
-                    <div className="flip-card-front">
-                      <img src={restaurant.icon} alt={restaurant.name} />
-                    </div>
-                    <div className="flip-card-back">
-                      <Typography variant="h5">{restaurant.name}</Typography>
+              {restaurants.length &&
+                restaurants.slice(0, 4).map((restaurant: any) => (
+                  <div
+                    onClick={() => navigate("/menu", { state: restaurant._id })}
+                    key={restaurant._id}
+                    className="flip-card"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
+                        <img src={restaurant.icon} alt={restaurant.name} />
+                      </div>
+                      <div className="flip-card-back">
+                        <Typography
+                          variant="h5"
+                          fontWeight={"bold"}
+                          sx={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            textWrap: "nowrap",
+                          }}
+                        >
+                          {restaurant.name}
+                        </Typography>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </Stack>
             <Link to="/restaurants" id="sign-link" className="log3">
               <button className="bb">
@@ -251,7 +262,7 @@ useEffect(()=>{
             </Link>
           </Stack>
         </Box>
-        <Box sx={{ marginTop: {xs:"90px"} }} ref={whyUsRef}>
+        <Box sx={{ marginTop: { xs: "90px" } }} ref={whyUsRef}>
           <Card />
         </Box>
       </div>

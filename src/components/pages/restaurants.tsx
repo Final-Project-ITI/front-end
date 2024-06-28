@@ -177,7 +177,7 @@ export default function Restaurants() {
               <div className="text-wrapper">
                 <Typography variant="h6">{restaurant.name}</Typography>
                 <Link
-                  to="/menu"
+                  to={"/menu/"+restaurant._id}
                   id="sign-link"
                   className="log4"
                   state={restaurant._id}

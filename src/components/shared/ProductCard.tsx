@@ -2,7 +2,7 @@ import { CardMedia, Typography, useTheme, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { IProduct } from "../../models/product.model";
 import axios from "../../api/axios";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import CartContext from "../../context/CartProvider";
 
 interface ProductProps {
@@ -117,7 +117,7 @@ const Product = ({ product }: ProductProps) => {
 
         <Button
           onClick={() => {
-            navigate("/productdetails", { state: product });
+            navigate("/productdetails/"+product.restaurantId+"/"+product._id);
           }}
           variant="outlined"
           fullWidth

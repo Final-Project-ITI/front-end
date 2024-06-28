@@ -25,9 +25,10 @@ const Product = ({ product }: ProductProps) => {
       if (!localStorage.getItem("token")) {
         navigate("/login");
       }
-
-      if (resId !== cartItems[0].productId.restaurantId) {
-        navigate("/");
+      if (cartItems.length) {
+        if (resId !== cartItems[0].productId.restaurantId) {
+          navigate("/");
+        }
       }
       const res = await axios.post(
         "/api/v1/cart",
@@ -117,7 +118,9 @@ const Product = ({ product }: ProductProps) => {
 
         <Button
           onClick={() => {
-            navigate("/productdetails/"+product.restaurantId+"/"+product._id);
+            navigate(
+              "/productdetails/" + product.restaurantId + "/" + product._id
+            );
           }}
           variant="outlined"
           fullWidth

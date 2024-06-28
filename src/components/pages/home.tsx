@@ -67,7 +67,7 @@ export default function Home({
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
-  const [loading,setloading]=useState(false)
+  const [loading, setloading] = useState(false);
 
   useEffect(() => {
     getAllRestaurants();
@@ -80,7 +80,7 @@ export default function Home({
         ? `/api/v1/restaurant/search/${searchRest}`
         : "/api/v1/restaurant/";
       const { data } = await axios.get(Rest_URL);
-      setloading(false)
+      setloading(false);
       setRestaurants(data);
     } catch (err: any) {
       setloading(false);
@@ -112,10 +112,9 @@ export default function Home({
     }
   }, []);
 
-
   return (
     <>
-    {loading && <Loading/>}
+      {loading && <Loading />}
       <div>
         <Stack
           height={"400px"}
@@ -154,11 +153,7 @@ export default function Home({
                 color: "black",
                 textAlign: "center",
                 position: "initial",
-<<<<<<< HEAD
-                fontSize: { xs: "3.5vw", sm: "20px" },
-=======
-                fontSize:{xs:"3.5vw",sm:"24px"}
->>>>>>> 2123ec35ad03ca0dbc2f35f45968806118e4d3c5
+                fontSize: { xs: "3.5vw", sm: "24px" },
               }}
             >
               Order food online in Zagazig
@@ -235,56 +230,39 @@ export default function Home({
                 spacing: 4,
               }}
             >
-<<<<<<< HEAD
-              {restaurants.length &&
-                restaurants.slice(0, 4).map((restaurant: any) => (
-                  <div
-                    onClick={() => navigate("/menu", { state: restaurant._id })}
-                    key={restaurant._id}
-                    className="flip-card"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    <div className="flip-card-inner">
-                      <div className="flip-card-front">
-                        <img src={restaurant.icon} alt={restaurant.name} />
+              {restaurants.length
+                ? restaurants.slice(0, 4).map((restaurant: any) => (
+                    <div
+                      onClick={() =>
+                        navigate("/menu", { state: restaurant._id })
+                      }
+                      key={restaurant._id}
+                      className="flip-card"
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
+                          <img src={restaurant.icon} alt={restaurant.name} />
+                        </div>
+                        <div className="flip-card-back">
+                          <Typography
+                            variant="h5"
+                            fontWeight={"bold"}
+                            sx={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              textWrap: "nowrap",
+                            }}
+                          >
+                            {restaurant.name}
+                          </Typography>
+                        </div>
                       </div>
-                      <div className="flip-card-back">
-                        <Typography
-                          variant="h5"
-                          fontWeight={"bold"}
-                          sx={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            textWrap: "nowrap",
-                          }}
-                        >
-                          {restaurant.name}
-                        </Typography>
-                      </div>
                     </div>
-                  </div>
-                ))}
-=======
-
-              {restaurants.length?restaurants.slice(0, 4).map((restaurant: any) => (
-                <div
-                  onClick={() => navigate("/menu", { state: restaurant._id })}
-                  key={restaurant._id}
-                  className="flip-card"
-                >
-                  <div className="flip-card-inner">
-                    <div className="flip-card-front">
-                      <img src={restaurant.icon} alt={restaurant.name} />
-                    </div>
-                    <div className="flip-card-back">
-                      <Typography variant="h5">{restaurant.name}</Typography>
-                    </div>
-                  </div>
-                </div>
-              )):""}
->>>>>>> 2123ec35ad03ca0dbc2f35f45968806118e4d3c5
+                  ))
+                : ""}
             </Stack>
             <Link to="/restaurants" id="sign-link" className="log3">
               <button className="bb">

@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://back-end-j1bi.onrender.com");
+const socket = io("http://localhost:3000");
 
 socket.on("connect", () => {
   console.log("connected to server");

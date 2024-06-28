@@ -2,7 +2,7 @@ import { Box, Button, TextField, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 const phoneRegex = new RegExp(/^01[0-2,5]{1}[0-9]{8}$/);
-const url = "https://back-end-j1bi.onrender.com/api/v1";
+const url = "http://localhost:3000/api/v1";
 
 function AddNumber({
   setAddNumberPopUp,

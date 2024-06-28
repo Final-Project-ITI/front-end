@@ -49,11 +49,13 @@ export const Menu = () => {
   return (
     <>
       <Image restaurantInfo={restaurantInfo} />
-      <Section
-        categories={categories}
-        sectionRefs={sectionRefs}
-        onCategoryClick={handleCategoryClick}
-      />
+      {categories.length > 0 && (
+        <Section
+          categories={categories}
+          sectionRefs={sectionRefs}
+          onCategoryClick={handleCategoryClick}
+        />
+      )}
       {categories.map((category) => (
         <Box
           id={category._id}

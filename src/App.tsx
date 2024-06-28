@@ -22,7 +22,7 @@ import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
 import IsAuthGuard from "./guards/IsAuthGuard.tsx";
 import { jwtDecode } from "jwt-decode";
 import { IPayload } from "./models/payload.mode.ts";
-const url = "https://back-end-j1bi.onrender.com/api/v1";
+const url = "http://localhost:3000/api/v1";
 import PaymentSuccess from "./components/pages/payment_success.tsx";
 import Loading from "./components/shared/Loading.tsx";
 import LoadingContext from "./context/LoadingProvider.tsx";
@@ -64,7 +64,6 @@ function App() {
         calculateTotal(newCartItems);
       }
     };
-
 
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token");
@@ -128,12 +127,15 @@ function App() {
             <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />
           </Routes>
-          {path !== "/register" && path !== "/login" && <Footer whyUsRef={whyUsRef}/>}
+          {path !== "/register" && path !== "/login" && (
+            <Footer whyUsRef={whyUsRef} />
+          )}
         </Stack>
         {openSideCart && <SideCart setOpenSideCart={setOpenSideCart} />}
-        {path !== "/register" && path !== "/login" && path !== "/cart" && isUser && (
-          <CartIcon setOpenSideCart={setOpenSideCart} />
-        )}
+        {path !== "/register" &&
+          path !== "/login" &&
+          path !== "/cart" &&
+          isUser && <CartIcon setOpenSideCart={setOpenSideCart} />}
       </ThemeProvider>
     </>
   );

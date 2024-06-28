@@ -117,17 +117,21 @@ function NavBar({
 
       socket.on("connect", () => {
         socket.emit("join-room", decoded._id);
-        socket.on("notify-user", (data) => handleGetNotificationById(data));
+        socket.on("notify-user", (data) => {
+          handleGetNotificationById(data);
+        });
       });
 
       return () => {
         socket.off("connect");
       };
     }
-  }, []);
+  }, [isUser]);
 
   React.useEffect(() => {
-    setNotifications((pre: any) => [newNotification, ...pre]);
+    if (newNotification._id) {
+      setNotifications((pre: any) => [newNotification, ...pre]);
+    }
   }, [newNotification]);
 
   return (

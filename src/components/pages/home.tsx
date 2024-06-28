@@ -14,6 +14,7 @@ import img from "../../assets/images/11.png";
 import img2 from "../../assets/images/12.png";
 import Card from "../Whyus";
 import axios from "../../api/axios";
+import Loading from "../shared/Loading";
 
 const Search = styled("div")(({ theme }) => ({
   paddingLeft: "20px",
@@ -63,6 +64,7 @@ export default function Home({whyUsRef}:{whyUsRef: React.MutableRefObject<undefi
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
+  const [loading,setloading]=useState(false)
 
   useEffect(() => {
     getAllRestaurants();
@@ -70,10 +72,12 @@ export default function Home({whyUsRef}:{whyUsRef: React.MutableRefObject<undefi
 
   const getAllRestaurants = async () => {
     try {
+      setloading(true);
       const Rest_URL = searchRest
         ? `/api/v1/restaurant/search/${searchRest}`
         : "/api/v1/restaurant/";
       const { data } = await axios.get(Rest_URL);
+      setloading(false)
       setRestaurants(data);
     } catch (err: any) {
       console.error(err.response?.data || err.message, "err");
@@ -109,8 +113,10 @@ useEffect(()=>{
 },[]);
 
 
+
   return (
     <>
+    {loading && <Loading/>}
       <div>
         <Stack
           height={"400px"}
@@ -149,7 +155,7 @@ useEffect(()=>{
                 color: "black",
                 textAlign: "center",
                 position: "initial",
-                fontSize:{xs:"3.5vw",sm:"20px"}
+                fontSize:{xs:"3.5vw",sm:"24px"}
               }}
             >
               Order food online in Zagazig
@@ -227,7 +233,7 @@ useEffect(()=>{
               }}
             >
 
-              {restaurants.length&&restaurants.slice(0, 4).map((restaurant: any) => (
+              {restaurants.length?restaurants.slice(0, 4).map((restaurant: any) => (
                 <div
                   onClick={() => navigate("/menu", { state: restaurant._id })}
                   key={restaurant._id}
@@ -242,7 +248,7 @@ useEffect(()=>{
                     </div>
                   </div>
                 </div>
-              ))}
+              )):""}
             </Stack>
             <Link to="/restaurants" id="sign-link" className="log3">
               <button className="bb">

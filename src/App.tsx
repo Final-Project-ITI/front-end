@@ -24,6 +24,8 @@ import { jwtDecode } from "jwt-decode";
 import { IPayload } from "./models/payload.mode.ts";
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 import PaymentSuccess from "./components/pages/payment_success.tsx";
+import Loading from "./components/shared/Loading.tsx";
+import LoadingContext from "./context/LoadingProvider.tsx";
 
 function App() {
   const path = useLocation().pathname;

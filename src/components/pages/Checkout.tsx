@@ -29,6 +29,7 @@ function Checkout({}) {
   const [phones, setPhones] = useState<IPhone[]>([]);
   const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const addPhoneNumber = (phone: any) => {
     const newPhones = [...phones, phone];
     setPhones(newPhones);

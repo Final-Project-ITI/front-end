@@ -193,7 +193,15 @@ function SideCart({
                   </Box>
                   <Typography
                     title={item.productId.title}
-                    sx={{ fontSize: "16px" }}
+                    sx={{
+                      fontSize: "16px",
+                      display: "block",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      textOverflow: " ellipsis",
+                      msTextOverflow: "ellipsis",
+                      maxWidth: { xs: "8vw" },
+                    }}
                   >
                     {item.productId.title}
                   </Typography>

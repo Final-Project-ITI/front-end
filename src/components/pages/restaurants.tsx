@@ -124,7 +124,7 @@ export default function Restaurants() {
               textAlign: "center",
               position: "initial",
               bottom: "10px",
-              fontSize:{xs:"3.8vw",sm:"20px"}
+              fontSize:{xs:"3.8vw",sm:"24px"}
             }}
           >
             Order from your favorite restaurants now!

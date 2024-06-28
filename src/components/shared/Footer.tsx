@@ -91,7 +91,8 @@ function Footer({ whyUsRef }: { whyUsRef: React.MutableRefObject<undefined> }) {
                 Find us on social media
               </Typography>
               <Stack direction={"row"}>
-                <Button>
+                
+                <Button onClick={()=>window.location.replace("https://www.instagram.com/foodi1465/")}>
                   <svg
                     width="32"
                     height="24"
@@ -105,7 +106,7 @@ function Footer({ whyUsRef }: { whyUsRef: React.MutableRefObject<undefined> }) {
                     />
                   </svg>
                 </Button>
-                <Button>
+                <Button onClick={()=>window.location.replace("https://www.facebook.com/profile.php?id=100084282463490")}>
                   <svg
                     width="32"
                     height="24"
@@ -131,7 +132,7 @@ function Footer({ whyUsRef }: { whyUsRef: React.MutableRefObject<undefined> }) {
                     </g>
                   </svg>
                 </Button>
-                <Button>
+                <Button onClick={()=>window.location.replace("https://x.com/FoodiSocial20")}>
                   <svg
                     width="32"
                     height="24"

@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
 import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
+import Loading from "../shared/Loading";
 
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 
@@ -48,7 +49,6 @@ function Cart() {
     if (item.quantity + newQuantity < 0) {
       return;
     } else if (item.quantity + newQuantity === 0) {
-      handleDeleteItem(item);
       return;
     }
     editItemQuantity(item.productId._id, newQuantity);
@@ -161,7 +161,9 @@ function Cart() {
 
                   {cartItems.map((item: any) => (
                     <TableRow key={item.productId._id}>
-                      <TableCell sx={{ padding: "10px 0" }}>
+                      <TableCell
+                        sx={{ padding: { xs: "10px 0.2px", md: "10px 2px" } }}
+                      >
                         <Box
                           sx={{
                             height: { xs: "38px", sm: "50px", md: "65px" },
@@ -191,7 +193,7 @@ function Cart() {
                           whiteSpace: "nowrap",
                           textOverflow: " ellipsis",
                           msTextOverflow: "ellipsis",
-                          padding: "0",
+                          padding: { xs: "0 0.2px", md: "0 2px" },
                         }}
                       >
                         <Typography

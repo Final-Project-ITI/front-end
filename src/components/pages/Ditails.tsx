@@ -231,7 +231,7 @@ const Details = ({}: IProps) => {
                 >
                   {productdetails?.description}
                 </Typography>
-                {productdetails.description.length > 100 && (
+                {productdetails?.description?.length > 100 && (
                   <Button
                     sx={{
                       position: "absolute",

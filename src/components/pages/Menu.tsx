@@ -29,7 +29,6 @@ export const Menu = () => {
   const handleGetCategories = async () => {
     const res = await axios.get("/api/v1/categories/" + location.state);
     setCategories(res.data);
-    console.log(res.data);
   };
 
   const handleGetRestaurantInfo = async () => {
@@ -41,7 +40,6 @@ export const Menu = () => {
     handleGetMenuItems();
     handleGetCategories();
     handleGetRestaurantInfo();
-    console.log(menu)
   }, [location.state]);
 
   const handleCategoryClick = (categoryId: string) => {

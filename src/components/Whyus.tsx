@@ -42,8 +42,7 @@ export default function Card() {
             direction={{ xs: "column", sm: "row" }}
             justifyContent="center"
             alignItems="center"
-            sx={{ background: "#f3ece4", flexWrap: "wrap" }}
-            spacing={{ xs: 3, sm: 10 }}
+            sx={{ marginBlock:"10px",background: "#f3ece4", flexWrap: "wrap",gap:{xs: 3,sm:7 ,md: 10} }}
           >
             <Stack
               justifyContent="center"
@@ -53,7 +52,6 @@ export default function Card() {
                 flexWrap: "wrap",
                 textAlign: "center",
                 width: { xs: "100%", sm: "250px" },
-                margin: { xs: "10px 0", sm: "0" },
               }}
             >
               <Box
@@ -97,7 +95,6 @@ export default function Card() {
                 flexWrap: "wrap",
                 textAlign: "center",
                 width: { xs: "100%", sm: "250px" },
-                margin: { xs: "10px 0", sm: "0" },
               }}
             >
               <Box
@@ -139,7 +136,6 @@ export default function Card() {
                 flexWrap: "wrap",
                 textAlign: "center",
                 width: { xs: "100%", sm: "250px" },
-                margin: { xs: "10px 0", sm: "0" },
               }}
             >
               <Box

@@ -14,7 +14,7 @@ import img from "../../assets/images/11.png";
 import img2 from "../../assets/images/12.png";
 import Card from "../Whyus";
 import axios from "../../api/axios";
-import Loader from "../shared/loader";
+import Loading from "../shared/Loading";
 
 const Search = styled("div")(({ theme }) => ({
   paddingLeft: "20px",
@@ -68,6 +68,7 @@ export default function Home({
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
+  // const [loading, setloading] = useState(false);
 
   useEffect(() => {
     getAllRestaurants();
@@ -80,8 +81,10 @@ export default function Home({
         ? `/api/v1/restaurant/search/${searchRest}`
         : "/api/v1/restaurant/";
       const { data } = await axios.get(Rest_URL);
+      // setloading(false);
       setRestaurants(data);
     } catch (err: any) {
+      // setloading(false);
       console.error(err.response?.data || err.message, "err");
     } finally {
       setLoading(false);
@@ -114,6 +117,7 @@ export default function Home({
 
   return (
     <>
+      {loading && <Loading />}
       <div>
         <Stack
           height={"400px"}
@@ -134,6 +138,7 @@ export default function Home({
               borderRadius: "20%",
               position: "relative",
               bottom: "30px",
+              visibility: { xs: "hidden", sm: "visible" },
             }}
           ></Box>
           <Stack
@@ -144,7 +149,6 @@ export default function Home({
             top={"-40px"}
           >
             <Typography
-              variant="h5"
               noWrap
               sx={{
                 fontWeight: 700,
@@ -152,10 +156,12 @@ export default function Home({
                 color: "black",
                 textAlign: "center",
                 position: "initial",
+                fontSize: { xs: "3.5vw", sm: "24px" },
               }}
             >
               Order food online in Zagazig
             </Typography>
+
             <Search>
               <StyledInputBase
                 placeholder="Search…"
@@ -180,87 +186,95 @@ export default function Home({
               backgroundSize: "cover",
               border: "5px",
               borderRadius: "5%",
+              visibility: { xs: "hidden", sm: "visible" },
             }}
           ></Box>
         </Stack>
 
-        {loading ? (
-          <Loader />
-        ) : (
-          <Box
+        <Box
+          sx={{
+            minHeight: "400px",
+            backgroundColor: "#f3ece4",
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <Typography
+            variant="h5"
+            noWrap
             sx={{
-              minHeight: "400px",
-              backgroundColor: "#f3ece4",
-              alignItems: "center",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "black",
+              textAlign: "center",
+              marginTop: "90px",
             }}
           >
-            <Typography
-              variant="h5"
-              noWrap
-              sx={{
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "black",
-                textAlign: "center",
-                position: "relative",
-                top: "100px",
-              }}
-            >
-              Restaurants
-            </Typography>
+            Restaurants
+          </Typography>
+          <Stack
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+              marginBlock: "40px",
+              background: "#f3ece4",
+            }}
+          >
             <Stack
+              direction="row"
               justifyContent="center"
               alignItems="center"
               sx={{
-                minHeight: "800px",
-                background: "#f3ece4",
+                background: "f3ece4",
+                minHeight: "400px",
+                flexWrap: "wrap",
+                spacing: 4,
               }}
             >
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                sx={{
-                  background: "f3ece4",
-                  minHeight: "400px",
-                  flexWrap: "wrap",
-                  spacing: 4,
-                }}
-              >
-                {restaurants.length &&
-                  restaurants.slice(0, 4).map((restaurant: any) => (
+              {restaurants.length
+                ? restaurants.slice(0, 4).map((restaurant: any) => (
                     <div
                       onClick={() =>
                         navigate("/menu", { state: restaurant._id })
                       }
                       key={restaurant._id}
                       className="flip-card"
+                      style={{
+                        cursor: "pointer",
+                      }}
                     >
                       <div className="flip-card-inner">
                         <div className="flip-card-front">
                           <img src={restaurant.icon} alt={restaurant.name} />
                         </div>
                         <div className="flip-card-back">
-                          <Typography variant="h5">
+                          <Typography
+                            variant="h5"
+                            fontWeight={"bold"}
+                            sx={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              textWrap: "nowrap",
+                            }}
+                          >
                             {restaurant.name}
                           </Typography>
                         </div>
                       </div>
                     </div>
-                  ))}
-              </Stack>
-              <Link to="/restaurants" id="sign-link" className="log3">
-                <button className="bb">
-                  <h3>See More</h3>
-                </button>
-              </Link>
+                  ))
+                : ""}
             </Stack>
-          </Box>
-        )}
-        <Box sx={{ marginTop: "0px" }} ref={whyUsRef}>
+            <Link to="/restaurants" id="sign-link" className="log3">
+              <button className="bb">
+                <h3>See More</h3>
+              </button>
+            </Link>
+          </Stack>
+        </Box>
+        <Box sx={{ marginTop: { xs: "90px" } }} ref={whyUsRef}>
           <Card />
         </Box>
       </div>

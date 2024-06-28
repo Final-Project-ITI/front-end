@@ -11,12 +11,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
-import item from "../../models/Item";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
 import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
+import Loading from "../shared/Loading";
 
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 
@@ -27,21 +27,25 @@ function Cart() {
     cartTotal,
     editItemQuantity,
     deleteItemQuantity,
-  } = useContext(CartContext);
+  }: any = useContext(CartContext);
 
   const navigate = useNavigate();
   const vat = 10;
   const [showDeleteItemPopUp, setShowDeleteItemPopUp] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleDeleteItem = (item: any) => {
     deleteItemQuantity(item.productId._id);
 
     const fetchDeleteItem = async () => {
+      // setLoading(true);
       const res = await axios.delete(url + "/cart/" + item._id, {
         headers: { jwt: localStorage.getItem("token") },
       });
+      // setLoading(false);
     };
+
     fetchDeleteItem();
   };
 
@@ -49,11 +53,11 @@ function Cart() {
     if (item.quantity + newQuantity < 0) {
       return;
     } else if (item.quantity + newQuantity === 0) {
-      handleDeleteItem(item);
       return;
     }
     editItemQuantity(item.productId._id, newQuantity);
     const fetchEditItemQuantity = async () => {
+      // setLoading(true);
       const res = await axios.patch(
         url + "/cart/" + item._id,
         {
@@ -63,12 +67,13 @@ function Cart() {
           headers: { jwt: localStorage.getItem("token") },
         }
       );
-      console.log(res);
+      // setLoading(false);
     };
     fetchEditItemQuantity();
   };
   return (
     <>
+      {loading && <Loading />}
       {showDeleteItemPopUp && itemToDelete && (
         <ConfirmDeleteFromCart
           itemToDelete={itemToDelete}
@@ -163,7 +168,9 @@ function Cart() {
 
                   {cartItems.map((item: any) => (
                     <TableRow key={item.productId._id}>
-                      <TableCell sx={{ padding: "10px 0" }}>
+                      <TableCell
+                        sx={{ padding: { xs: "10px 0.2px", md: "10px 2px" } }}
+                      >
                         <Box
                           sx={{
                             height: { xs: "38px", sm: "50px", md: "65px" },
@@ -193,7 +200,7 @@ function Cart() {
                           whiteSpace: "nowrap",
                           textOverflow: " ellipsis",
                           msTextOverflow: "ellipsis",
-                          padding: "0",
+                          padding: { xs: "0 0.2px", md: "0 2px" },
                         }}
                       >
                         <Typography

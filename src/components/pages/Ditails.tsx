@@ -18,12 +18,14 @@ import CartContext from "../../context/CartProvider";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Loading from "../shared/Loading";
 
 interface IProps {}
 
 const Details = ({}: IProps) => {
   const theme = useTheme();
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
   const [productdetails, setProductDetails] = useState<IProduct>({
     _id: "",
     description: "",
@@ -55,6 +57,7 @@ const Details = ({}: IProps) => {
 
   const handleAddItemToCart = async (product: IProduct, quantity: number) => {
     try {
+      setLoading(true);
       const res = await axios.post(
         "/api/v1/cart",
         {
@@ -79,11 +82,14 @@ const Details = ({}: IProps) => {
       setIsInCart(true);
     } catch (e) {
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleRemoveItemFromCart = async (productId: string) => {
     try {
+      setLoading(true);
       const res = await axios.delete(`/api/v1/cart/${productId}`, {
         headers: { jwt: localStorage.getItem("token") },
       });
@@ -98,11 +104,14 @@ const Details = ({}: IProps) => {
       }
     } catch (e) {
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     setProductDetails(location.state);
+    setLoading(false);
 
     if (location.state) {
       const productInCart = cartItems.some(
@@ -122,6 +131,7 @@ const Details = ({}: IProps) => {
 
   return (
     <>
+      {loading && <Loading />}
       <Grid
         container
         alignItems="center"
@@ -231,7 +241,7 @@ const Details = ({}: IProps) => {
                 >
                   {productdetails?.description}
                 </Typography>
-                {productdetails.description.length > 100 && (
+                {productdetails?.description?.length > 100 && (
                   <Button
                     sx={{
                       position: "absolute",

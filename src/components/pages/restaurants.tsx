@@ -6,16 +6,19 @@ import img from "../../assets/images/21.png";
 import img2 from "../../assets/images/22.png";
 import axios from "../../api/axios";
 import Section from "../shared/Section";
-import Loader from "../shared/loader";
+import Loading from "../shared/Loading";
 import { IMenuCategory } from "../../models/menuCategory.model";
+import { IRestaurant } from "../../models/restaurant.model";
 
 const itemsInPage = 8;
 
 export default function Restaurants() {
-  const [restaurants, setRestaurants] = useState([]);
-  const [allRestaurants, setAllRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
+  const [allRestaurants, setAllRestaurants] = useState<IRestaurant[]>([]);
   const [page, setPage] = useState(0);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState<IRestaurant[]>(
+    []
+  );
   const [categories, setCategories] = useState<IMenuCategory[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,10 +34,11 @@ export default function Restaurants() {
   };
 
   const handleCategoryClick = (categoryId: string) => {
-    const filtered = allRestaurants.filter((restaurant: any) =>
-      restaurant.categoryIds?.includes(categoryId)
+    const filtered = allRestaurants.filter((restaurant) =>
+      restaurant.categoriesIds?.includes(categoryId)
     );
     setFilteredRestaurants(filtered);
+    setPage(0);
   };
 
   useEffect(() => {
@@ -61,7 +65,7 @@ export default function Restaurants() {
 
   const filterRestaurants = () => {
     if (searchQuery) {
-      const filtered = allRestaurants.filter((restaurant: any) =>
+      const filtered = allRestaurants.filter((restaurant) =>
         restaurant.name.toLowerCase().includes(searchQuery)
       );
       setFilteredRestaurants(filtered);
@@ -89,9 +93,9 @@ export default function Restaurants() {
   const currentItems = filteredRestaurants.slice(startIndex, endIndex);
 
   return (
-    <div>
-      {loading && <Loader />}
-      <div style={{ visibility: loading ? "hidden" : "visible" }}>
+    <>
+      {loading && <Loading />}
+      <div>
         <Stack
           height={"400px"}
           direction="row"
@@ -108,6 +112,7 @@ export default function Restaurants() {
               backgroundPosition: "center center",
               backgroundSize: "cover",
               borderRadius: "1%",
+              visibility: { xs: "hidden", sm: "visible" },
             }}
           ></Box>
           <Stack
@@ -118,7 +123,6 @@ export default function Restaurants() {
             top={"-40px"}
           >
             <Typography
-              variant="h5"
               noWrap
               sx={{
                 fontWeight: 700,
@@ -126,6 +130,7 @@ export default function Restaurants() {
                 textAlign: "center",
                 position: "initial",
                 bottom: "10px",
+                fontSize: { xs: "3.8vw", sm: "24px" },
               }}
             >
               Order from your favorite restaurants now!
@@ -141,6 +146,7 @@ export default function Restaurants() {
               backgroundSize: "cover",
               position: "relative",
               bottom: "20px",
+              visibility: { xs: "hidden", sm: "visible" },
             }}
           ></Box>
         </Stack>
@@ -150,11 +156,13 @@ export default function Restaurants() {
           sx={{ minHeight: "800px", background: "#f3ece4" }}
           spacing={4}
         >
-          <Section
-            categories={categories}
-            sectionRefs={sectionRefs}
-            onCategoryClick={handleCategoryClick}
-          />
+          {categories.length > 0 && (
+            <Section
+              categories={categories}
+              sectionRefs={sectionRefs}
+              onCategoryClick={handleCategoryClick}
+            />
+          )}
           <Stack
             direction="row"
             justifyContent="center"
@@ -167,7 +175,7 @@ export default function Restaurants() {
             }}
             spacing={4}
           >
-            {currentItems.map((restaurant: any, index) => (
+            {currentItems.map((restaurant, index) => (
               <div key={restaurant._id} className="card">
                 <div className="image-wrapper">
                   <img src={restaurant.icon} alt={`Image ${index}`} />
@@ -186,7 +194,7 @@ export default function Restaurants() {
               </div>
             ))}
           </Stack>
-          {Math.ceil(filteredRestaurants.length / itemsInPage) > 1 && (
+          {Math.ceil(filteredRestaurants.length / itemsInPage) > 1 ? (
             <Stack direction="row" spacing={2} alignItems="center">
               <Button sx={{ fontSize: "2rem" }} onClick={handlePrev}>
                 &larr;
@@ -199,9 +207,11 @@ export default function Restaurants() {
                 &rarr;
               </Button>
             </Stack>
+          ) : (
+            ""
           )}
         </Stack>
       </div>
-    </div>
+    </>
   );
 }

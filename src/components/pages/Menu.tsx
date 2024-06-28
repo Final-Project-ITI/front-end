@@ -8,6 +8,7 @@ import About from "../shared/About";
 import Category from "../shared/Category";
 import Image from "../shared/Image";
 import Section from "../shared/Section";
+import Loading from "../shared/Loading";
 import { Box } from "@mui/material";
 
 export const Menu = () => {
@@ -18,23 +19,25 @@ export const Menu = () => {
   const [restaurantInfo, setRestaurantInfo] = useState<IRestaurant>(
     {} as IRestaurant
   );
-
+  const [loading, setLoading] = useState(true);
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const handleGetMenuItems = async () => {
     const res = await axios.get("/api/v1/products/" + location.state);
     setMenu(res.data);
+    setLoading(false);
   };
 
   const handleGetCategories = async () => {
     const res = await axios.get("/api/v1/categories/" + location.state);
     setCategories(res.data);
-    console.log(res.data);
+    setLoading(false);
   };
 
   const handleGetRestaurantInfo = async () => {
     const res = await axios.get("/api/v1/restaurant/" + location.state);
     setRestaurantInfo(res.data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -49,18 +52,20 @@ export const Menu = () => {
 
   return (
     <>
+      {loading && <Loading />}
       <Image restaurantInfo={restaurantInfo} />
-      <Section
-        categories={categories}
-        sectionRefs={sectionRefs}
-        onCategoryClick={handleCategoryClick}
-      />
+      {categories.length > 0 && (
+        <Section
+          categories={categories}
+          sectionRefs={sectionRefs}
+          onCategoryClick={handleCategoryClick}
+        />
+      )}
       {categories.map((category) => (
         <Box
           id={category._id}
           key={category._id}
-          ref={(el) => (sectionRefs.current[category._id] = el)}
-          sx={{ marginBottom: "-280px" }}
+          ref={(el: any) => (sectionRefs.current[category._id] = el)}
         >
           <Category
             name={category.name}

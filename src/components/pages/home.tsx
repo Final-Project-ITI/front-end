@@ -154,11 +154,9 @@ export default function Home({
                 color: "black",
                 textAlign: "center",
                 position: "initial",
-<<<<<<< HEAD
                 fontSize: { xs: "3.5vw", sm: "20px" },
-=======
+
                 fontSize:{xs:"3.5vw",sm:"24px"}
->>>>>>> 2123ec35ad03ca0dbc2f35f45968806118e4d3c5
               }}
             >
               Order food online in Zagazig
@@ -235,38 +233,6 @@ export default function Home({
                 spacing: 4,
               }}
             >
-<<<<<<< HEAD
-              {restaurants.length &&
-                restaurants.slice(0, 4).map((restaurant: any) => (
-                  <div
-                    onClick={() => navigate("/menu", { state: restaurant._id })}
-                    key={restaurant._id}
-                    className="flip-card"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    <div className="flip-card-inner">
-                      <div className="flip-card-front">
-                        <img src={restaurant.icon} alt={restaurant.name} />
-                      </div>
-                      <div className="flip-card-back">
-                        <Typography
-                          variant="h5"
-                          fontWeight={"bold"}
-                          sx={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            textWrap: "nowrap",
-                          }}
-                        >
-                          {restaurant.name}
-                        </Typography>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-=======
 
               {restaurants.length?restaurants.slice(0, 4).map((restaurant: any) => (
                 <div
@@ -284,7 +250,6 @@ export default function Home({
                   </div>
                 </div>
               )):""}
->>>>>>> 2123ec35ad03ca0dbc2f35f45968806118e4d3c5
             </Stack>
             <Link to="/restaurants" id="sign-link" className="log3">
               <button className="bb">

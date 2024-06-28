@@ -18,7 +18,7 @@ import CartContext from "../../context/CartProvider";
 import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 import Loading from "../shared/Loading";
 
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function Cart() {
   const {
@@ -27,7 +27,7 @@ function Cart() {
     cartTotal,
     editItemQuantity,
     deleteItemQuantity,
-  }:any = useContext(CartContext);
+  }: any = useContext(CartContext);
 
   const navigate = useNavigate();
   const vat = 10;
@@ -161,7 +161,9 @@ function Cart() {
 
                   {cartItems.map((item: any) => (
                     <TableRow key={item.productId._id}>
-                      <TableCell sx={{padding:{ xs:"10px 0.2px",md:"10px 2px"}, }}>
+                      <TableCell
+                        sx={{ padding: { xs: "10px 0.2px", md: "10px 2px" } }}
+                      >
                         <Box
                           sx={{
                             height: { xs: "38px", sm: "50px", md: "65px" },
@@ -191,7 +193,7 @@ function Cart() {
                           whiteSpace: "nowrap",
                           textOverflow: " ellipsis",
                           msTextOverflow: "ellipsis",
-                          padding:{ xs:"0 0.2px",md:"0 2px"},
+                          padding: { xs: "0 0.2px", md: "0 2px" },
                         }}
                       >
                         <Typography

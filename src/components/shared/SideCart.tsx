@@ -6,7 +6,7 @@ import axios from "axios";
 import CartContext from "../../context/CartProvider";
 import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function SideCart({
   setOpenSideCart,
@@ -20,7 +20,7 @@ function SideCart({
     cartTotal,
     editItemQuantity,
     deleteItemQuantity,
-  }:any = useContext(CartContext);
+  }: any = useContext(CartContext);
 
   const [showDeleteItemPopUp, setShowDeleteItemPopUp] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -193,11 +193,15 @@ function SideCart({
                   </Box>
                   <Typography
                     title={item.productId.title}
-                    sx={{ fontSize: "16px",display: "block",
+                    sx={{
+                      fontSize: "16px",
+                      display: "block",
                       overflow: "hidden",
                       whiteSpace: "nowrap",
                       textOverflow: " ellipsis",
-                      msTextOverflow: "ellipsis",maxWidth: { xs: "8vw" } }}
+                      msTextOverflow: "ellipsis",
+                      maxWidth: { xs: "8vw" },
+                    }}
                   >
                     {item.productId.title}
                   </Typography>

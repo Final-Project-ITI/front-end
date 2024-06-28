@@ -80,6 +80,7 @@ export default function Home({whyUsRef}:{whyUsRef: React.MutableRefObject<undefi
       setloading(false)
       setRestaurants(data);
     } catch (err: any) {
+      setloading(false);
       console.error(err.response?.data || err.message, "err");
     }
   };

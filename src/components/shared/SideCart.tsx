@@ -20,7 +20,7 @@ function SideCart({
     cartTotal,
     editItemQuantity,
     deleteItemQuantity,
-  } = useContext(CartContext);
+  }:any = useContext(CartContext);
 
   const [showDeleteItemPopUp, setShowDeleteItemPopUp] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -53,7 +53,6 @@ function SideCart({
           headers: { jwt: localStorage.getItem("token") },
         }
       );
-      console.log(res);
     };
     fetchEditItemQuantity();
   };

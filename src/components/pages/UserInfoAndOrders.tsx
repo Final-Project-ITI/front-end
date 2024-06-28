@@ -29,7 +29,7 @@ const UserInfoAndOrders = () => {
   const [phones, setPhones] = React.useState<IPhone[]>([]);
   const [items, setItems] = React.useState<IItem[]>([]);
   const [orders, setOrders] = React.useState<IOrder[]>([]);
-  const [order, setOrder] = React.useState<IOrder>({});
+  const [order, setOrder] = React.useState<any>({});
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -151,9 +151,7 @@ const UserInfoAndOrders = () => {
     setSecondPhone(phones[1]?.phoneNumber);
   }, [phones]);
 
-  useEffect(() => {
-    console.log(orders, items);
-  }, [orders, items]);
+
 
   return (
     <Grid container marginBlock={"100px"} justifyContent={"center"}>
@@ -398,7 +396,7 @@ const UserInfoAndOrders = () => {
                   <span>EGP {handleTotalPrice(order._id)}</span>
                 </Typography>
               ))
-            : ""}
+            : "No orders"}
         </Box>
       </Grid>
       <OrderDetailsPopup

@@ -75,7 +75,7 @@ const Product = ({ product }: ProductProps) => {
             transform: "translateX(-50%)",
           }}
         />
-        <Typography sx={{ fontWeight: "700", fontSize: "24px", mt: "159px" }}>
+        <Typography sx={{ fontWeight: "700", fontSize: "24px", mt: {xs:"120px",sm:"159px"} }}>
           {product.title}
         </Typography>
 

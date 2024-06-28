@@ -11,8 +11,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
-import item from "../../models/Item";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CartContext from "../../context/CartProvider";
@@ -27,7 +26,7 @@ function Cart() {
     cartTotal,
     editItemQuantity,
     deleteItemQuantity,
-  } = useContext(CartContext);
+  }:any = useContext(CartContext);
 
   const navigate = useNavigate();
   const vat = 10;
@@ -63,7 +62,6 @@ function Cart() {
           headers: { jwt: localStorage.getItem("token") },
         }
       );
-      console.log(res);
     };
     fetchEditItemQuantity();
   };

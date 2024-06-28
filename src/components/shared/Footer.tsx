@@ -2,17 +2,17 @@ import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import logo from "../../assets/logo.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function Footer({whyUsRef}:{whyUsRef: React.MutableRefObject<undefined>}) {
-const navigate =useNavigate()
-const location= useLocation()
+function Footer({ whyUsRef }: { whyUsRef: React.MutableRefObject<undefined> }) {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-const scrollToWhyUs = () => {
-  const { current } = whyUsRef;
-  if (current !== null) {
-    //@ts-ignore
-    current.scrollIntoView({ behavior: "smooth" });
-  }
-};
+  const scrollToWhyUs = () => {
+    const { current } = whyUsRef;
+    if (current !== null) {
+      //@ts-ignore
+      current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <>
@@ -36,7 +36,7 @@ const scrollToWhyUs = () => {
           <Grid item xs={12} md={3}>
             <Stack justifyContent={"center"}>
               <Button>
-                <img src={logo} width={"144px"} height={"144px"} />
+                <img src={logo} width={"144px"} height={"144px"} alt="Logo" />
               </Button>
               <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
                 Craving deliciousness? Order from your favorite restaurants now!
@@ -45,17 +45,42 @@ const scrollToWhyUs = () => {
           </Grid>
           <Grid item xs={12} md={2}>
             <Stack justifyContent={"center"} spacing={2}>
-              <Typography sx={{ fontSize: "24px", fontWeight: "700"}}>
+              <Typography sx={{ fontSize: "24px", fontWeight: "700" }}>
                 Quick links
               </Typography>
-              
-              <Typography sx={{ fontWeight: "400", fontSize: "16px", "&:hover":{cursor:"pointer"}  }} onClick={()=>location.pathname=="/"?scrollToWhyUs():navigate("/",{ state: { section: "why us" } })}>
+
+              <Typography
+                sx={{
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  "&:hover": { cursor: "pointer" },
+                }}
+                onClick={() =>
+                  location.pathname == "/"
+                    ? scrollToWhyUs()
+                    : navigate("/", { state: { section: "why us" } })
+                }
+              >
                 why us?{" "}
               </Typography>
-              <Typography sx={{ fontWeight: "400", fontSize: "16px", "&:hover":{cursor:"pointer"}  }} onClick={()=>navigate("/Restaurants")}>
+              <Typography
+                sx={{
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  "&:hover": { cursor: "pointer" },
+                }}
+                onClick={() => navigate("/Restaurants")}
+              >
                 Restaurants{" "}
               </Typography>
-              <Typography sx={{ fontWeight: "400", fontSize: "16px", "&:hover":{cursor:"pointer"}  }} onClick={()=>navigate("/")}>
+              <Typography
+                sx={{
+                  fontWeight: "400",
+                  fontSize: "16px",
+                  "&:hover": { cursor: "pointer" },
+                }}
+                onClick={() => navigate("/")}
+              >
                 Home{" "}
               </Typography>
             </Stack>
@@ -124,6 +149,18 @@ const scrollToWhyUs = () => {
             </Stack>
           </Grid>
         </Grid>
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: "#373334",
+          color: "white",
+          textAlign: "center",
+          padding: "10px",
+        }}
+      >
+        <Typography sx={{ fontSize: "15px" }}>
+          Foodi RH © All rights reserved
+        </Typography>
       </Box>
     </>
   );

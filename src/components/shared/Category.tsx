@@ -18,15 +18,14 @@ const Category = ({ name, products }: IProps) => {
           justifyContent="center"
           alignItems="center"
           sx={{
-            height: "40vh",
             fontWeight: "700",
-            fontSize: "40px",
+            fontSize:{xs:"30px",sm:"40px"},
           }}
         >
           {name}
         </Typography>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{marginTop:"180px"}}>
         <Stack
           direction={"row"}
           justifyContent={"space-around"}
@@ -37,7 +36,7 @@ const Category = ({ name, products }: IProps) => {
               <Product key={product._id} product={product} />
             ))
           ) : (
-            <Typography variant="h2">Stay Tuned For Upcoming Items</Typography>
+            <Typography sx={{textAlign:"center", marginTop:"-120px",fontSize:{xs:"30px",sm:"40px"}, fontWeight:"700"}} variant="h2">Stay Tuned For Upcoming Items</Typography>
           )}
         </Stack>
       </Grid>

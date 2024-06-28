@@ -11,7 +11,7 @@ const About = ({ restaurantInfo }: IProps) => {
       <Grid
         item
         xs={12}
-        sx={{ width: "100%", marginTop: "480px", marginBottom: "200px" }}
+        sx={{ width: "100%", marginTop: "90px", marginBottom: "200px" }}
       >
         <Box
           sx={{
@@ -19,6 +19,7 @@ const About = ({ restaurantInfo }: IProps) => {
             marginBottom: 4,
             maxWidth: "800px",
             margin: "0 auto",
+            paddingInline:{xs:"22px",md:"30px"}
           }}
         >
           <Typography

@@ -29,7 +29,6 @@ export const Menu = () => {
   const handleGetCategories = async () => {
     const res = await axios.get("/api/v1/categories/" + location.state);
     setCategories(res.data);
-    console.log(res.data);
   };
 
   const handleGetRestaurantInfo = async () => {
@@ -61,8 +60,7 @@ export const Menu = () => {
         <Box
           id={category._id}
           key={category._id}
-          ref={(el) => (sectionRefs.current[category._id] = el)}
-          sx={{ marginBottom: "-280px" }}
+          ref={(el:any) => (sectionRefs.current[category._id] = el)}
         >
           <Category
             name={category.name}

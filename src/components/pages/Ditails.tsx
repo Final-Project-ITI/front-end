@@ -24,7 +24,7 @@ interface IProps {}
 const Details = ({}: IProps) => {
   const theme = useTheme();
   const location = useLocation();
-  const {id,resId}= useParams();
+  const { id, resId } = useParams();
   const [productdetails, setProductDetails] = useState<IProduct>({
     _id: "",
     description: "",
@@ -54,7 +54,7 @@ const Details = ({}: IProps) => {
   const [quantity, setQuantity] = useState(1);
   const [isInCart, setIsInCart] = useState(false);
 
-  const url = "https://back-end-j1bi.onrender.com/api/v1";
+  const url = "http://localhost:3000/api/v1";
 
   const handleAddItemToCart = async (product: IProduct, quantity: number) => {
     try {
@@ -104,17 +104,16 @@ const Details = ({}: IProps) => {
     }
   };
 
-  const getProductDetails=async(id:any)=>{
-    const res = await axios.get(url+"/products/" +resId+"/"+ id);
-    if(res.status=200){
+  const getProductDetails = async (id: any) => {
+    const res = await axios.get(url + "/products/" + resId + "/" + id);
+    if ((res.status = 200)) {
       setProductDetails(res.data);
     }
-
-  }
+  };
 
   useEffect(() => {
-    getProductDetails(id)
-    
+    getProductDetails(id);
+
     if (id) {
       const productInCart = cartItems.some(
         (item: any) => item.productId === id

@@ -27,10 +27,12 @@ const Product = ({ product }: ProductProps) => {
     try {
       if (!localStorage.getItem("token")) {
         navigate("/login");
+        return;
       }
       if (cartItems.length) {
         if (resId !== cartItems[0].productId.restaurantId) {
           navigate("/");
+          return;
         }
       }
       const res = await axiosPrivate.post(

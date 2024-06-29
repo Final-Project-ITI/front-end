@@ -79,31 +79,31 @@ const Details = ({}: IProps) => {
       }
 
       setCartItems(res.data.itemsIds);
-      setCartQuantity((prevQuantity: number) => prevQuantity + quantity);
-      setCartTotal((prevTotal: number) => prevTotal + product.price * quantity);
       setRestaurantId(product.restaurantId);
       setIsInCart(true);
+      calculateTotal(res.data.itemsIds);
+      calculateQuantity(res.data.itemsIds);
     } catch (e) {
       console.error(e);
     }
   };
 
-  const handleRemoveItemFromCart = async (productId: string) => {
-    try {
-      const res = await axiosPrivate.delete(`/api/v1/cart/${productId}`);
+  // const handleRemoveItemFromCart = async (productId: string) => {
+  //   try {
+  //     const res = await axiosPrivate.delete(`/api/v1/cart/${productId}`);
 
-      setCartItems(res.data.itemsIds);
-      setCartQuantity((prevQuantity: number) => prevQuantity - 1);
-      setCartTotal((prevTotal: number) => prevTotal - productdetails.price);
-      setIsInCart(false);
+  //     setCartItems(res.data.itemsIds);
+  //     setCartQuantity((prevQuantity: number) => prevQuantity - 1);
+  //     setCartTotal((prevTotal: number) => prevTotal - productdetails.price);
+  //     setIsInCart(false);
 
-      if (res.data.itemsIds.length === 0) {
-        setRestaurantId("");
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  //     if (res.data.itemsIds.length === 0) {
+  //       setRestaurantId("");
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const getProductDetails = async (id: any) => {
     const res = await axiosPrivate.get(url + "/products/" + resId + "/" + id);
@@ -331,43 +331,23 @@ const Details = ({}: IProps) => {
                 mt: { xs: "24px", md: "60px" },
               }}
             >
-              {isInCart ? (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  sx={{
-                    width: { xs: "100%", md: "577px" },
-                    height: "64px",
-                    borderRadius: "50px",
-                    padding: "10px",
-                    gap: "10px",
-                    fontSize: { xs: "20px", md: "24px" },
-                    fontWeight: "700",
-                  }}
-                  onClick={() => handleRemoveItemFromCart(productdetails._id)}
-                >
-                  <DeleteIcon />
-                  Remove From Cart
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    width: { xs: "100%", md: "577px" },
-                    height: "64px",
-                    borderRadius: "50px",
-                    padding: "10px",
-                    gap: "10px",
-                    fontSize: { xs: "20px", md: "24px" },
-                    fontWeight: "700",
-                  }}
-                  onClick={() => handleAddItemToCart(productdetails, quantity)}
-                >
-                  <ShoppingCartIcon />
-                  Add To Cart
-                </Button>
-              )}
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  width: { xs: "100%", md: "577px" },
+                  height: "64px",
+                  borderRadius: "50px",
+                  padding: "10px",
+                  gap: "10px",
+                  fontSize: { xs: "20px", md: "24px" },
+                  fontWeight: "700",
+                }}
+                onClick={() => handleAddItemToCart(productdetails, quantity)}
+              >
+                <ShoppingCartIcon />
+                Add To Cart
+              </Button>
             </Box>
           </CardContent>
         </Grid>

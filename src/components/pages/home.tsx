@@ -77,7 +77,7 @@ export default function Home({
 
   const getAllRestaurants = async () => {
     try {
-      setLoading(true);
+      if (!searchRest) setLoading(true);
       const Rest_URL = searchRest
         ? `/api/v1/restaurant/search/${searchRest}`
         : "/api/v1/restaurant/";

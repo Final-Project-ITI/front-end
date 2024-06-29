@@ -107,9 +107,9 @@ function App() {
             ></NavBar>
           )}
           <Routes>
-            <Route path="/menu" element={<Menu />} />
+            <Route path="/menu/:id" element={<Menu />} />
 
-            <Route path="/productdetails" element={<Ditails />} />
+            <Route path="/productdetails/:resId/:id" element={<Ditails />} />
             <Route element={<IsNotAuthGuard />}>
               <Route
                 path="/register"

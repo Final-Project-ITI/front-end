@@ -6,7 +6,7 @@ import CartContext from "../../context/CartProvider";
 import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function SideCart({
   setOpenSideCart,
@@ -43,12 +43,9 @@ function SideCart({
     }
     editItemQuantity(item.productId._id, newQuantity);
     const fetchEditItemQuantity = async () => {
-      const res = await axiosPrivate.patch(
-        url + "/cart/" + item._id,
-        {
-          quantity: item.quantity + newQuantity,
-        }
-      );
+      const res = await axiosPrivate.patch(url + "/cart/" + item._id, {
+        quantity: item.quantity + newQuantity,
+      });
     };
     fetchEditItemQuantity();
   };

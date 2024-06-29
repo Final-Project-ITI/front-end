@@ -2,7 +2,7 @@ import { Box, Button, TextField, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 const phoneRegex = new RegExp(/^01[0-2,5]{1}[0-9]{8}$/);
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function AddNumber({
   setAddNumberPopUp,
@@ -28,12 +28,9 @@ function AddNumber({
   };
   const handleAddPhone = () => {
     const fetchAddPhone = async () => {
-      const res = await axiosPrivate.post(
-        url + "/phones",
-        {
-          phoneNumber: phone,
-        }
-      );
+      const res = await axiosPrivate.post(url + "/phones", {
+        phoneNumber: phone,
+      });
       addPhoneNumber(res.data);
       setCheckoutInfo((pre: any) => {
         return { phone: res.data._id, address: pre.address };

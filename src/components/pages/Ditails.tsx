@@ -57,7 +57,7 @@ const Details = ({}: IProps) => {
   const [quantity, setQuantity] = useState(1);
   const [isInCart, setIsInCart] = useState(false);
 
-  const url = "http://localhost:3000/api/v1";
+  const url = "https://back-end-j1bi.onrender.com/api/v1";
 
   const handleAddItemToCart = async (product: IProduct, quantity: number) => {
     const token = localStorage.getItem("token");

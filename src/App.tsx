@@ -23,7 +23,7 @@ import { jwtDecode } from "jwt-decode";
 import NotFoundPage from "./components/pages/page404.tsx";
 
 import { IPayload } from "./models/payload.mode.ts";
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 import PaymentSuccess from "./components/pages/payment_success.tsx";
 import Loading from "./components/shared/Loading.tsx";
 import LoadingContext from "./context/LoadingProvider.tsx";
@@ -33,7 +33,6 @@ import useAxiosPrivate from "./hooks/useAxiosPrivate.tsx";
 function App() {
   const path = useLocation().pathname;
   const [openSideCart, setOpenSideCart] = useState(false);
-
 
   const {
     cartItems,
@@ -50,12 +49,11 @@ function App() {
     restaurantId,
     setRestaurantId,
   }: any = useContext(CartContext);
-  const {auth,setAuth,isUser,setisUser}:any=useAuth();
+  const { auth, setAuth, isUser, setisUser }: any = useAuth();
 
   const whyUsRef = useRef();
 
   const axiosPrivate = useAxiosPrivate();
-
 
   useEffect(() => {
     const getUserCart = async () => {
@@ -66,7 +64,6 @@ function App() {
         setRestaurantId(res.data.itemsIds[0].productId.restaurantId);
         calculateQuantity(newCartItems);
         calculateTotal(newCartItems);
-        console.log(newCartItems)
       }
     };
 
@@ -79,11 +76,11 @@ function App() {
 
       if (expDate > nowDate) {
         setisUser(true);
-        setAuth({token});
+        setAuth({ token });
         getUserCart();
       } else {
         localStorage.removeItem("token");
-        setAuth({token:""})
+        setAuth({ token: "" });
       }
     } else {
       setisUser(false);

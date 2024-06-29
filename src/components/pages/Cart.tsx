@@ -469,6 +469,9 @@ function Cart() {
                       fontSize: { xs: "18px", sm: "24px" },
                       fontWeight: "700",
                     }}
+                    onClick={() => {
+                      navigate("/menu");
+                    }}
                   >
                     Add more items
                   </Button>

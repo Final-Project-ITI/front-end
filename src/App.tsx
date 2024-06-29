@@ -21,6 +21,8 @@ import CartContext from "./context/CartProvider.tsx";
 import IsNotAuthGuard from "./guards/IsNotAuthGuard.tsx";
 import IsAuthGuard from "./guards/IsAuthGuard.tsx";
 import { jwtDecode } from "jwt-decode";
+import NotFoundPage from "./components/pages/page404.tsx";
+
 import { IPayload } from "./models/payload.mode.ts";
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 import PaymentSuccess from "./components/pages/payment_success.tsx";
@@ -126,6 +128,7 @@ function App() {
 
             <Route path="/" element={<Home whyUsRef={whyUsRef} />} />
             <Route path="/restaurants" element={<Restaurants />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
           {path !== "/register" && path !== "/login" && (
             <Footer whyUsRef={whyUsRef} />

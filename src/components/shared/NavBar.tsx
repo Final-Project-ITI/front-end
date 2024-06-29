@@ -16,6 +16,7 @@ import CartContext from "../../context/CartProvider";
 import axios from "axios";
 import socket from "../../utils/socket";
 import { jwtDecode } from "jwt-decode";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useEffect } from "react";
 
 const url = "https://back-end-j1bi.onrender.com/api/v1";
@@ -451,6 +452,15 @@ function NavBar({
                             justifyContent={"center"}
                             alignItems={"center"}
                           >
+                            <NotificationsIcon
+                              sx={{
+                                color: "black",
+                                opacity: "0.5",
+                                fontSize: "70px",
+                                fontWeight: "bold",
+                                mb: "30px",
+                              }}
+                            />
                             <Typography
                               sx={{
                                 color: "black",
@@ -459,7 +469,7 @@ function NavBar({
                                 fontWeight: "bold",
                               }}
                             >
-                              Notifications
+                              There Is No Notifications
                             </Typography>
                           </Stack>
                         )}

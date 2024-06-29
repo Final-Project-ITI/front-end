@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
-import character1 from "../../assets/character-1.jpg";
-import character2 from "../../assets/character-2.jpg";
-import character3 from "../../assets/character-3.jpg";
+import character1 from "../../../public/character-1.svg";
+import character2 from "../../../public/character-2.svg";
+import character3 from "../../../public/character-3.svg";
 
 const NotFoundPage = () => {
   return (
@@ -20,7 +20,7 @@ const NotFoundPage = () => {
         sx={{
           marginBottom: "20px",
           fontWeight: "700",
-          fontSize: "40px",
+          fontSize: "60px",
           marginTop: "70px",
         }}
       >
@@ -35,7 +35,7 @@ const NotFoundPage = () => {
           backgroundColor: "#d84339",
           fontSize: "24px",
           borderRadius: "50px",
-          marginBottom: "25px",
+          marginBottom: "100px",
         }}
       >
         Go to Homepage

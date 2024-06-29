@@ -151,19 +151,7 @@ function Footer({ whyUsRef }: { whyUsRef: React.MutableRefObject<undefined> }) {
           </Grid>
         </Grid>
       </Box>
-      <Box
-        sx={{
-          backgroundColor: "#373334",
-          color: "white",
-          textAlign: "center",
-          padding: "10px",
-        }}
-      >
-        <Typography sx={{ fontSize: "15px" }}>
-          Foodi RH © All rights reserved
-        </Typography>
-      </Box>
-    </>
+     </>
   );
 }
 

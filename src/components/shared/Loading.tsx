@@ -1,7 +1,6 @@
 import { Box, Stack } from "@mui/material";
-import React, { useState } from "react";
-import logo from "../../../public/main logo.svg";
 import "animate.css";
+import logo from "../../../public/main logo.svg";
 
 export default function Loading() {
   return (
@@ -19,7 +18,7 @@ export default function Loading() {
       alignItems={"center"}
     >
       <Box>
-       <img className=" loading" src={logo} />
+        <img className=" loading" src={logo} />
       </Box>
     </Stack>
   );

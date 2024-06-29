@@ -124,10 +124,12 @@ function NavBar({
         socket.off("connect");
       };
     }
-  }, []);
+  }, [isUser]);
 
   React.useEffect(() => {
-    setNotifications((pre: any) => [newNotification, ...pre]);
+    if (newNotification._id) {
+      setNotifications((pre: any) => [newNotification, ...pre]);
+    }
   }, [newNotification]);
 
   return (
@@ -385,7 +387,6 @@ function NavBar({
                           height: 0,
                           borderLeft: "10px solid transparent",
                           borderRight: "10px solid transparent",
-
                           borderBottom: "10px solid black",
                           marginRight: "20px",
                         }}
@@ -394,7 +395,7 @@ function NavBar({
                       <Stack
                         sx={{
                           width: "400px",
-                          maxHeight: "350px",
+                          height: "350px",
                           border: "black solid 1px",
                           backgroundColor: "#E8DCCC",
                           borderRadius: "20px 0 0 20px",
@@ -404,49 +405,64 @@ function NavBar({
                         }}
                         alignItems={"flex-start"}
                       >
-                        {notifications.length
-                          ? notifications.map((notification: any) => (
-                              <Stack
-                                direction={"row"}
-                                color={"black"}
-                                alignItems={"center"}
-                                marginBottom={"10px"}
-                                key={notification?._id}
-                              >
-                                <img
-                                  src={
-                                    notification?.notificationType
-                                      ?.restaurantIcon
-                                  }
-                                  title="icon"
-                                  style={{
-                                    objectFit: "cover",
-                                    width: "64px",
-                                    height: "64px",
-                                    borderRadius: "50%",
-                                    marginRight: "10px",
-                                  }}
-                                />
-                                <Box>
-                                  <Stack direction={"row"}>
-                                    {" "}
-                                    <Typography>
-                                      Your order has been{" "}
-                                    </Typography>
-                                    <Typography
-                                      fontWeight={"bold"}
-                                      marginLeft={"5px"}
-                                    >
-                                      {notification?.notificationType?.name}
-                                    </Typography>
-                                  </Stack>
-                                  <Typography fontSize={"small"} color={"gray"}>
-                                    {handleDate(notification?.createdAt)}
+                        {notifications.length ? (
+                          notifications.map((notification: any) => (
+                            <Stack
+                              direction={"row"}
+                              color={"black"}
+                              alignItems={"center"}
+                              marginBottom={"10px"}
+                              key={notification?._id}
+                            >
+                              <img
+                                src={
+                                  notification?.notificationType?.restaurantIcon
+                                }
+                                title="icon"
+                                style={{
+                                  objectFit: "cover",
+                                  width: "64px",
+                                  height: "64px",
+                                  borderRadius: "50%",
+                                  marginRight: "10px",
+                                }}
+                              />
+                              <Box>
+                                <Stack direction={"row"}>
+                                  {" "}
+                                  <Typography>Your order has been </Typography>
+                                  <Typography
+                                    fontWeight={"bold"}
+                                    marginLeft={"5px"}
+                                  >
+                                    {notification?.notificationType?.name}
                                   </Typography>
-                                </Box>
-                              </Stack>
-                            ))
-                          : ""}
+                                </Stack>
+                                <Typography fontSize={"small"} color={"gray"}>
+                                  {handleDate(notification?.createdAt)}
+                                </Typography>
+                              </Box>
+                            </Stack>
+                          ))
+                        ) : (
+                          <Stack
+                            width={"100%"}
+                            height={"100%"}
+                            justifyContent={"center"}
+                            alignItems={"center"}
+                          >
+                            <Typography
+                              sx={{
+                                color: "black",
+                                opacity: "0.5",
+                                fontSize: "24px",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Notifications
+                            </Typography>
+                          </Stack>
+                        )}
                       </Stack>
                     </Stack>
                   )}

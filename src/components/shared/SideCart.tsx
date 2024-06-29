@@ -39,7 +39,6 @@ function SideCart({
     if (item.quantity + newQuantity < 0) {
       return;
     } else if (item.quantity + newQuantity === 0) {
-      handleDeleteItem(item);
       return;
     }
     editItemQuantity(item.productId._id, newQuantity);

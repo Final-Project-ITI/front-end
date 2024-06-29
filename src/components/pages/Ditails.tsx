@@ -11,7 +11,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { IProduct } from "../../models/product.model";
 import CartContext from "../../context/CartProvider";
 import AddIcon from "@mui/icons-material/Add";
@@ -25,7 +25,10 @@ const Details = ({}: IProps) => {
 
   const axiosPrivate = useAxiosPrivate();
   const theme = useTheme();
-  const {id,resId}= useParams();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { id, resId } = useParams();
   const [productdetails, setProductDetails] = useState<IProduct>({
     _id: "",
     description: "",
@@ -58,6 +61,12 @@ const Details = ({}: IProps) => {
   const url = "https://back-end-j1bi.onrender.com/api/v1";
 
   const handleAddItemToCart = async (product: IProduct, quantity: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
     try {
       const res = await axiosPrivate.post(
         "/api/v1/cart",
@@ -65,6 +74,7 @@ const Details = ({}: IProps) => {
           productId: product._id,
           quantity: quantity,
         });
+
 
       if (restaurantId && restaurantId !== product.restaurantId) {
         setCartItems([]);
@@ -102,14 +112,14 @@ const Details = ({}: IProps) => {
   const getProductDetails=async(id:any)=>{
     const res = await axiosPrivate.get(url+"/products/" +resId+"/"+ id);
     if(res.status=200){
+
       setProductDetails(res.data);
     }
-
-  }
+  };
 
   useEffect(() => {
-    getProductDetails(id)
-    
+    getProductDetails(id);
+
     if (id) {
       const productInCart = cartItems.some(
         (item: any) => item.productId === id

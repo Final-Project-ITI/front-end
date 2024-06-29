@@ -68,7 +68,8 @@ export default function Home({
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hasResults, setHasResults] = useState(true);
 
   useEffect(() => {
     getAllRestaurants();
@@ -76,16 +77,16 @@ export default function Home({
 
   const getAllRestaurants = async () => {
     try {
-      setloading(true);
+      setLoading(true);
       const Rest_URL = searchRest
         ? `/api/v1/restaurant/search/${searchRest}`
         : "/api/v1/restaurant/";
       const { data } = await axiosPrivate.get(Rest_URL);
-      setloading(false);
+      setLoading(false);
       setRestaurants(data);
+      setHasResults(data.length > 0);
     } catch (err: any) {
-      setloading(false);
-      console.error(err.response?.data || err.message, "err");
+      setLoading(false);
     }
   };
 
@@ -212,65 +213,77 @@ export default function Home({
           >
             Restaurants
           </Typography>
-          <Stack
-            justifyContent="center"
-            alignItems="center"
-            sx={{
-              marginBlock: "40px",
-              background: "#f3ece4",
-            }}
-          >
+          {hasResults ? (
             <Stack
-              direction="row"
               justifyContent="center"
               alignItems="center"
               sx={{
-                background: "f3ece4",
-                minHeight: "400px",
-                flexWrap: "wrap",
-                spacing: 4,
+                marginBlock: "40px",
+                background: "#f3ece4",
               }}
             >
-              {restaurants.length
-                ? restaurants.slice(0, 4).map((restaurant: any) => (
-                    <div
-                      onClick={() =>
-                        navigate("/menu/"+restaurant._id)
-                      }
-                      key={restaurant._id}
-                      className="flip-card"
-                      style={{
-                        cursor: "pointer",
-                      }}
-                    >
-                      <div className="flip-card-inner">
-                        <div className="flip-card-front">
-                          <img src={restaurant.icon} alt={restaurant.name} />
-                        </div>
-                        <div className="flip-card-back">
-                          <Typography
-                            variant="h5"
-                            fontWeight={"bold"}
-                            sx={{
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              textWrap: "nowrap",
-                            }}
-                          >
-                            {restaurant.name}
-                          </Typography>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  background: "f3ece4",
+                  minHeight: "400px",
+                  flexWrap: "wrap",
+                  spacing: 4,
+                }}
+              >
+                {restaurants.length
+                  ? restaurants.slice(0, 4).map((restaurant: any) => (
+                      <div
+                        onClick={() => navigate("/menu/" + restaurant._id)}
+                        key={restaurant._id}
+                        className="flip-card"
+                        style={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        <div className="flip-card-inner">
+                          <div className="flip-card-front">
+                            <img src={restaurant.icon} alt={restaurant.name} />
+                          </div>
+                          <div className="flip-card-back">
+                            <Typography
+                              variant="h5"
+                              fontWeight={"bold"}
+                              sx={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                textWrap: "nowrap",
+                              }}
+                            >
+                              {restaurant.name}
+                            </Typography>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                : ""}
+                    ))
+                  : ""}
+              </Stack>
+              <Link to="/restaurants" id="sign-link" className="log3">
+                <button className="bb">
+                  <h3>See More</h3>
+                </button>
+              </Link>
             </Stack>
-            <Link to="/restaurants" id="sign-link" className="log3">
-              <button className="bb">
-                <h3>See More</h3>
-              </button>
-            </Link>
-          </Stack>
+          ) : (
+            <Typography
+              variant="body1"
+              sx={{
+                marginTop: "20px",
+                fontWeight: "700",
+                fontSize: "40px",
+                color: "#d74339",
+              }}
+            >
+              No restaurants found.
+            </Typography>
+          )}
         </Box>
         <Box sx={{ marginTop: { xs: "90px" } }} ref={whyUsRef}>
           <Card />

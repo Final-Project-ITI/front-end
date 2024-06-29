@@ -13,10 +13,12 @@ import logo from "../../assets/logo.svg";
 import { Divider, Stack } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import CartContext from "../../context/CartProvider";
-import axios from "axios";
 import socket from "../../utils/socket";
 import { jwtDecode } from "jwt-decode";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useEffect } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
 
 const url = "http://localhost:3000/api/v1";
 
@@ -31,6 +33,9 @@ function NavBar({
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
   whyUsRef: React.MutableRefObject<undefined>;
 }) {
+  const axiosPrivate = useAxiosPrivate();
+  const {pathname}=useLocation();
+
   //@ts-ignore
   const { cartQuantity } = React.useContext(CartContext);
   const [notifications, setNotifications] = React.useState<any>([]);
@@ -38,7 +43,7 @@ function NavBar({
   const [showNotifications, setShowNotifications] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const {auth,setAuth}:any=useAuth();
   const scrollToWhyUs = () => {
     const { current } = whyUsRef;
     if (current !== null) {
@@ -50,6 +55,7 @@ function NavBar({
   const handleLogOut = () => {
     localStorage.removeItem("token");
     setisUser(false);
+    setAuth({token:""})
   };
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -65,10 +71,8 @@ function NavBar({
   };
 
   const handleGetNotifications = async () => {
-    if (isUser) {
-      const res = await axios.get(url + "/notification/user", {
-        headers: { jwt: localStorage.getItem("token") },
-      });
+    if (auth.token) {
+      const res = await axiosPrivate.get(url + "/notification/user");
 
       if (res.status == 200) {
         setNotifications(res.data);
@@ -77,10 +81,9 @@ function NavBar({
   };
 
   const handleGetNotificationById = async (id: string) => {
-    if (isUser) {
-      const res = await axios.get(url + "/notification/user/" + id, {
-        headers: { jwt: localStorage.getItem("token") },
-      });
+    
+    if (auth.token) {
+      const res = await axiosPrivate.get(url + "/notification/user/" + id);
 
       if (res.status == 200) {
         setNewNotification(res.data);
@@ -110,7 +113,7 @@ function NavBar({
   };
 
   React.useEffect(() => {
-    if (isUser) {
+    if (auth.token) {
       handleGetNotifications();
 
       const decoded: any = jwtDecode(localStorage.getItem("token")!);
@@ -131,6 +134,10 @@ function NavBar({
       setNotifications((pre: any) => [newNotification, ...pre]);
     }
   }, [newNotification]);
+
+  useEffect(()=>{
+    
+  },[pathname])
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "inherit", boxShadow: 0 }}>
@@ -256,6 +263,7 @@ function NavBar({
 
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
+  
                 <Button
                   key={page}
                   onClick={() => {
@@ -274,8 +282,11 @@ function NavBar({
                     my: 2,
                     marginInline: "1rem",
                     display: "block",
-                    color: "#0a0a0a",
                     fontWeight: "700",
+                    // color:pathname.includes(page.toLowerCase())| pathname="/" & page=="Home"?"#d84339":"#0a0a0a",
+                    color:"#0a0a0a",
+                    "&:hover":{color:"#d84339"}
+                  
                   }}
                 >
                   {page}
@@ -451,6 +462,15 @@ function NavBar({
                             justifyContent={"center"}
                             alignItems={"center"}
                           >
+                            <NotificationsIcon
+                              sx={{
+                                color: "black",
+                                opacity: "0.5",
+                                fontSize: "70px",
+                                fontWeight: "bold",
+                                mb: "30px",
+                              }}
+                            />
                             <Typography
                               sx={{
                                 color: "black",
@@ -459,7 +479,7 @@ function NavBar({
                                 fontWeight: "bold",
                               }}
                             >
-                              Notifications
+                              There Is No Notifications
                             </Typography>
                           </Stack>
                         )}

@@ -18,14 +18,17 @@ import React, { useContext, useEffect, useState } from "react";
 import OrderSubmitted from "../popups/OrderSubmitted";
 import AddNumber from "../popups/AddNumber";
 import AddAdress from "../popups/AddAdress";
-import axios from "axios";
 import CartContext from "../../context/CartProvider";
 import socket from "../../utils/socket";
 import { IPhone } from "../../models/phone.model";
 import { IAddress } from "../../models/address.model";
-const url = "http://localhost:3000/api/v1";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useNavigate } from "react-router-dom";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function Checkout({}) {
+  const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
   const [phones, setPhones] = useState<IPhone[]>([]);
   const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
@@ -66,18 +69,14 @@ function Checkout({}) {
   };
   useEffect(() => {
     const getUserAddresses = async () => {
-      const res = await axios.get(url + "/addresses", {
-        headers: { jwt: localStorage.getItem("token") },
-      });
+      const res = await axiosPrivate.get(url + "/addresses");
       if (!res.data.message) {
         const newAddresses = res.data;
         setAddresses(newAddresses);
       }
     };
     const getUserPhones = async () => {
-      const res = await axios.get(url + "/phones", {
-        headers: { jwt: localStorage.getItem("token") },
-      });
+      const res = await axiosPrivate.get(url + "/phones");
       if (!res.data.message) {
         const newPhones = res.data;
         setPhones(newPhones);
@@ -124,12 +123,9 @@ function Checkout({}) {
   const handlCheckout = () => {
     const fetchCheckout = async () => {
       try {
-        const res = await axios.post(
+        const res = await axiosPrivate.post(
           url + "/orders/" + restaurantId + "/user",
-          { phoneId: checkoutInfo.phone, addressId: checkoutInfo.address },
-          {
-            headers: { jwt: localStorage.getItem("token") },
-          }
+          { phoneId: checkoutInfo.phone, addressId: checkoutInfo.address }
         );
 
         socket.emit("new-order-req", restaurantId);
@@ -143,13 +139,10 @@ function Checkout({}) {
       }
     };
     const fetchStripe = async () => {
-      const res = await axios.post(
-        url + "/payments",
-        { phoneId: checkoutInfo.phone, addressId: checkoutInfo.address },
-        {
-          headers: { jwt: localStorage.getItem("token") },
-        }
-      );
+      const res = await axiosPrivate.post(url + "/payments", {
+        phoneId: checkoutInfo.phone,
+        addressId: checkoutInfo.address,
+      });
       window.location.replace(res.data.session.url);
 
       // socket.emit("new-order-req", restaurantId);
@@ -525,6 +518,9 @@ function Checkout({}) {
                 </Grid>
                 <Grid item xs={12} md={4} lg={12}>
                   <Button
+                    onClick={() => {
+                      navigate("/menu/" + restaurantId);
+                    }}
                     variant="outlined"
                     sx={{
                       width: "100%",

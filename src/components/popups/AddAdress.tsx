@@ -1,8 +1,8 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import axios from "axios";
 
 import React, { useState } from "react";
-const url = "http://localhost:3000/api/v1";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function AddAdress({
   setAddAddressPopUp,
@@ -18,6 +18,8 @@ function AddAdress({
     }>
   >;
 }) {
+  const axiosPrivate = useAxiosPrivate();
+
   let [address, setAddress] = useState("");
   let [error, setError] = useState(false);
 
@@ -26,15 +28,9 @@ function AddAdress({
   };
   const handleAddAddress = () => {
     const fetchAddAddress = async () => {
-      const res = await axios.post(
-        url + "/addresses",
-        {
-          details: address,
-        },
-        {
-          headers: { jwt: localStorage.getItem("token") },
-        }
-      );
+      const res = await axiosPrivate.post(url + "/addresses", {
+        details: address,
+      });
       addAddress(res.data);
       setCheckoutInfo((pre: any) => {
         return { phone: pre.phone, address: res.data._id };

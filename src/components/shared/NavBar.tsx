@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 const pages = ["Home", "Restaurants", "why us"];
 
@@ -33,6 +33,7 @@ function NavBar({
   whyUsRef: React.MutableRefObject<undefined>;
 }) {
   const axiosPrivate = useAxiosPrivate();
+  const {pathname}=useLocation();
 
   //@ts-ignore
   const { cartQuantity } = React.useContext(CartContext);
@@ -133,6 +134,10 @@ function NavBar({
       setNotifications((pre: any) => [newNotification, ...pre]);
     }
   }, [newNotification]);
+
+  useEffect(()=>{
+    
+  },[pathname])
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "inherit", boxShadow: 0 }}>
@@ -258,6 +263,7 @@ function NavBar({
 
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
+  
                 <Button
                   key={page}
                   onClick={() => {
@@ -276,8 +282,10 @@ function NavBar({
                     my: 2,
                     marginInline: "1rem",
                     display: "block",
-                    color: "#0a0a0a",
                     fontWeight: "700",
+                    // color:pathname.includes(page.toLowerCase())| pathname="/" & page=="Home"?"#d84339":"#0a0a0a",
+                    "&:hover":{color:"#d84339"}
+                  
                   }}
                 >
                   {page}

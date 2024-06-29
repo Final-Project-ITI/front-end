@@ -23,6 +23,7 @@ import socket from "../../utils/socket";
 import { IPhone } from "../../models/phone.model";
 import { IAddress } from "../../models/address.model";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useNavigate } from "react-router-dom";
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 
@@ -30,7 +31,7 @@ const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function Checkout({}) {
   const axiosPrivate = useAxiosPrivate();
-
+  const navigate= useNavigate()
   const [phones, setPhones] = useState<IPhone[]>([]);
   const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
@@ -520,6 +521,7 @@ function Checkout({}) {
                 </Grid>
                 <Grid item xs={12} md={4} lg={12}>
                   <Button
+                  onClick={()=>{navigate("/menu/"+ restaurantId)}}
                     variant="outlined"
                     sx={{
                       width: "100%",

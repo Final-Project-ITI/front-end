@@ -18,7 +18,7 @@ import ConfirmDeleteFromCart from "../popups/ConfirmDeleteFromCart";
 import Loading from "../shared/Loading";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 
 function Cart() {
@@ -449,6 +449,7 @@ function Cart() {
                 </Grid>
                 <Grid item xs={12} md={4} lg={12}>
                   <Button
+                  onClick={()=>{navigate("/menu/"+cartItems[0]?.productId?.restaurantId)}}
                     variant="outlined"
                     sx={{
                       width: "100%",

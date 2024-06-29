@@ -13,8 +13,8 @@ import "../../styles/home.css";
 import img from "../../assets/images/11.png";
 import img2 from "../../assets/images/12.png";
 import Card from "../Whyus";
-import axios from "../../api/axios";
 import Loading from "../shared/Loading";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const Search = styled("div")(({ theme }) => ({
   paddingLeft: "20px",
@@ -64,6 +64,7 @@ export default function Home({
 }: {
   whyUsRef: React.MutableRefObject<undefined>;
 }) {
+  const axiosPrivate = useAxiosPrivate();
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [searchRest, setSearchRest] = useState("");
@@ -79,7 +80,7 @@ export default function Home({
       const Rest_URL = searchRest
         ? `/api/v1/restaurant/search/${searchRest}`
         : "/api/v1/restaurant/";
-      const { data } = await axios.get(Rest_URL);
+      const { data } = await axiosPrivate.get(Rest_URL);
       setloading(false);
       setRestaurants(data);
     } catch (err: any) {

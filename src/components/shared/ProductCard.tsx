@@ -1,9 +1,9 @@
 import { CardMedia, Typography, useTheme, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { IProduct } from "../../models/product.model";
-import axios from "../../api/axios";
 import { useContext, useEffect } from "react";
 import CartContext from "../../context/CartProvider";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 interface ProductProps {
   product: IProduct;
@@ -20,6 +20,9 @@ const Product = ({ product }: ProductProps) => {
     calculateQuantity,
   }: any = useContext(CartContext);
 
+  const axiosPrivate = useAxiosPrivate();
+
+
   const handleAddItemToCart = async (productId: string, resId: string) => {
     try {
       if (!localStorage.getItem("token")) {
@@ -30,14 +33,11 @@ const Product = ({ product }: ProductProps) => {
           navigate("/");
         }
       }
-      const res = await axios.post(
+      const res = await axiosPrivate.post(
         "/api/v1/cart",
         {
           productId,
           quantity: 1,
-        },
-        {
-          headers: { jwt: localStorage.getItem("token") },
         }
       );
       setCartItems(res.data.itemsIds);

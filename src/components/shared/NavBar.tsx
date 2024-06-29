@@ -13,10 +13,11 @@ import logo from "../../assets/logo.svg";
 import { Divider, Stack } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import CartContext from "../../context/CartProvider";
-import axios from "axios";
 import socket from "../../utils/socket";
 import { jwtDecode } from "jwt-decode";
 import { useEffect } from "react";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useAuth from "../../hooks/useAuth";
 
 const url = "https://back-end-j1bi.onrender.com/api/v1";
 
@@ -31,6 +32,8 @@ function NavBar({
   setisUser: React.Dispatch<React.SetStateAction<boolean>>;
   whyUsRef: React.MutableRefObject<undefined>;
 }) {
+  const axiosPrivate = useAxiosPrivate();
+
   //@ts-ignore
   const { cartQuantity } = React.useContext(CartContext);
   const [notifications, setNotifications] = React.useState<any>([]);
@@ -38,7 +41,7 @@ function NavBar({
   const [showNotifications, setShowNotifications] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const {auth,setAuth}:any=useAuth();
   const scrollToWhyUs = () => {
     const { current } = whyUsRef;
     if (current !== null) {
@@ -50,6 +53,7 @@ function NavBar({
   const handleLogOut = () => {
     localStorage.removeItem("token");
     setisUser(false);
+    setAuth({token:""})
   };
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -65,10 +69,8 @@ function NavBar({
   };
 
   const handleGetNotifications = async () => {
-    if (isUser) {
-      const res = await axios.get(url + "/notification/user", {
-        headers: { jwt: localStorage.getItem("token") },
-      });
+    if (auth.token) {
+      const res = await axiosPrivate.get(url + "/notification/user");
 
       if (res.status == 200) {
         setNotifications(res.data);
@@ -77,10 +79,9 @@ function NavBar({
   };
 
   const handleGetNotificationById = async (id: string) => {
-    if (isUser) {
-      const res = await axios.get(url + "/notification/user/" + id, {
-        headers: { jwt: localStorage.getItem("token") },
-      });
+    
+    if (auth.token) {
+      const res = await axiosPrivate.get(url + "/notification/user/" + id);
 
       if (res.status == 200) {
         setNewNotification(res.data);
@@ -110,7 +111,7 @@ function NavBar({
   };
 
   React.useEffect(() => {
-    if (isUser) {
+    if (auth.token) {
       handleGetNotifications();
 
       const decoded: any = jwtDecode(localStorage.getItem("token")!);

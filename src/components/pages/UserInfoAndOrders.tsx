@@ -10,14 +10,15 @@ import OrderDetailsPopup from "./OrderDetailsPopup";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { IUser } from "../../models/user.model";
 import { IOrder } from "../../models/order.model";
-import axios from "../../api/axios";
 import { IPhone } from "../../models/phone.model";
 import { IItem } from "../../models/item.model";
 import { IRestaurant } from "../../models/restaurant.model";
-import { Link } from "react-router-dom";
 import Loading from "../shared/Loading";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const UserInfoAndOrders = () => {
+  const axiosPrivate = useAxiosPrivate();
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,64 +50,49 @@ const UserInfoAndOrders = () => {
 
   const handleGetUser = async () => {
     setLoading(true);
-    const res = await axios.get("/api/v1/user", {
-      headers: { jwt: localStorage.getItem("token") },
-    });
+    const res = await axiosPrivate.get("/api/v1/user");
 
     setUser(res.data);
   };
 
   const handleGetRestaurants = async () => {
-    const res = await axios.get("/api/v1/restaurant");
+    const res = await axiosPrivate.get("/api/v1/restaurant");
 
     setRestaurants(res.data);
     setLoading(false);
   };
 
   const handleGetPhoneNumbers = async () => {
-    const res = await axios.get("/api/v1/phones", {
-      headers: { jwt: localStorage.getItem("token") },
-    });
+    const res = await axiosPrivate.get("/api/v1/phones");
 
     setPhones(res.data);
   };
 
   const handleGetUserOrders = async () => {
-    const res = await axios.get("/api/v1/orders/user", {
-      headers: { jwt: localStorage.getItem("token") },
-    });
+    const res = await axiosPrivate.get("/api/v1/orders/user");
 
     setOrders(res.data?.orders);
     setItems(res.data?.items);
   };
 
   const handleUpdateName = async (fullName: string) => {
-    await axios.patch(
+    await axiosPrivate.patch(
       "/api/v1/user",
-      { fullName },
-      {
-        headers: { jwt: localStorage.getItem("token") },
-      }
+      { fullName }
     );
   };
 
   const handleUpdatePhone = async (phoneNumber: string, phoneId: string) => {
-    await axios.patch(
+    await axiosPrivate.patch(
       "/api/v1/phones/" + phoneId,
-      { phoneNumber },
-      {
-        headers: { jwt: localStorage.getItem("token") },
-      }
+      { phoneNumber }
     );
   };
 
   const handleCreatePhone = async (phoneNumber: string) => {
-    await axios.post(
+    await axiosPrivate.post(
       "/api/v1/phones",
-      { phoneNumber },
-      {
-        headers: { jwt: localStorage.getItem("token") },
-      }
+      { phoneNumber }
     );
   };
 

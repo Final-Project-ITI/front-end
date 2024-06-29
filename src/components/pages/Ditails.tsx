@@ -13,17 +13,18 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { IProduct } from "../../models/product.model";
-import axios from "../../api/axios";
 import CartContext from "../../context/CartProvider";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 interface IProps {}
 
 const Details = ({}: IProps) => {
+
+  const axiosPrivate = useAxiosPrivate();
   const theme = useTheme();
-  const location = useLocation();
   const {id,resId}= useParams();
   const [productdetails, setProductDetails] = useState<IProduct>({
     _id: "",
@@ -58,16 +59,12 @@ const Details = ({}: IProps) => {
 
   const handleAddItemToCart = async (product: IProduct, quantity: number) => {
     try {
-      const res = await axios.post(
+      const res = await axiosPrivate.post(
         "/api/v1/cart",
         {
           productId: product._id,
           quantity: quantity,
-        },
-        {
-          headers: { jwt: localStorage.getItem("token") },
-        }
-      );
+        });
 
       if (restaurantId && restaurantId !== product.restaurantId) {
         setCartItems([]);
@@ -87,9 +84,7 @@ const Details = ({}: IProps) => {
 
   const handleRemoveItemFromCart = async (productId: string) => {
     try {
-      const res = await axios.delete(`/api/v1/cart/${productId}`, {
-        headers: { jwt: localStorage.getItem("token") },
-      });
+      const res = await axiosPrivate.delete(`/api/v1/cart/${productId}`);
 
       setCartItems(res.data.itemsIds);
       setCartQuantity((prevQuantity: number) => prevQuantity - 1);
@@ -105,7 +100,7 @@ const Details = ({}: IProps) => {
   };
 
   const getProductDetails=async(id:any)=>{
-    const res = await axios.get(url+"/products/" +resId+"/"+ id);
+    const res = await axiosPrivate.get(url+"/products/" +resId+"/"+ id);
     if(res.status=200){
       setProductDetails(res.data);
     }

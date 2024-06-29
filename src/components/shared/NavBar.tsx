@@ -18,7 +18,7 @@ import socket from "../../utils/socket";
 import { jwtDecode } from "jwt-decode";
 import { useEffect } from "react";
 
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 const pages = ["Home", "Restaurants", "why us"];
 

@@ -2,7 +2,7 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import axios from "axios";
 
 import React, { useState } from "react";
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function AddAdress({
   setAddAddressPopUp,

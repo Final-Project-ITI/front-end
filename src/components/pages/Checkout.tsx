@@ -23,7 +23,7 @@ import CartContext from "../../context/CartProvider";
 import socket from "../../utils/socket";
 import { IPhone } from "../../models/phone.model";
 import { IAddress } from "../../models/address.model";
-const url = "http://localhost:3000/api/v1";
+const url = "https://back-end-j1bi.onrender.com/api/v1";
 
 function Checkout({}) {
   const [phones, setPhones] = useState<IPhone[]>([]);
